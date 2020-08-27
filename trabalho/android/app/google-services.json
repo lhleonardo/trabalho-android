@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "372206876908",
+    "firebase_url": "https://rep-app-51fb8.firebaseio.com",
+    "project_id": "rep-app-51fb8",
+    "storage_bucket": "rep-app-51fb8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:372206876908:android:b55454726d233499914dc9",
+        "android_client_info": {
+          "package_name": "com.example.trabalho"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "372206876908-598q6nsdiie8oe1l4grgqrnj5kul5c71.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMYjSxL6Bkfxjp_deTz1UJuuEXcXPw9QA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "372206876908-598q6nsdiie8oe1l4grgqrnj5kul5c71.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
