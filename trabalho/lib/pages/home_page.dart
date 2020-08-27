@@ -9,19 +9,19 @@ class HomePage extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              "Olá",
+              'Olá',
               style: Theme.of(context).textTheme.headline1,
             ),
             Text(
-              "Olá",
+              'Olá',
               style: Theme.of(context).textTheme.headline3,
             ),
             Text(
-              "Olá",
+              'Olá',
               style: Theme.of(context).textTheme.subtitle1,
             ),
             Text(
-              "Olá",
+              'Olá',
               style: Theme.of(context).textTheme.caption,
             ),
           ],

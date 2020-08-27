@@ -9,7 +9,7 @@ class SplashScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image(
+            const Image(
               image: AssetImage(
                 'assets/icons/logo.png',
               ),
@@ -17,11 +17,11 @@ class SplashScreen extends StatelessWidget {
               height: 200,
             ),
             Text(
-              "RepApp",
+              'RepApp',
               style: Theme.of(context).textTheme.headline1,
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0),
+            const Padding(
+              padding: EdgeInsets.only(top: 20.0),
               child: CircularProgressIndicator(),
             ),
           ],

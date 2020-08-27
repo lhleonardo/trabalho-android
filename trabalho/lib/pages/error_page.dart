@@ -5,7 +5,7 @@ class ErrorPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Text(
-        "Algo de errado aconteceu",
+        'Algo de errado aconteceu',
         style: Theme.of(context).textTheme.headline1,
       ),
     );

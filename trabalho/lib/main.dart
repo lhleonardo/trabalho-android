@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import "package:firebase_core/firebase_core.dart";
+import 'package:firebase_core/firebase_core.dart';
 import 'package:trabalho/pages/error_page.dart';
 import 'package:trabalho/pages/splash_screen.dart';
 import 'package:trabalho/theme/theme_manager.dart';
@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeManager.defaultTheme(),
       home: Startup(),
+      // routes: ,
     );
   }
 }
@@ -23,9 +24,9 @@ class MyApp extends StatelessWidget {
 class Startup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var app = Firebase.initializeApp();
+    final Future<FirebaseApp> app = Firebase.initializeApp();
 
-    return FutureBuilder(
+    return FutureBuilder<FirebaseApp>(
       future: app,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
