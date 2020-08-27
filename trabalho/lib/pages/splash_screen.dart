@@ -3,6 +3,30 @@ import 'package:flutter/material.dart';
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image(
+              image: AssetImage(
+                'assets/icons/logo.png',
+              ),
+              fit: BoxFit.cover,
+              height: 200,
+            ),
+            Text(
+              "RepApp",
+              style: Theme.of(context).textTheme.headline1,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0),
+              child: CircularProgressIndicator(),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
