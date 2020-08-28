@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trabalho/components/input.dart';
 
-import '../../routes/routes.dart';
-
-class LoginPage extends StatelessWidget {
+class RegisterMember extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +30,11 @@ class LoginPage extends StatelessWidget {
                 height: MediaQuery.of(context).size.height * 0.08,
               ),
               Text(
-                'Entre para continuar',
+                'Cadastra-se na plataforma',
+                style: Theme.of(context).textTheme.headline3,
+              ),
+              Text(
+                '2/2',
                 style: Theme.of(context).textTheme.headline3,
               ),
               Container(
@@ -43,7 +45,25 @@ class LoginPage extends StatelessWidget {
                       const Padding(
                         padding: EdgeInsets.only(top: 16.0),
                         child: Input(
-                          placeholder: 'Endereço de e-mail',
+                          placeholder: 'Nome completo',
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 16.0),
+                        child: Input(
+                          placeholder: 'Apelido',
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 16.0),
+                        child: Input(
+                          placeholder: 'Data de Nascimento',
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 16.0),
+                        child: Input(
+                          placeholder: 'E-mail',
                         ),
                       ),
                       const Padding(
@@ -52,19 +72,8 @@ class LoginPage extends StatelessWidget {
                           placeholder: 'Senha',
                         ),
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(
-                            'Esqueceu sua senha?',
-                            style: Theme.of(context).textTheme.caption,
-                            textAlign: TextAlign.right,
-                          ),
-                        ),
-                      ),
                       SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.08,
+                        height: MediaQuery.of(context).size.height * 0.04,
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 16.0),
@@ -77,7 +86,7 @@ class LoginPage extends StatelessWidget {
                             ),
                             color: Theme.of(context).accentColor,
                             child: const Text(
-                              'Entrar',
+                              'Cadastrar',
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -94,11 +103,9 @@ class LoginPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 24),
                 child: FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(Routes.registerRepublic);
-                  },
+                  onPressed: () {},
                   child: Text(
-                    'Criar uma conta',
+                    'Já tem uma conta? Entrar',
                     style: Theme.of(context).textTheme.subtitle1,
                   ),
                 ),

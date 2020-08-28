@@ -4,6 +4,9 @@ import 'package:trabalho/pages/error_page.dart';
 import 'package:trabalho/pages/splash_screen.dart';
 import 'package:trabalho/theme/theme_manager.dart';
 import 'package:trabalho/wrapper.dart';
+import 'routes/routes.dart';
+import 'pages/auth/registerRep_page1.dart';
+import 'pages/auth/registerRep_page2.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,8 +18,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeManager.defaultTheme(),
+      debugShowCheckedModeBanner: false,
       home: Startup(),
-      // routes: ,
+      routes: {
+        Routes.registerRepublic: (_) => RegisterRepPage1(),
+        Routes.registerRepublicResponsable: (_) => RegisterRepPage2(),
+      },
     );
   }
 }

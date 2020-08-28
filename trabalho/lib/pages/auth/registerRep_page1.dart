@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:trabalho/components/input.dart';
-
 import '../../routes/routes.dart';
+import 'package:trabalho/components/input.dart';
+import 'package:trabalho/components/button.dart';
 
-class LoginPage extends StatelessWidget {
+class RegisterRepPage1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +32,11 @@ class LoginPage extends StatelessWidget {
                 height: MediaQuery.of(context).size.height * 0.08,
               ),
               Text(
-                'Entre para continuar',
+                'Cadastra-se na plataforma',
+                style: Theme.of(context).textTheme.headline3,
+              ),
+              Text(
+                '1/2',
                 style: Theme.of(context).textTheme.headline3,
               ),
               Container(
@@ -43,48 +47,40 @@ class LoginPage extends StatelessWidget {
                       const Padding(
                         padding: EdgeInsets.only(top: 16.0),
                         child: Input(
-                          placeholder: 'Endereço de e-mail',
+                          placeholder: 'Nome da república',
                         ),
                       ),
                       const Padding(
                         padding: EdgeInsets.only(top: 16.0),
                         child: Input(
-                          placeholder: 'Senha',
+                          placeholder: 'Telefone',
                         ),
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(
-                            'Esqueceu sua senha?',
-                            style: Theme.of(context).textTheme.caption,
-                            textAlign: TextAlign.right,
-                          ),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 16.0),
+                        child: Input(
+                          placeholder: 'Data de criação',
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 16.0),
+                        child: Input(
+                          placeholder: 'Cidade',
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 16.0),
+                        child: Input(
+                          placeholder: 'Estado',
                         ),
                       ),
                       SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.08,
+                        height: MediaQuery.of(context).size.height * 0.04,
                       ),
-                      Padding(
+                      const Padding(
                         padding: const EdgeInsets.only(top: 16.0),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 0.8,
-                          height: 50,
-                          child: FlatButton(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            color: Theme.of(context).accentColor,
-                            child: const Text(
-                              'Entrar',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            onPressed: () {},
-                          ),
+                        child: Button(
+                          placeholder: 'Próximo',
                         ),
                       ),
                     ],
@@ -94,11 +90,9 @@ class LoginPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 24),
                 child: FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(Routes.registerRepublic);
-                  },
+                  onPressed: () {},
                   child: Text(
-                    'Criar uma conta',
+                    'Já tem uma conta? Entrar',
                     style: Theme.of(context).textTheme.subtitle1,
                   ),
                 ),
