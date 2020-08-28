@@ -95,7 +95,7 @@ class LoginPage extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 24),
                 child: FlatButton(
                   onPressed: () {
-                    Navigator.of(context).pushNamed(Routes.registerRepublic);
+                    Navigator.of(context).pushNamed(Routes.registerHouse);
                   },
                   child: Text(
                     'Criar uma conta',

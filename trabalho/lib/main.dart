@@ -4,9 +4,8 @@ import 'package:trabalho/pages/error_page.dart';
 import 'package:trabalho/pages/splash_screen.dart';
 import 'package:trabalho/theme/theme_manager.dart';
 import 'package:trabalho/wrapper.dart';
+import 'pages/auth/register_house.dart';
 import 'routes/routes.dart';
-import 'pages/auth/registerRep_page1.dart';
-import 'pages/auth/registerRep_page2.dart';
 
 void main() {
   runApp(MyApp());
@@ -21,8 +20,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Startup(),
       routes: {
-        Routes.registerRepublic: (_) => RegisterRepPage1(),
-        Routes.registerRepublicResponsable: (_) => RegisterRepPage2(),
+        Routes.registerHouse: (_) => RegisterHouse(),
       },
     );
   }
