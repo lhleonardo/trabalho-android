@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:trabalho/components/input.dart';
 
 class RegisterMember extends StatelessWidget {
   @override

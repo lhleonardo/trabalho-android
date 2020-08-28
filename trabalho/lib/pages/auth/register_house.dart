@@ -14,6 +14,16 @@ class _RegisterHouseState extends State<RegisterHouse> {
   ScrollController scrollController = ScrollController();
   int step = 1;
 
+  void _scrollToTop() {
+    scrollController.animateTo(
+      scrollController.position.minScrollExtent,
+      duration: const Duration(
+        milliseconds: 300,
+      ),
+      curve: Curves.easeIn,
+    );
+  }
+
   Widget _houseForm() {
     return Center(
       child: Column(
@@ -88,11 +98,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
                     child: Button(
                       text: 'Próximo',
                       callback: () => setState(() {
-                        scrollController.animateTo(5.0,
-                            duration: const Duration(
-                              milliseconds: 600,
-                            ),
-                            curve: Curves.bounceIn);
+                        _scrollToTop();
                         step = 2;
                       }),
                     ),
@@ -151,28 +157,12 @@ class _RegisterHouseState extends State<RegisterHouse> {
                       ),
                       onPressed: () => setState(() {
                         step = 1;
-                        scrollController.animateTo(
-                          5.0,
-                          duration: const Duration(
-                            milliseconds: 600,
-                          ),
-                          curve: Curves.bounceIn,
-                        );
+                        _scrollToTop();
                       }),
                     ),
                   )
                 ],
               ),
-              // child: Column(
-              //   children: [
-              //     const Image(
-              //       image: AssetImage('assets/icons/logo.png'),
-              //       height: 150,
-              //       fit: BoxFit.fill,
-              //     ),
-
-              //   ],
-              // ),
             ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.08,
