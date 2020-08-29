@@ -9,6 +9,7 @@ class Input extends StatelessWidget {
     this.onTap,
     this.obscureText = false,
     this.readOnly = false,
+    this.keyboardType = TextInputType.text
   });
 
   final TextEditingController controller;
@@ -18,12 +19,14 @@ class Input extends StatelessWidget {
   final GestureTapCallback onTap;
   final bool obscureText;
   final bool readOnly;
+  final TextInputType keyboardType;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
       cursorColor: Theme.of(context).accentColor,
+      keyboardType: keyboardType,
       validator: validator,
       obscureText: obscureText,
       onTap: onTap,
