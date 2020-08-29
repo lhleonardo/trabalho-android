@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trabalho/components/input.dart';
+import 'package:trabalho/components/dialogAlert.dart';
 
 import '../../routes/routes.dart';
 
@@ -95,7 +96,11 @@ class LoginPage extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 24),
                 child: FlatButton(
                   onPressed: () {
-                    Navigator.of(context).pushNamed(Routes.registerHouse);
+                    
+                    showDialog(
+                      context: context, 
+                      builder: (context) => DialogAlert()
+                    );
                   },
                   child: Text(
                     'Criar uma conta',
