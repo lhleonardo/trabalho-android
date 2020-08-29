@@ -50,6 +50,8 @@ flutter:
     - assets/icons/logo.png
     - assets/icons/member.png
     - assets/icons/house.png
+    - assets/icons/group.png
+    - assets/icons/thumbs.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:trabalho/components/input.dart';
+import 'package:trabalho/components/button.dart';
+import '../../routes/routes.dart';
 
 class RegisterMember extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -74,24 +75,11 @@ class RegisterMember extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 16.0),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 0.8,
-                          height: 50,
-                          child: FlatButton(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            color: Theme.of(context).accentColor,
-                            child: const Text(
-                              'Cadastrar',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            onPressed: () {},
-                          ),
-                        ),
+                        child: Button(
+                          text: 'Cadastrar', 
+                          callback: () {
+                            Navigator.of(context).pushNamed(Routes.welcomePage);
+                          }),
                       ),
                     ],
                   ),

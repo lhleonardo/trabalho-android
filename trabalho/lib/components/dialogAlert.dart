@@ -40,7 +40,7 @@ class _DialogState extends State<DialogAlert> {
                     "Membro",
                     style: TextStyle(
                       color: Color.fromRGBO(240, 238, 238, 1),
-                      fontSize: 12.3,
+                      fontSize: 12,
                     ),
                   ),
                 ],
@@ -77,7 +77,7 @@ class _DialogState extends State<DialogAlert> {
                     "Representante",
                     style: TextStyle(
                       color: Color.fromRGBO(240, 238, 238, 1),
-                      fontSize: 12.3,
+                      fontSize: 12,
                     ),
                   ),
                 ],
