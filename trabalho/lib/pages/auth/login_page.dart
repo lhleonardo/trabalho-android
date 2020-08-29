@@ -1,10 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:trabalho/components/input.dart';
 import 'package:trabalho/components/dialogAlert.dart';
-
 import '../../routes/routes.dart';
 
 class LoginPage extends StatelessWidget {
+
+  final Map<String, String> data= {};
+
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  String _inputValidator(String value) {
+
+    if (value.trim().isEmpty) {
+      return 'Insira o campo endereço de e-mail';
+    }
+    bool format = false;
+    for (var i=0; i<value.length; i++) {
+      if (value[i] == '@'){
+        format = true;
+      }
+    }
+    if (format == false) {
+      return 'Insira um endereço de e-mail válido';
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,18 +60,48 @@ class LoginPage extends StatelessWidget {
               Container(
                 width: MediaQuery.of(context).size.width * 0.8,
                 child: Form(
+                  key: _formKey,
                   child: Column(
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.only(top: 16.0),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16.0),
                         child: Input(
+                          obscureText: false,
                           placeholder: 'Endereço de e-mail',
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Insira um endereço de e-mail';
+                            }
+                            bool format = false;
+                            for (var i=0; i<value.length; i++) {
+                              if (value[i] == '@'){
+                                format = true;
+                              }
+                            }
+                            if (format == false) {
+                              return 'Insira um endereço de e-mail válido';
+                            }
+                            return null;
+                          },
+                          onSaved: (value){
+                            data['email'] = value;
+                          },
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(top: 16.0),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16.0),
                         child: Input(
+                          obscureText: true,
                           placeholder: 'Senha',
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Insira uma senha';
+                            }
+                            return null;
+                          },
+                          onSaved: (value){
+                            data['senha'] = value;
+                          },
                         ),
                       ),
                       Container(
@@ -84,7 +135,12 @@ class LoginPage extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              if (_formKey.currentState.validate()){
+                                
+                              }
+                              
+                            },
                           ),
                         ),
                       ),

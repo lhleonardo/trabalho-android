@@ -18,7 +18,7 @@ class _DialogState extends State<DialogAlert> {
           Container(
             padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
             height: MediaQuery.of(context).size.height * 0.166,
-            width: MediaQuery.of(context).size.height * 0.166,
+            width: MediaQuery.of(context).size.height * 0.160,
             decoration: new BoxDecoration(
               border: new Border.all(
                   color: Theme.of(context).accentColor, width: 3),
