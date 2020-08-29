@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:trabalho/pages/auth/register_member_page.dart';
 import 'package:trabalho/pages/error_page.dart';
 import 'package:trabalho/pages/splash_screen.dart';
 import 'package:trabalho/theme/theme_manager.dart';
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
       home: Startup(),
       routes: {
         Routes.registerHouse: (_) => RegisterHouse(),
+        Routes.registerMember: (_) => RegisterMember(),
       },
     );
   }

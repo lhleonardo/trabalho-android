@@ -10,6 +10,7 @@ class ThemeManager {
       //em uma boa escala para aplicações mobile
       backgroundColor: const Color.fromRGBO(11, 19, 43, 1),
       accentColor: const Color.fromRGBO(91, 192, 190, 1),
+      primaryColor: const Color.fromRGBO(58, 80, 107, 1),
       textTheme: const TextTheme(
         headline1: TextStyle(
           fontSize: 36,
