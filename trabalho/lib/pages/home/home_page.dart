@@ -14,33 +14,53 @@ class _HomePage extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      appBar: AppBar(
-        toolbarHeight: 80,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text(
-              'Nome do membro',
-              style: TextStyle(fontSize: 24),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(86),
+        child: AppBar(
+          flexibleSpace: SafeArea(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 12.0,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        'Nome do membro',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.normal,
+                          color: Color.fromRGBO(240, 238, 238, 1),
+                        ),
+                      ),
+                      Text(
+                        'Nome da republica',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.normal,
+                          color: Color.fromRGBO(240, 238, 238, 1),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(
+                    Icons.exit_to_app,
+                    size: 30.0,
+                  ),
+                  color: const Color.fromRGBO(240, 238, 238, 1),
+                  onPressed: () {},
+                )
+              ],
             ),
-            SizedBox(
-              height: 4,
-            ),
-            Text(
-              'Nome da republica',
-              style: TextStyle(fontSize: 18),
-            ),
-          ],
+          ),
+          actions: [],
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.exit_to_app,
-            ),
-            color: const Color.fromRGBO(240, 238, 238, 1),
-            onPressed: () {},
-          )
-        ],
       ),
       body: Container(
         child: Text(_page.toString()),
