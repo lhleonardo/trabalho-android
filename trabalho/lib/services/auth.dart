@@ -9,6 +9,16 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final _collection = FirebaseFirestore.instance.collection('users');
 
+  Stream<User> get user {
+    return _auth.authStateChanges();
+  }
+
+  Future<QueryDocumentSnapshot> getUser(String email) async {
+    final result = await _collection.where('email', isEqualTo: email).get();
+    final user = result.docs.first;
+    return user;
+  }
+
   Member _convertFromFirebase({
     @required String id,
     @required String email,
@@ -63,8 +73,7 @@ class AuthService {
   Future<Member> signIn({String email, String password}) async {
     await _auth.signInWithEmailAndPassword(email: email, password: password);
 
-    final result = await _collection.where('email', isEqualTo: email).get();
-    final user = result.docs.first;
+    final QueryDocumentSnapshot user = await getUser(email);
 
     return _convertFromFirebase(
       id: user.id,
