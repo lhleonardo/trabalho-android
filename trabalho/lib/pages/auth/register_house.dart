@@ -259,7 +259,6 @@ class _RegisterHouseState extends State<RegisterHouse> {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: SingleChildScrollView(
-        primary: false,
         controller: scrollController,
         child: step == 1 ? _houseForm() : _managerForm(),
       ),
