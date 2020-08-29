@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
 class Input extends StatelessWidget {
-  const Input({this.placeholder, this.validator, this.onSaved, this.obscureText = false});
+  const Input(
+      {this.placeholder,
+      this.validator,
+      this.onSaved,
+      this.obscureText = false});
 
   final String placeholder;
   final FormFieldValidator<String> validator;
@@ -40,6 +44,13 @@ class Input extends StatelessWidget {
           borderSide: BorderSide(
             width: 2,
             color: Theme.of(context).accentColor,
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5),
+          borderSide: BorderSide(
+            width: 2,
+            color: Theme.of(context).errorColor,
           ),
         ),
       ),
