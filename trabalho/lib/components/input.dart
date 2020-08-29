@@ -1,23 +1,34 @@
 import 'package:flutter/material.dart';
 
 class Input extends StatelessWidget {
-  const Input(
-      {this.placeholder,
-      this.validator,
-      this.onSaved,
-      this.obscureText = false});
+  const Input({
+    this.placeholder,
+    this.validator,
+    this.controller,
+    this.onSaved,
+    this.onTap,
+    this.obscureText = false,
+    this.readOnly = false,
+  });
 
+  final TextEditingController controller;
   final String placeholder;
   final FormFieldValidator<String> validator;
   final FormFieldSetter<String> onSaved;
+  final GestureTapCallback onTap;
   final bool obscureText;
+  final bool readOnly;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       cursorColor: Theme.of(context).accentColor,
       validator: validator,
       obscureText: obscureText,
+      onTap: onTap,
+      onSaved: onSaved,
+      readOnly: readOnly,
       decoration: InputDecoration(
         hintText: placeholder,
         hintStyle: TextStyle(
