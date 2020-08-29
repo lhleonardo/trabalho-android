@@ -6,6 +6,5 @@ class Routes {
   static const registerMember = '/register-member';
   static const welcomePage = '/welcome-page';
   static const enterHousePage = '/enter-house-page';
-
   static const homePage = '/home';
 }
