@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:trabalho/components/input.dart';
 import 'package:trabalho/components/dialogAlert.dart';
-import '../../routes/routes.dart';
 
 class LoginPage extends StatelessWidget {
-
-  final Map<String, String> data= {};
+  final Map<String, String> data = {};
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   String _inputValidator(String value) {
-
     if (value.trim().isEmpty) {
       return 'Insira o campo endereço de e-mail';
     }
     bool format = false;
-    for (var i=0; i<value.length; i++) {
-      if (value[i] == '@'){
+    for (var i = 0; i < value.length; i++) {
+      if (value[i] == '@') {
         format = true;
       }
     }
@@ -73,8 +70,8 @@ class LoginPage extends StatelessWidget {
                               return 'Insira um endereço de e-mail';
                             }
                             bool format = false;
-                            for (var i=0; i<value.length; i++) {
-                              if (value[i] == '@'){
+                            for (var i = 0; i < value.length; i++) {
+                              if (value[i] == '@') {
                                 format = true;
                               }
                             }
@@ -83,7 +80,7 @@ class LoginPage extends StatelessWidget {
                             }
                             return null;
                           },
-                          onSaved: (value){
+                          onSaved: (value) {
                             data['email'] = value;
                           },
                         ),
@@ -99,7 +96,7 @@ class LoginPage extends StatelessWidget {
                             }
                             return null;
                           },
-                          onSaved: (value){
+                          onSaved: (value) {
                             data['senha'] = value;
                           },
                         ),
@@ -136,10 +133,7 @@ class LoginPage extends StatelessWidget {
                               ),
                             ),
                             onPressed: () {
-                              if (_formKey.currentState.validate()){
-                                
-                              }
-                              
+                              if (_formKey.currentState.validate()) {}
                             },
                           ),
                         ),
@@ -152,11 +146,8 @@ class LoginPage extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 24),
                 child: FlatButton(
                   onPressed: () {
-                    
                     showDialog(
-                      context: context, 
-                      builder: (context) => DialogAlert()
-                    );
+                        context: context, builder: (context) => DialogAlert());
                   },
                   child: Text(
                     'Criar uma conta',
