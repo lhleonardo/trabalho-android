@@ -30,13 +30,12 @@ class AuthService {
   }
 
   Future<Member> registerMember({
-    String id,
-    String email,
-    String name,
-    String nickname,
-    String cpf,
-    String dateOfBirth,
-    String password,
+    @required String email,
+    @required String name,
+    @required String nickname,
+    @required String cpf,
+    @required String dateOfBirth,
+    @required String password,
   }) async {
     await _auth.createUserWithEmailAndPassword(
       email: email,
