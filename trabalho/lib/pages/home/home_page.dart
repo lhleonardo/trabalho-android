@@ -8,34 +8,37 @@ class HomePage extends StatefulWidget {
 
 class _HomePage extends State<HomePage> {
   int _page = 0;
-  GlobalKey _bottomNavigationKey = GlobalKey();
+  final GlobalKey _bottomNavigationKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
+        toolbarHeight: 80,
         title: Column(
-          children: <Widget>[
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
             Text(
-              "Nome do membro",
-              style: TextStyle(fontSize: 15),
+              'Nome do membro',
+              style: TextStyle(fontSize: 24),
             ),
             SizedBox(
-              height: 10,
+              height: 4,
             ),
             Text(
-              "Nome da republica",
-              style: TextStyle(fontSize: 12),
+              'Nome da republica',
+              style: TextStyle(fontSize: 18),
             ),
           ],
         ),
-        actions: <Widget>[
+        actions: [
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.exit_to_app,
             ),
-            color: Color.fromRGBO(240, 238, 238, 1),
+            color: const Color.fromRGBO(240, 238, 238, 1),
+            onPressed: () {},
           )
         ],
       ),
@@ -56,7 +59,7 @@ class _HomePage extends State<HomePage> {
         buttonBackgroundColor: Theme.of(context).accentColor,
         backgroundColor: Theme.of(context).backgroundColor,
         animationCurve: Curves.easeInOut,
-        animationDuration: Duration(milliseconds: 600),
+        animationDuration: const Duration(milliseconds: 300),
         onTap: (index) {
           setState(() {
             _page = index;

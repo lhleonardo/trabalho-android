@@ -6,7 +6,7 @@ import '../../routes/routes.dart';
 class LoginPage extends StatelessWidget {
   final Map<String, String> data = {};
 
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   String _inputValidator(String value) {
     if (value.trim().isEmpty) {

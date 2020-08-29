@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:trabalho/components/button.dart';
-import '../routes/routes.dart';
+import 'package:trabalho/components/input.dart';
 
-class WelcomePage extends StatelessWidget {
+class EnterHousePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -11,13 +11,13 @@ class WelcomePage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Center(
             child: Container(
-              margin: EdgeInsets.only(top: 30, left: 10, right: 10),
+              alignment: Alignment.center,
+              margin: const EdgeInsets.only(top: 30, left: 10, right: 10),
               height: MediaQuery.of(context).size.height * 0.87,
               width: MediaQuery.of(context).size.height * 1,
-              decoration: new BoxDecoration(
+              decoration: BoxDecoration(
                 color: Theme.of(context).backgroundColor,
-                borderRadius: BorderRadius.all(Radius.circular(25)),
-                
+                borderRadius: const BorderRadius.all(Radius.circular(25)),
               ),
               child: Column(
                 children: [
@@ -26,7 +26,7 @@ class WelcomePage extends StatelessWidget {
                   ),
                   Container(
                     child: Align(
-                      alignment: Alignment(0.85, -0.85),
+                      alignment: const Alignment(0.85, -0.85),
                       child: Column(
                         children: [
                           const Image(
@@ -34,7 +34,7 @@ class WelcomePage extends StatelessWidget {
                             height: 30,
                             fit: BoxFit.fill,
                           ),
-                          Text(
+                          const Text(
                             'RepApp',
                             style: TextStyle(
                               color: Color.fromRGBO(240, 238, 238, 1),
@@ -48,39 +48,50 @@ class WelcomePage extends StatelessWidget {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.08,
                   ),
-                  Image(
-                    image: AssetImage('assets/icons/thumbs.png'),
+                  const Image(
+                    image: AssetImage('assets/icons/group.png'),
                     height: 150,
                     fit: BoxFit.fill,
                   ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.03,
                   ),
-                  Text(
-                    'Parabéns',
-                    style: Theme.of(context).textTheme.headline1,
-                  ),
-                  Text(
-                    'Seu cadastro foi realizado com sucesso !',
-                    style: Theme.of(context).textTheme.caption,
+                  const Text(
+                    'Entre para sua república',
+                    style: TextStyle(
+                      color: Color.fromRGBO(240, 238, 238, 1),
+                      fontSize: 24,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.21,
+                    height: MediaQuery.of(context).size.height * 0.08,
                   ),
-                  Text(
-                    'Vamos para o próximo passo',
-                    style: Theme.of(context).textTheme.caption,
-                    textAlign: TextAlign.center,
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    child: Text(
+                      // ignore: lines_longer_than_80_chars
+                      'Digite abaixo o código infomado por um representante para ingressar na sua república',
+                      style: Theme.of(context).textTheme.caption,
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.03,
+                    height: MediaQuery.of(context).size.height * 0.02,
                   ),
-                  Button(
-                      text: 'Avançar',
-                      callback: () {
-                        Navigator.of(context).pushNamed(Routes.enterHousePage);
-                      }),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    child: const Padding(
+                      padding: EdgeInsets.only(top: 16.0),
+                      child: Input(
+                        placeholder: 'Código da república',
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.06,
+                  ),
+                  Button(text: 'Finalizar', callback: () {}),
                 ],
               ),
             ),

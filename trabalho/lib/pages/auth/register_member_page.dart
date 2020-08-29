@@ -35,10 +35,7 @@ class RegisterMember extends StatelessWidget {
         password: _formData['password'],
         cpf: _formData['cpf'],
       );
-    } catch (error) {
-      print(error);
-      print(error.toString());
-    }
+    } catch (error) {}
   }
 
   @override
