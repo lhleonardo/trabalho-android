@@ -26,12 +26,10 @@ class _DialogState extends State<DialogAlert> {
             ),
             child: FlatButton(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: const [
                   Image(
                     image: AssetImage('assets/icons/member.png'),
                     height: 85,
-                    //fit: BoxFit.fill,
                   ),
                   SizedBox(
                     height: 4,
@@ -46,14 +44,14 @@ class _DialogState extends State<DialogAlert> {
                 ],
               ),
               onPressed: () =>
-                  Navigator.of(context).pushNamed(Routes.registerMember),
+                  Navigator.of(context).popAndPushNamed(Routes.registerMember),
             ),
           ),
           const SizedBox(
             width: 8,
           ),
           Container(
-            padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+            padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
             height: MediaQuery.of(context).size.height * 0.166,
             width: MediaQuery.of(context).size.height * 0.166,
             decoration: BoxDecoration(
@@ -82,7 +80,7 @@ class _DialogState extends State<DialogAlert> {
                 ],
               ),
               onPressed: () =>
-                  Navigator.of(context).pushNamed(Routes.registerHouse),
+                  Navigator.of(context).popAndPushNamed(Routes.registerHouse),
             ),
           ),
         ],
