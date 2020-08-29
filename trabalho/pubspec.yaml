@@ -32,6 +32,7 @@ dependencies:
   firebase_core:
   firebase_auth:
   cloud_firestore: "^0.14.0+2"
+  curved_navigation_bar: ^0.3.3
 dev_dependencies:
   lint:
   flutter_test:

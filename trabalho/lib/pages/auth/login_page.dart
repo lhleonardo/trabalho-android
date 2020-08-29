@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trabalho/components/input.dart';
 import 'package:trabalho/components/dialogAlert.dart';
+import '../../routes/routes.dart';
 
 class LoginPage extends StatelessWidget {
   final Map<String, String> data = {};
@@ -133,7 +134,10 @@ class LoginPage extends StatelessWidget {
                               ),
                             ),
                             onPressed: () {
-                              if (_formKey.currentState.validate()) {}
+                              if (_formKey.currentState.validate()) {
+                                Navigator.of(context)
+                                    .popAndPushNamed(Routes.homePage);
+                              }
                             },
                           ),
                         ),

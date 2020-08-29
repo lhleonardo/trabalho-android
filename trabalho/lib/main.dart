@@ -1,12 +1,9 @@
-import 'dart:async';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:trabalho/home/enter_house_page.dart';
+import 'package:trabalho/home/home_page.dart';
 import 'package:trabalho/home/welcome_page.dart';
 import 'package:trabalho/pages/auth/register_member_page.dart';
 import 'package:trabalho/pages/error_page.dart';
-import 'package:trabalho/pages/home_page.dart';
 import 'package:trabalho/pages/splash_screen.dart';
 import 'package:trabalho/theme/theme_manager.dart';
 import 'pages/auth/login_page.dart';
