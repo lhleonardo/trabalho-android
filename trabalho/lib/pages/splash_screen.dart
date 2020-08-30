@@ -11,6 +11,8 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  Timer _lastTimer;
+
   @override
   void initState() {
     super.initState();
@@ -22,21 +24,20 @@ class _SplashScreenState extends State<SplashScreen> {
       await Firebase.initializeApp();
 
       FirebaseAuth.instance.authStateChanges().listen((user) {
-        if (user != null) {
-          Timer(
-              const Duration(seconds: 2),
-              () => Navigator.pushReplacementNamed(
-                    context,
-                    Routes.homePage,
-                  ));
-        } else {
-          Timer(
-              const Duration(seconds: 2),
-              () => Navigator.pushReplacementNamed(
-                    context,
-                    Routes.loginPage,
-                  ));
-        }
+        final routeName = user != null ? Routes.homePage : Routes.loginPage;
+
+        _lastTimer = Timer(
+          const Duration(seconds: 2),
+          () {
+            if (_lastTimer != null) {
+              _lastTimer.cancel();
+            }
+            Navigator.pushReplacementNamed(
+              context,
+              routeName,
+            );
+          },
+        );
       });
     } catch (error) {
       Navigator.pushReplacementNamed(context, Routes.errorPage);
