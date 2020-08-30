@@ -14,15 +14,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> {
-
   int _page = 1;
   //final GlobalKey _bottomNavigationKey = GlobalKey();
 
   final Accountlist _accountlist = Accountlist();
   final HouseEditPage _houseEditPage = HouseEditPage();
   final MemberEditPage _memberEditPage = MemberEditPage();
-  Widget _showPage = new Accountlist();
 
+  Widget _showPage = new Accountlist();
   Widget _pageChosser(int page) {
     switch (page) {
       case 0:
