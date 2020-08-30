@@ -26,13 +26,13 @@ class _HomePage extends State<HomePage> {
   Widget _pageChosser(int page) {
     switch (page) {
       case 0:
-        return _houseEditPage;
+        return _memberEditPage;
         break;
       case 1:
         return _accountlist;
         break;
       default:
-        return _memberEditPage;
+        return _houseEditPage;
         break;
     }
   }
