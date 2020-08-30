@@ -13,10 +13,23 @@ class AuthService {
     return _auth.authStateChanges();
   }
 
-  Future<QueryDocumentSnapshot> getUser(String email) async {
+  Future<QueryDocumentSnapshot> _getUser(String email) async {
     final result = await _collection.where('email', isEqualTo: email).get();
     final user = result.docs.first;
     return user;
+  }
+
+  Future<Member> getUser(String email) async {
+    final result = await _collection.where('email', isEqualTo: email).get();
+    final user = result.docs.first;
+    return _convertFromFirebase(
+      id: user.id,
+      email: user.get('email') as String,
+      name: user.get('name') as String,
+      nickname: user.get('nickname') as String,
+      cpf: user.get('cpf') as String,
+      dateOfBirth: user.get('dateOfBirth') as String,
+    );
   }
 
   Member _convertFromFirebase({
@@ -77,7 +90,7 @@ class AuthService {
   Future<Member> signIn({String email, String password}) async {
     await _auth.signInWithEmailAndPassword(email: email, password: password);
 
-    final QueryDocumentSnapshot user = await getUser(email);
+    final QueryDocumentSnapshot user = await _getUser(email);
 
     return _convertFromFirebase(
       id: user.id,
