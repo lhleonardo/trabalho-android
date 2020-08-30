@@ -12,6 +12,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   Timer _lastTimer;
+  StreamSubscription<User> _unsubscribe;
 
   @override
   void initState() {
@@ -19,11 +20,17 @@ class _SplashScreenState extends State<SplashScreen> {
     loading();
   }
 
+  @override
+  void dispose() {
+    _unsubscribe.cancel();
+    super.dispose();
+  }
+
   Future<void> loading() async {
     try {
       await Firebase.initializeApp();
 
-      FirebaseAuth.instance.authStateChanges().listen((user) {
+      _unsubscribe = FirebaseAuth.instance.authStateChanges().listen((user) {
         final routeName = user != null ? Routes.homePage : Routes.loginPage;
 
         _lastTimer = Timer(

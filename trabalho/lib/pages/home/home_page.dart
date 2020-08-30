@@ -1,12 +1,12 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import '../dashboard/account_list_page.dart';
-import '../users/house_edit_page.dart';
-import '../users/member_edit_page.dart';
 import 'package:trabalho/routes/routes.dart';
 import 'package:trabalho/services/auth.dart';
 import 'package:trabalho/utils/validator_alerts.dart';
 
+import '../dashboard/account_list_page.dart';
+import '../users/house_edit_page.dart';
+import '../users/member_edit_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -14,14 +14,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> {
-  int _page = 1;
+  final int _page = 1;
   //final GlobalKey _bottomNavigationKey = GlobalKey();
 
   final Accountlist _accountlist = Accountlist();
   final HouseEditPage _houseEditPage = HouseEditPage();
   final MemberEditPage _memberEditPage = MemberEditPage();
 
-  Widget _showPage = new Accountlist();
+  Widget _showPage = Accountlist();
+
   Widget _pageChosser(int page) {
     switch (page) {
       case 0:
@@ -30,14 +31,13 @@ class _HomePage extends State<HomePage> {
       case 1:
         return _accountlist;
         break;
-      case 2:
+      default:
         return _memberEditPage;
         break;
     }
   }
 
   final _authService = AuthService();
-
 
   @override
   Widget build(BuildContext context) {
