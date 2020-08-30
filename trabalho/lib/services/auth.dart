@@ -70,6 +70,10 @@ class AuthService {
     );
   }
 
+  Future<void> logout() {
+    return _auth.signOut();
+  }
+
   Future<Member> signIn({String email, String password}) async {
     await _auth.signInWithEmailAndPassword(email: email, password: password);
 

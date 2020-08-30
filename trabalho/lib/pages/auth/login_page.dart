@@ -1,16 +1,26 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:trabalho/components/input.dart';
 import 'package:trabalho/components/dialogAlert.dart';
-import '../../routes/routes.dart';
+import 'package:trabalho/routes/routes.dart';
+import 'package:trabalho/services/auth.dart';
+import 'package:trabalho/utils/validator_alerts.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   final Map<String, String> data = {};
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _authService = AuthService();
+  ProgressDialog _progress;
 
   String _inputValidator(String value) {
-    if (value.trim().isEmpty) {
-      return 'Insira o campo endereço de e-mail';
+    if (value.isEmpty) {
+      return 'Insira um endereço de e-mail';
     }
     bool format = false;
     for (var i = 0; i < value.length; i++) {
@@ -22,6 +32,48 @@ class LoginPage extends StatelessWidget {
       return 'Insira um endereço de e-mail válido';
     }
     return null;
+  }
+
+  Future<void> _submit(BuildContext context) async {
+    if (!_formKey.currentState.validate()) {
+      ValidatorAlerts.showWarningMessage(
+          context, 'Validação', 'Preencha os campos para continuar');
+    }
+
+    _formKey.currentState.save();
+
+    try {
+      await _progress.show();
+      final member = await _authService.signIn(
+          email: data['email'], password: data['password']);
+      await _progress.hide();
+
+      if (member != null) {
+        Navigator.of(context).pushReplacementNamed(Routes.homePage);
+        print(member.house == null);
+      }
+    } on FirebaseAuthException catch (error) {
+      await _progress.hide();
+      String message;
+      switch (error.code) {
+        case 'user-not-found':
+        case 'wrong-password':
+          message = 'Usuário e/ou senha incorretos.';
+          break;
+        default:
+          message = 'Algo de errado aconteceu. Tenta mais tarde.';
+          break;
+      }
+
+      ValidatorAlerts.showWarningMessage(context, 'Autenticação', message);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _progress = ValidatorAlerts.createProgress(context);
   }
 
   @override
@@ -64,26 +116,10 @@ class LoginPage extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: 16.0),
                         child: Input(
-                          obscureText: false,
                           placeholder: 'Endereço de e-mail',
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Insira um endereço de e-mail';
-                            }
-                            bool format = false;
-                            for (var i = 0; i < value.length; i++) {
-                              if (value[i] == '@') {
-                                format = true;
-                              }
-                            }
-                            if (format == false) {
-                              return 'Insira um endereço de e-mail válido';
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                            data['email'] = value;
-                          },
+                          keyboardType: TextInputType.emailAddress,
+                          validator: _inputValidator,
+                          onSaved: (value) => data['email'] = value,
                         ),
                       ),
                       Padding(
@@ -97,15 +133,14 @@ class LoginPage extends StatelessWidget {
                             }
                             return null;
                           },
-                          onSaved: (value) {
-                            data['senha'] = value;
-                          },
+                          onSaved: (value) => data['password'] = value,
                         ),
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width * 0.8,
                         child: Padding(
                           padding: const EdgeInsets.only(top: 8.0),
+                          // TODO: Implementar recuperação de senha!
                           child: Text(
                             'Esqueceu sua senha?',
                             style: Theme.of(context).textTheme.caption,
@@ -133,12 +168,7 @@ class LoginPage extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            onPressed: () {
-                              if (_formKey.currentState.validate()) {
-                                Navigator.of(context)
-                                    .popAndPushNamed(Routes.homePage);
-                              }
-                            },
+                            onPressed: () => _submit(context),
                           ),
                         ),
                       ),

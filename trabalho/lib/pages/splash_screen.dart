@@ -34,7 +34,7 @@ class _SplashScreenState extends State<SplashScreen> {
               const Duration(seconds: 2),
               () => Navigator.pushReplacementNamed(
                     context,
-                    Routes.homePage,
+                    Routes.loginPage,
                   ));
         }
       });
