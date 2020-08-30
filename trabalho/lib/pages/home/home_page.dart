@@ -1,5 +1,8 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import '../dashboard/account_list_page.dart';
+import '../users/house_edit_page.dart';
+import '../users/member_edit_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -7,8 +10,27 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> {
-  int _page = 0;
-  final GlobalKey _bottomNavigationKey = GlobalKey();
+  int _page = 1;
+  //final GlobalKey _bottomNavigationKey = GlobalKey();
+
+  final Accountlist _accountlist = Accountlist();
+  final HouseEditPage _houseEditPage = HouseEditPage();
+  final MemberEditPage _memberEditPage = MemberEditPage();
+  Widget _showPage = new Accountlist();
+
+  Widget _pageChosser(int page) {
+    switch (page) {
+      case 0:
+        return _houseEditPage;
+        break;
+      case 1:
+        return _accountlist;
+        break;
+      case 2:
+        return _memberEditPage;
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,10 +85,10 @@ class _HomePage extends State<HomePage> {
         ),
       ),
       body: Container(
-        child: Text(_page.toString()),
+        child: _showPage,
       ),
       bottomNavigationBar: CurvedNavigationBar(
-        index: 0,
+        index: _page,
         height: 56,
         items: <Widget>[
           Icon(Icons.person,
@@ -80,9 +102,9 @@ class _HomePage extends State<HomePage> {
         backgroundColor: Theme.of(context).backgroundColor,
         animationCurve: Curves.easeInOut,
         animationDuration: const Duration(milliseconds: 300),
-        onTap: (index) {
+        onTap: (int tappedIndex) {
           setState(() {
-            _page = index;
+            _showPage = _pageChosser(tappedIndex);
           });
         },
       ),
