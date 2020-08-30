@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:trabalho/components/input.dart';
 import 'package:trabalho/components/button.dart';
 
@@ -14,7 +15,9 @@ class _RegisterHouseState extends State<RegisterHouse> {
   ScrollController scrollController = ScrollController();
   int step = 1;
   final Map<String, String> data = {};
+  final TextEditingController _dateController = TextEditingController();
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _formatter = DateFormat('dd/MM/yyyy');
 
   void _scrollToTop() {
     scrollController.animateTo(
@@ -69,7 +72,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
                       placeholder: 'Nome da república',
                       validator: (value){
                         if (value.trim().isEmpty) {
-                          return 'Insira o campo endereço de e-mail';
+                          return 'Campo obrigatório';
                         }
                         return null;
                       },
@@ -85,7 +88,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
                       keyboardType: TextInputType.number,
                       validator: (value){
                         if (value.trim().isEmpty) {
-                          return 'Insira o campo endereço de e-mail';
+                          return 'Campo obrigatório';
                         }
                         if (value.trim().length <  11){
                           return 'Insira o número incluindo o DDD';
@@ -101,25 +104,28 @@ class _RegisterHouseState extends State<RegisterHouse> {
                     padding: const EdgeInsets.only(top: 16.0),
                     child: Input(
                       placeholder: 'Data de criação',
-                      keyboardType: TextInputType.datetime,
-                      validator: (value){
-                        if (value.trim().isEmpty) {
-                          return 'Insira o campo endereço de e-mail';
-                        }
-                        RegExp regExp = new RegExp(r'[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]');
-                        if (!regExp.hasMatch(value)) {
-                          print(regExp.hasMatch(value));
-                          return 'A data precisa ser no formato: 01/01/2020';
-                        }
-                        int dia = int.parse(value[0]+value[1]);
-                        int mes = int.parse(value[3]+value[4]);
-                        if (dia > 31 || mes > 12){
-                          return 'Insira uma data válida';
+                      validator: (value) {
+                        if(value.isEmpty) {
+                          return 'Campo obrigatório';
                         }
                         return null;
                       },
-                      onSaved: (value){
-                        data['telefone'] = value;
+                      controller: _dateController,
+                      readOnly: true,
+                      onSaved: (value) => data['dataCriacao'] = value,
+                      onTap: () async {
+                        final currentDate = _dateController.text != null &&
+                                _dateController.text.isNotEmpty
+                            ? _formatter.parse(_dateController.text)
+                            : DateTime.now();
+                        final result = await showDatePicker(
+                          context: context,
+                          firstDate: DateTime(1930),
+                          lastDate: DateTime(2100),
+                          initialDate: currentDate,
+                        );
+
+                        _dateController.text = _formatter.format(result);
                       },
                     ),
                   ),
@@ -129,7 +135,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
                       placeholder: 'Estado',
                       validator: (value){
                         if (value.trim().isEmpty) {
-                          return 'Escolha um estado';
+                          return 'Campo obrigatório';
                         }
                         return null;
                       },
@@ -144,7 +150,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
                       placeholder: 'Cidade',
                       validator: (value){
                         if (value.trim().isEmpty) {
-                          return 'Escolha uma cidade';
+                          return 'Campo obrigatório';
                         }
                         return null;
                       },
@@ -243,12 +249,22 @@ class _RegisterHouseState extends State<RegisterHouse> {
             Container(
               width: MediaQuery.of(context).size.width * 0.8,
               child: Form(
+                key: _formKey,
                 child: Column(
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.only(top: 16.0),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16.0),
                       child: Input(
                         placeholder: 'Nome completo',
+                        validator: (value){
+                          if (value.trim().isEmpty) {
+                            return 'Campo obrigatório';
+                          }
+                          return null;
+                        },
+                        onSaved: (value){
+                          data['nomeCompleto'] = value;
+                        },
                       ),
                     ),
                     const Padding(
@@ -257,10 +273,33 @@ class _RegisterHouseState extends State<RegisterHouse> {
                         placeholder: 'Apelido',
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 16.0),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16.0),
                       child: Input(
                         placeholder: 'Data de Nascimento',
+                        validator: (value) {
+                          if(value.isEmpty) {
+                            return 'Campo obrigatório';
+                          }
+                          return null;
+                        },
+                        controller: _dateController,
+                        readOnly: true,
+                        onSaved: (value) => data['dataNascimento'] = value,
+                        onTap: () async {
+                          final currentDate = _dateController.text != null &&
+                                  _dateController.text.isNotEmpty
+                              ? _formatter.parse(_dateController.text)
+                              : DateTime.now();
+                          final result = await showDatePicker(
+                            context: context,
+                            firstDate: DateTime(1930),
+                            lastDate: DateTime(2100),
+                            initialDate: currentDate,
+                          );
+
+                          _dateController.text = _formatter.format(result);
+                        },
                       ),
                     ),
                     const Padding(

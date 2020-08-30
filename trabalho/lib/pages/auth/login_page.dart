@@ -35,37 +35,34 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _submit(BuildContext context) async {
-    if (!_formKey.currentState.validate()) {
-      ValidatorAlerts.showWarningMessage(
-          context, 'Validação', 'Preencha os campos para continuar');
-    }
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
 
-    _formKey.currentState.save();
+      try {
+        await _progress.show();
+        final member = await _authService.signIn(
+            email: data['email'], password: data['password']);
+        await _progress.hide();
 
-    try {
-      await _progress.show();
-      final member = await _authService.signIn(
-          email: data['email'], password: data['password']);
-      await _progress.hide();
+        if (member != null) {
+          Navigator.of(context).pushReplacementNamed(Routes.homePage);
+          print(member.house == null);
+        }
+      } on FirebaseAuthException catch (error) {
+        await _progress.hide();
+        String message;
+        switch (error.code) {
+          case 'user-not-found':
+          case 'wrong-password':
+            message = 'Usuário e/ou senha incorretos.';
+            break;
+          default:
+            message = 'Algo de errado aconteceu. Tenta mais tarde.';
+            break;
+        }
 
-      if (member != null) {
-        Navigator.of(context).pushReplacementNamed(Routes.homePage);
-        print(member.house == null);
+        ValidatorAlerts.showWarningMessage(context, 'Autenticação', message);
       }
-    } on FirebaseAuthException catch (error) {
-      await _progress.hide();
-      String message;
-      switch (error.code) {
-        case 'user-not-found':
-        case 'wrong-password':
-          message = 'Usuário e/ou senha incorretos.';
-          break;
-        default:
-          message = 'Algo de errado aconteceu. Tenta mais tarde.';
-          break;
-      }
-
-      ValidatorAlerts.showWarningMessage(context, 'Autenticação', message);
     }
   }
 
