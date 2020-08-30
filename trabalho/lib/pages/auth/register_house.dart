@@ -15,8 +15,10 @@ class _RegisterHouseState extends State<RegisterHouse> {
   ScrollController scrollController = ScrollController();
   int step = 1;
   final Map<String, String> data = {};
-  final TextEditingController _dateController = TextEditingController();
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _dateController1 = TextEditingController();
+  final TextEditingController _dateController2 = TextEditingController();
+  final GlobalKey<FormState> _formKey1 = GlobalKey<FormState>();
+  //final GlobalKey<FormState> _formKey2 = GlobalKey<FormState>();
   final _formatter = DateFormat('dd/MM/yyyy');
 
   void _scrollToTop() {
@@ -27,6 +29,12 @@ class _RegisterHouseState extends State<RegisterHouse> {
       ),
       curve: Curves.easeIn,
     );
+  }
+
+  void _submit() {
+    if (_formKey1.currentState.validate() == true && _formKey1.currentState.validate() == true) {
+      print('tudo certo');
+    }
   }
 
   Widget _houseForm() {
@@ -63,7 +71,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
           Container(
             width: MediaQuery.of(context).size.width * 0.8,
             child: Form(
-              key: _formKey,
+              key: _formKey1,
               child: Column(
                 children: [
                   Padding(
@@ -110,13 +118,13 @@ class _RegisterHouseState extends State<RegisterHouse> {
                         }
                         return null;
                       },
-                      controller: _dateController,
+                      controller: _dateController1,
                       readOnly: true,
                       onSaved: (value) => data['dataCriacao'] = value,
                       onTap: () async {
-                        final currentDate = _dateController.text != null &&
-                                _dateController.text.isNotEmpty
-                            ? _formatter.parse(_dateController.text)
+                        final currentDate = _dateController1.text != null &&
+                                _dateController1.text.isNotEmpty
+                            ? _formatter.parse(_dateController1.text)
                             : DateTime.now();
                         final result = await showDatePicker(
                           context: context,
@@ -125,7 +133,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
                           initialDate: currentDate,
                         );
 
-                        _dateController.text = _formatter.format(result);
+                        _dateController1.text = _formatter.format(result);
                       },
                     ),
                   ),
@@ -167,7 +175,8 @@ class _RegisterHouseState extends State<RegisterHouse> {
                     child: Button(
                       text: 'Próximo',
                       callback: () => setState(() {
-                        if (_formKey.currentState.validate()) {
+                        if (_formKey1.currentState.validate()) {
+                          _formKey1.currentState.reset();
                           _scrollToTop();
                           step = 2;
                         }
@@ -181,7 +190,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
           Padding(
             padding: const EdgeInsets.only(top: 24),
             child: FlatButton(
-              onPressed: () {},
+              onPressed: () {Navigator.pop(context);},
               child: Text(
                 'Já tem uma conta? Entrar',
                 style: Theme.of(context).textTheme.subtitle1,
@@ -249,7 +258,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
             Container(
               width: MediaQuery.of(context).size.width * 0.8,
               child: Form(
-                key: _formKey,
+                key: _formKey1,
                 child: Column(
                   children: [
                     Padding(
@@ -267,10 +276,13 @@ class _RegisterHouseState extends State<RegisterHouse> {
                         },
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 16.0),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16.0),
                       child: Input(
                         placeholder: 'Apelido',
+                        onSaved: (value){
+                          data['apelido'] = value;
+                        },
                       ),
                     ),
                     Padding(
@@ -283,13 +295,13 @@ class _RegisterHouseState extends State<RegisterHouse> {
                           }
                           return null;
                         },
-                        controller: _dateController,
+                        controller: _dateController2,
                         readOnly: true,
                         onSaved: (value) => data['dataNascimento'] = value,
                         onTap: () async {
-                          final currentDate = _dateController.text != null &&
-                                  _dateController.text.isNotEmpty
-                              ? _formatter.parse(_dateController.text)
+                          final currentDate = _dateController2.text != null &&
+                                  _dateController2.text.isNotEmpty
+                              ? _formatter.parse(_dateController2.text)
                               : DateTime.now();
                           final result = await showDatePicker(
                             context: context,
@@ -298,20 +310,68 @@ class _RegisterHouseState extends State<RegisterHouse> {
                             initialDate: currentDate,
                           );
 
-                          _dateController.text = _formatter.format(result);
+                          _dateController2.text = _formatter.format(result);
                         },
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 16.0),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16.0),
                       child: Input(
                         placeholder: 'E-mail',
+                        validator: (value){
+                          if (value.isEmpty) {
+                            return 'Campo obrigatório';
+                          }
+                          bool format = false;
+                          for (var i = 0; i < value.length; i++) {
+                            if (value[i] == '@') {
+                              format = true;
+                            }
+                          }
+                          if (format == false) {
+                            return 'Insira um endereço de e-mail válido';
+                          }
+                          return null;
+                        },
+                        onSaved: (value){
+                          data['email'] = value;
+                        },
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 16.0),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16.0),
                       child: Input(
+                        obscureText: true,
                         placeholder: 'Senha',
+                        validator: (value){
+                          if (value.trim().isEmpty) {
+                            return 'Campo obrigatório';
+                          }
+                          data['senha'] = value;
+                          return null;
+                        },
+                        onSaved: (value){
+                          data['senha'] = value;
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16.0),
+                      child: Input(
+                        obscureText: true,
+                        placeholder: 'Confirme a senha',
+                        validator: (value){
+                          if (value.trim().isEmpty) {
+                            return 'Campo obrigatório';
+                          }
+                          if (value.trim() != data['senha']) {
+                            return 'Confirmação diferente da senha';
+                          }
+                          return null;
+                        },
+                        onSaved: (value){
+                          data['senhaConfirmacao'] = value;
+                        },
                       ),
                     ),
                     SizedBox(
@@ -334,7 +394,12 @@ class _RegisterHouseState extends State<RegisterHouse> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            // ignore: lines_longer_than_80_chars
+                            if (_formKey1.currentState.validate() == true) {
+                              print('tudo certo');
+                            }
+                          },
                         ),
                       ),
                     ),
@@ -345,7 +410,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
             Padding(
               padding: const EdgeInsets.only(top: 24),
               child: FlatButton(
-                onPressed: () {},
+                onPressed: () {Navigator.pop(context);},
                 child: Text(
                   'Já tem uma conta? Entrar',
                   style: Theme.of(context).textTheme.subtitle1,
