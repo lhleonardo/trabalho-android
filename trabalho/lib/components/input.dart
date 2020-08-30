@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 
 class Input extends StatelessWidget {
-  const Input({
-    this.placeholder,
-    this.validator,
-    this.controller,
-    this.onSaved,
-    this.onTap,
-    this.obscureText = false,
-    this.readOnly = false,
-    this.keyboardType = TextInputType.text
-  });
+  const Input(
+      {this.placeholder,
+      this.validator,
+      this.controller,
+      this.onSaved,
+      this.onTap,
+      this.obscureText = false,
+      this.readOnly = false,
+      this.keyboardType = TextInputType.text});
 
   final TextEditingController controller;
   final String placeholder;
@@ -38,7 +37,7 @@ class Input extends StatelessWidget {
           color: Theme.of(context).accentColor,
           fontSize: 20,
         ),
-        floatingLabelBehavior: FloatingLabelBehavior.never,
+        floatingLabelBehavior: FloatingLabelBehavior.always,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5),
           borderSide: BorderSide(

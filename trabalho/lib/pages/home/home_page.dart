@@ -1,5 +1,8 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:trabalho/routes/routes.dart';
+import 'package:trabalho/services/auth.dart';
+import 'package:trabalho/utils/validator_alerts.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -9,9 +12,11 @@ class HomePage extends StatefulWidget {
 class _HomePage extends State<HomePage> {
   int _page = 0;
   final GlobalKey _bottomNavigationKey = GlobalKey();
+  final _authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
+    final progress = ValidatorAlerts.createProgress(context);
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: PreferredSize(
@@ -54,12 +59,18 @@ class _HomePage extends State<HomePage> {
                     size: 30.0,
                   ),
                   color: const Color.fromRGBO(240, 238, 238, 1),
-                  onPressed: () {},
+                  onPressed: () async {
+                    await progress.show();
+                    await _authService.logout();
+                    await progress.hide();
+
+                    Navigator.of(context)
+                        .pushReplacementNamed(Routes.loginPage);
+                  },
                 )
               ],
             ),
           ),
-          actions: [],
         ),
       ),
       body: Container(
