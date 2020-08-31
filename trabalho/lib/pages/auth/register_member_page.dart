@@ -19,13 +19,17 @@ class RegisterMember extends StatelessWidget {
   }
 
   Future<void> _submit(BuildContext context) async {
+    final progress = ValidatorAlerts.createProgress(context);
     if (!_formKey.currentState.validate()) {
       ValidatorAlerts.showWarningMessage(
           context, 'Validação', 'Há campos que precisam de sua atenção!');
+
+      return;
     }
 
     _formKey.currentState.save();
 
+    await progress.show();
     try {
       await _authService.registerMember(
         name: _formData['name'],
@@ -35,7 +39,16 @@ class RegisterMember extends StatelessWidget {
         password: _formData['password'],
         cpf: _formData['cpf'],
       );
-    } catch (error) {}
+
+      await progress.hide();
+
+      // Fecha a tela após o cadastro
+      Navigator.pop(context);
+    } catch (error) {
+      await progress.hide();
+      ValidatorAlerts.showWarningMessage(context, 'Erro!',
+          'Não foi possível cadastrar. Tente novamente mais tarde!');
+    }
   }
 
   @override

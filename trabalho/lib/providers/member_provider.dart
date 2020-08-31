@@ -1,16 +1,20 @@
-import 'package:flutter/material.dart';
+import 'package:trabalho/models/house.dart';
 import 'package:trabalho/models/member.dart';
+import 'package:trabalho/services/house.dart';
+import 'package:trabalho/services/member.dart';
 
-class MemberProvider extends ChangeNotifier {
-  Member _currentMember;
+class MemberProvider {
+  Member _member;
+  House _house;
 
-  Member getCurrentMember() {
-    return _currentMember;
-  }
+  final _memberService = MemberService();
+  final _houseService = HouseService();
 
-  void setCurrentMember(Member value) {
-    _currentMember = value;
+  Future<void> loadMember(String id) async {
+    _member = await _memberService.getById(id);
 
-    notifyListeners();
+    if (_member != null && _member.houseId != null) {
+      _house = await _houseService.getById(_member.houseId);
+    }
   }
 }

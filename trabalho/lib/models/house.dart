@@ -1,5 +1,3 @@
-import 'member.dart';
-
 /// Cadastro de Repúblicas
 /// - Nome
 /// - Endereço
@@ -16,23 +14,12 @@ class House {
   final String state;
   final String city;
 
-  /// Mapeamento de membros que moram na república
-  /// diferenciando representantes dos membros comuns
-  /// a partir de uma flag
-  final Map<Member, bool> members;
+  House({this.id, this.name, this.address, this.state, this.city});
 
-  House(
-      {this.id, this.name, this.address, this.state, this.city, this.members});
-
-  void addMember(Member member) {
-    members.putIfAbsent(member, () => false);
-  }
-
-  void addManager(Member member) {
-    if (members.containsKey(member)) {
-      members.update(member, (value) => true);
-    } else {
-      members.putIfAbsent(member, () => true);
-    }
-  }
+  House.fromMap(Map<String, dynamic> snapshot, String id)
+      : id = id ?? '',
+        name = snapshot['name'] as String ?? '',
+        address = snapshot['address'] as String ?? '',
+        state = snapshot['state'] as String ?? '',
+        city = snapshot['city'] as String ?? '';
 }

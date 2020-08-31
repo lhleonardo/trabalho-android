@@ -1,5 +1,3 @@
-import 'house.dart';
-
 /// Cliente - Informações do Cadastro
 /// - Nome Completo
 /// - Apelido
@@ -15,12 +13,23 @@ class Member {
   final String cpf;
   final String dateOfBirth;
 
-  const Member({
-    this.id,
-    this.name,
-    this.nickname,
-    this.email,
-    this.cpf,
-    this.dateOfBirth,
-  });
+  final String houseId;
+
+  const Member(
+      {this.id,
+      this.name,
+      this.nickname,
+      this.email,
+      this.cpf,
+      this.dateOfBirth,
+      this.houseId});
+
+  Member.fromMap(Map<String, dynamic> snapshot, String id)
+      : id = id ?? '',
+        name = snapshot['name'] as String ?? '',
+        nickname = snapshot['nickname'] as String ?? '',
+        email = snapshot['email'] as String ?? '',
+        cpf = snapshot['cpf'] as String ?? '',
+        dateOfBirth = snapshot['dateOfBirth'] as String ?? '',
+        houseId = snapshot['houseId'] as String ?? '';
 }
