@@ -1,6 +1,5 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:trabalho/routes/routes.dart';
 import 'package:trabalho/services/auth.dart';
 import 'package:trabalho/utils/validator_alerts.dart';
 
@@ -42,6 +41,7 @@ class _HomePage extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final progress = ValidatorAlerts.createProgress(context);
+
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: PreferredSize(

@@ -5,23 +5,23 @@ class Accountlist extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: new Container(
+      body: Container(
         color: Theme.of(context).backgroundColor,
-        child: new ListView.builder(
+        child: ListView.builder(
           itemExtent: 160.0,
           itemCount: 1,
-          itemBuilder: (_, index) => new CardList(),
+          itemBuilder: (_, index) => CardList(),
         ),
       ),
     );
     /*
-    return new Flexible(
-      child: new Container(
+    return Flexible(
+      child: Container(
         color: Theme.of(context).primaryColor,
-        child: new ListView.builder(
+        child: ListView.builder(
           itemExtent: 160.0,
           itemCount: 1,
-          itemBuilder: (_, index) => new CardList(),
+          itemBuilder: (_, index) => CardList(),
         ),
       ),
     );

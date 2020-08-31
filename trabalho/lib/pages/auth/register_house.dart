@@ -32,7 +32,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
   }
 
   void _submit() {
-    if (_formKey1.currentState.validate() == true && _formKey1.currentState.validate() == true) {
+    if (_formKey1.currentState.validate()) {
       print('tudo certo');
     }
   }
@@ -78,13 +78,13 @@ class _RegisterHouseState extends State<RegisterHouse> {
                     padding: const EdgeInsets.only(top: 16.0),
                     child: Input(
                       placeholder: 'Nome da república',
-                      validator: (value){
+                      validator: (value) {
                         if (value.trim().isEmpty) {
                           return 'Campo obrigatório';
                         }
                         return null;
                       },
-                      onSaved: (value){
+                      onSaved: (value) {
                         data['nomeRep'] = value;
                       },
                     ),
@@ -94,16 +94,16 @@ class _RegisterHouseState extends State<RegisterHouse> {
                     child: Input(
                       placeholder: 'Telefone',
                       keyboardType: TextInputType.number,
-                      validator: (value){
+                      validator: (value) {
                         if (value.trim().isEmpty) {
                           return 'Campo obrigatório';
                         }
-                        if (value.trim().length <  11){
+                        if (value.trim().length < 11) {
                           return 'Insira o número incluindo o DDD';
                         }
                         return null;
                       },
-                      onSaved: (value){
+                      onSaved: (value) {
                         data['telefone'] = value;
                       },
                     ),
@@ -113,7 +113,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
                     child: Input(
                       placeholder: 'Data de criação',
                       validator: (value) {
-                        if(value.isEmpty) {
+                        if (value.isEmpty) {
                           return 'Campo obrigatório';
                         }
                         return null;
@@ -141,13 +141,13 @@ class _RegisterHouseState extends State<RegisterHouse> {
                     padding: const EdgeInsets.only(top: 16.0),
                     child: Input(
                       placeholder: 'Estado',
-                      validator: (value){
+                      validator: (value) {
                         if (value.trim().isEmpty) {
                           return 'Campo obrigatório';
                         }
                         return null;
                       },
-                      onSaved: (value){
+                      onSaved: (value) {
                         data['estado'] = value;
                       },
                     ),
@@ -156,13 +156,13 @@ class _RegisterHouseState extends State<RegisterHouse> {
                     padding: const EdgeInsets.only(top: 16.0),
                     child: Input(
                       placeholder: 'Cidade',
-                      validator: (value){
+                      validator: (value) {
                         if (value.trim().isEmpty) {
                           return 'Campo obrigatório';
                         }
                         return null;
                       },
-                      onSaved: (value){
+                      onSaved: (value) {
                         data['cidade'] = value;
                       },
                     ),
@@ -190,7 +190,9 @@ class _RegisterHouseState extends State<RegisterHouse> {
           Padding(
             padding: const EdgeInsets.only(top: 24),
             child: FlatButton(
-              onPressed: () {Navigator.pop(context);},
+              onPressed: () {
+                Navigator.pop(context);
+              },
               child: Text(
                 'Já tem uma conta? Entrar',
                 style: Theme.of(context).textTheme.subtitle1,
@@ -265,13 +267,13 @@ class _RegisterHouseState extends State<RegisterHouse> {
                       padding: const EdgeInsets.only(top: 16.0),
                       child: Input(
                         placeholder: 'Nome completo',
-                        validator: (value){
+                        validator: (value) {
                           if (value.trim().isEmpty) {
                             return 'Campo obrigatório';
                           }
                           return null;
                         },
-                        onSaved: (value){
+                        onSaved: (value) {
                           data['nomeCompleto'] = value;
                         },
                       ),
@@ -280,7 +282,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
                       padding: const EdgeInsets.only(top: 16.0),
                       child: Input(
                         placeholder: 'Apelido',
-                        onSaved: (value){
+                        onSaved: (value) {
                           data['apelido'] = value;
                         },
                       ),
@@ -290,7 +292,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
                       child: Input(
                         placeholder: 'Data de Nascimento',
                         validator: (value) {
-                          if(value.isEmpty) {
+                          if (value.isEmpty) {
                             return 'Campo obrigatório';
                           }
                           return null;
@@ -318,7 +320,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
                       padding: const EdgeInsets.only(top: 16.0),
                       child: Input(
                         placeholder: 'E-mail',
-                        validator: (value){
+                        validator: (value) {
                           if (value.isEmpty) {
                             return 'Campo obrigatório';
                           }
@@ -333,7 +335,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
                           }
                           return null;
                         },
-                        onSaved: (value){
+                        onSaved: (value) {
                           data['email'] = value;
                         },
                       ),
@@ -343,14 +345,14 @@ class _RegisterHouseState extends State<RegisterHouse> {
                       child: Input(
                         obscureText: true,
                         placeholder: 'Senha',
-                        validator: (value){
+                        validator: (value) {
                           if (value.trim().isEmpty) {
                             return 'Campo obrigatório';
                           }
                           data['senha'] = value;
                           return null;
                         },
-                        onSaved: (value){
+                        onSaved: (value) {
                           data['senha'] = value;
                         },
                       ),
@@ -360,7 +362,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
                       child: Input(
                         obscureText: true,
                         placeholder: 'Confirme a senha',
-                        validator: (value){
+                        validator: (value) {
                           if (value.trim().isEmpty) {
                             return 'Campo obrigatório';
                           }
@@ -369,7 +371,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
                           }
                           return null;
                         },
-                        onSaved: (value){
+                        onSaved: (value) {
                           data['senhaConfirmacao'] = value;
                         },
                       ),
@@ -410,7 +412,9 @@ class _RegisterHouseState extends State<RegisterHouse> {
             Padding(
               padding: const EdgeInsets.only(top: 24),
               child: FlatButton(
-                onPressed: () {Navigator.pop(context);},
+                onPressed: () {
+                  Navigator.pop(context);
+                },
                 child: Text(
                   'Já tem uma conta? Entrar',
                   style: Theme.of(context).textTheme.subtitle1,

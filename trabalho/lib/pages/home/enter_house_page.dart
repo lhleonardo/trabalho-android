@@ -24,25 +24,23 @@ class EnterHousePage extends StatelessWidget {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.05,
                   ),
-                  Container(
-                    child: Align(
-                      alignment: const Alignment(0.85, -0.85),
-                      child: Column(
-                        children: [
-                          const Image(
-                            image: AssetImage('assets/icons/logo.png'),
-                            height: 30,
-                            fit: BoxFit.fill,
+                  Align(
+                    alignment: const Alignment(0.85, -0.85),
+                    child: Column(
+                      children: const [
+                        Image(
+                          image: AssetImage('assets/icons/logo.png'),
+                          height: 30,
+                          fit: BoxFit.fill,
+                        ),
+                        Text(
+                          'RepApp',
+                          style: TextStyle(
+                            color: Color.fromRGBO(240, 238, 238, 1),
+                            fontSize: 7,
                           ),
-                          const Text(
-                            'RepApp',
-                            style: TextStyle(
-                              color: Color.fromRGBO(240, 238, 238, 1),
-                              fontSize: 7,
-                            ),
-                          )
-                        ],
-                      ),
+                        )
+                      ],
                     ),
                   ),
                   SizedBox(

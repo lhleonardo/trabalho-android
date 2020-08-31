@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:trabalho/components/input.dart';
 import 'package:trabalho/components/button.dart';
 
@@ -28,17 +27,17 @@ class _MemberEditState extends State<MemberEditPage> {
   Widget _informationMember() {
     return Center(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Container(
-            margin: EdgeInsets.only(right: 10),
+            margin: const EdgeInsets.only(right: 10),
             child: Align(
               alignment: Alignment.topRight,
               child: IconButton(
-                icon: Icon(Icons.edit, color: Color.fromRGBO(240, 238, 238, 1)),
+                icon: const Icon(Icons.edit,
+                    color: Color.fromRGBO(240, 238, 238, 1)),
                 onPressed: () {
                   setState(() {
                     _scrollToTop();
@@ -57,16 +56,16 @@ class _MemberEditState extends State<MemberEditPage> {
             height: MediaQuery.of(context).size.height * 0.03,
           ),
           Container(
-            margin: EdgeInsets.only(left: 15),
+            margin: const EdgeInsets.only(left: 15),
             alignment: Alignment.center,
             child: Row(
               children: <Widget>[
                 Icon(Icons.person,
                     size: 24, color: Theme.of(context).accentColor),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
-                Text(
+                const Text(
                   'Gabrielle Almeida Cuba',
                   style: TextStyle(
                       color: Color.fromRGBO(240, 238, 238, 1), fontSize: 16),
@@ -81,16 +80,16 @@ class _MemberEditState extends State<MemberEditPage> {
             endIndent: 25,
           ),
           Container(
-            margin: EdgeInsets.only(left: 15),
+            margin: const EdgeInsets.only(left: 15),
             alignment: Alignment.center,
             child: Row(
               children: <Widget>[
                 Icon(Icons.mood,
                     size: 24, color: Theme.of(context).accentColor),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
-                Text(
+                const Text(
                   'Apelido',
                   style: TextStyle(
                       color: Color.fromRGBO(240, 238, 238, 1), fontSize: 16),
@@ -105,16 +104,16 @@ class _MemberEditState extends State<MemberEditPage> {
             endIndent: 25,
           ),
           Container(
-            margin: EdgeInsets.only(left: 20),
+            margin: const EdgeInsets.only(left: 20),
             alignment: Alignment.center,
             child: Row(
               children: <Widget>[
                 Icon(Icons.email,
                     size: 24, color: Theme.of(context).accentColor),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
-                Text(
+                const Text(
                   'Endereço de e-mail',
                   style: TextStyle(
                       color: Color.fromRGBO(240, 238, 238, 1), fontSize: 16),
@@ -129,16 +128,16 @@ class _MemberEditState extends State<MemberEditPage> {
             endIndent: 25,
           ),
           Container(
-            margin: EdgeInsets.only(left: 20),
+            margin: const EdgeInsets.only(left: 20),
             alignment: Alignment.center,
             child: Row(
               children: <Widget>[
                 Icon(Icons.calendar_today,
                     size: 24, color: Theme.of(context).accentColor),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
-                Text(
+                const Text(
                   '11/11/1111',
                   style: TextStyle(
                       color: Color.fromRGBO(240, 238, 238, 1), fontSize: 16),
@@ -160,13 +159,12 @@ class _MemberEditState extends State<MemberEditPage> {
   Widget _memberForm() {
     return Center(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Container(
-            margin: EdgeInsets.only( right: 15),
+            margin: const EdgeInsets.only(right: 15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -184,7 +182,7 @@ class _MemberEditState extends State<MemberEditPage> {
                     }),
                   ),
                 ),
-                Align(
+                const Align(
                   alignment: Alignment.topRight,
                   child: Icon(Icons.edit, color: Colors.grey),
                 ),
@@ -200,13 +198,13 @@ class _MemberEditState extends State<MemberEditPage> {
             height: MediaQuery.of(context).size.height * 0.03,
           ),
           Container(
-            margin: EdgeInsets.only(left: 20),
+            margin: const EdgeInsets.only(left: 20),
             alignment: Alignment.center,
             child: Row(
               children: <Widget>[
                 Icon(Icons.person,
                     size: 24, color: Theme.of(context).accentColor),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Container(
@@ -221,15 +219,15 @@ class _MemberEditState extends State<MemberEditPage> {
               ],
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Container(
-            margin: EdgeInsets.only(left: 20),
+            margin: const EdgeInsets.only(left: 20),
             alignment: Alignment.center,
             child: Row(
               children: <Widget>[
                 Icon(Icons.mood,
                     size: 24, color: Theme.of(context).accentColor),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Container(
@@ -244,15 +242,15 @@ class _MemberEditState extends State<MemberEditPage> {
               ],
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Container(
-            margin: EdgeInsets.only(left: 20),
+            margin: const EdgeInsets.only(left: 20),
             alignment: Alignment.center,
             child: Row(
               children: <Widget>[
                 Icon(Icons.email,
                     size: 24, color: Theme.of(context).accentColor),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Container(
@@ -267,15 +265,15 @@ class _MemberEditState extends State<MemberEditPage> {
               ],
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Container(
-            margin: EdgeInsets.only(left: 20),
+            margin: const EdgeInsets.only(left: 20),
             alignment: Alignment.center,
             child: Row(
               children: <Widget>[
                 Icon(Icons.calendar_today,
                     size: 24, color: Theme.of(context).accentColor),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Container(
@@ -290,9 +288,9 @@ class _MemberEditState extends State<MemberEditPage> {
               ],
             ),
           ),
-          SizedBox(height: 25),
+          const SizedBox(height: 25),
           Button(text: 'Finalizar', callback: () {}),
-          SizedBox(height: 30),
+          const SizedBox(height: 30),
         ],
       ),
     );

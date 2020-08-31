@@ -5,11 +5,9 @@ class HouseEditPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      body: Container(
-        child: Text(
-          "House Edit Page",
-          style: TextStyle(color: Colors.white),
-        ),
+      body: const Text(
+        'House Edit Page',
+        style: TextStyle(color: Colors.white),
       ),
     );
   }
