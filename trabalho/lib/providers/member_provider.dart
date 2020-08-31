@@ -10,11 +10,19 @@ class MemberProvider {
   final _memberService = MemberService();
   final _houseService = HouseService();
 
-  Future<void> loadMember(String id) async {
+  MemberProvider(String memberId) {
+    _loadMember(memberId);
+  }
+
+  Future<void> _loadMember(String id) async {
     _member = await _memberService.getById(id);
 
     if (_member != null && _member.houseId != null) {
       _house = await _houseService.getById(_member.houseId);
     }
+  }
+
+  House get house {
+    return _house;
   }
 }

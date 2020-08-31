@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:trabalho/pages/auth/login_page.dart';
 import 'package:trabalho/pages/home/home_page.dart';
+import 'package:trabalho/providers/member_provider.dart';
 import 'package:trabalho/services/auth.dart';
 import 'package:trabalho/services/member.dart';
 
@@ -16,7 +18,10 @@ class _WrapperState extends State<Wrapper> {
   Widget _currentWidget;
 
   Widget _homePage(String userId) {
-    return HomePage();
+    return Provider(
+      create: (_) => MemberProvider(userId),
+      child: HomePage(),
+    );
   }
 
   Widget _loginPage() {

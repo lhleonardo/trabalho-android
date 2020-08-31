@@ -1,5 +1,8 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:trabalho/pages/home/welcome_page.dart';
+import 'package:trabalho/providers/member_provider.dart';
 import 'package:trabalho/services/auth.dart';
 import 'package:trabalho/utils/validator_alerts.dart';
 
@@ -14,7 +17,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePage extends State<HomePage> {
   final int _page = 1;
-  //final GlobalKey _bottomNavigationKey = GlobalKey();
+  final _authService = AuthService();
 
   final Accountlist _accountlist = Accountlist();
   final HouseEditPage _houseEditPage = HouseEditPage();
@@ -36,12 +39,8 @@ class _HomePage extends State<HomePage> {
     }
   }
 
-  final _authService = AuthService();
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _home() {
     final progress = ValidatorAlerts.createProgress(context);
-
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: PreferredSize(
@@ -88,9 +87,6 @@ class _HomePage extends State<HomePage> {
                     await progress.show();
                     await _authService.logout();
                     await progress.hide();
-
-                    // Navigator.of(context)
-                    //     .pushReplacementNamed(Routes.loginPage);
                   },
                 )
               ],
@@ -123,5 +119,20 @@ class _HomePage extends State<HomePage> {
         },
       ),
     );
+  }
+
+  Widget _welcome() {
+    return WelcomePage();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final MemberProvider provider = Provider.of<MemberProvider>(context);
+
+    if (provider.house != null) {
+      return _home();
+    } else {
+      return _welcome();
+    }
   }
 }
