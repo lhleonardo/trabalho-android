@@ -11,41 +11,28 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  Timer _lastTimer;
-  StreamSubscription<User> _unsubscribe;
-
+  StreamSubscription<User> _subscription;
   @override
   void initState() {
     super.initState();
     loading();
   }
 
-  @override
-  void dispose() {
-    _unsubscribe.cancel();
-    super.dispose();
-  }
-
   Future<void> loading() async {
     try {
       await Firebase.initializeApp();
 
-      _unsubscribe = FirebaseAuth.instance.authStateChanges().listen((user) {
-        final routeName = user != null ? Routes.homePage : Routes.loginPage;
-
-        _lastTimer = Timer(
-          const Duration(seconds: 2),
-          () {
-            if (_lastTimer != null) {
-              _lastTimer.cancel();
-            }
-            Navigator.pushReplacementNamed(
-              context,
-              routeName,
-            );
-          },
-        );
-      });
+      _subscription = FirebaseAuth.instance.authStateChanges().listen(
+        (event) {
+          _subscription.cancel();
+          Timer(
+            const Duration(seconds: 2),
+            () {
+              Navigator.of(context).pushReplacementNamed(Routes.wrapper);
+            },
+          );
+        },
+      );
     } catch (error) {
       Navigator.pushReplacementNamed(context, Routes.errorPage);
     }

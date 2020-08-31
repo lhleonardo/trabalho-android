@@ -45,8 +45,7 @@ class _LoginPageState extends State<LoginPage> {
         await _progress.hide();
 
         if (member != null) {
-          Navigator.of(context).pushReplacementNamed(Routes.homePage);
-          print(member.house == null);
+          // Navigator.of(context).pushReplacementNamed(Routes.homePage);
         }
       } on FirebaseAuthException catch (error) {
         await _progress.hide();

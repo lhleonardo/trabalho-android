@@ -15,8 +15,6 @@ class Member {
   final String cpf;
   final String dateOfBirth;
 
-  final House house;
-
   const Member({
     this.id,
     this.name,
@@ -24,6 +22,5 @@ class Member {
     this.email,
     this.cpf,
     this.dateOfBirth,
-    this.house,
   });
 }

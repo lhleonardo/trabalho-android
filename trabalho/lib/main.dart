@@ -6,6 +6,7 @@ import 'package:trabalho/pages/auth/register_member_page.dart';
 import 'package:trabalho/pages/error_page.dart';
 import 'package:trabalho/pages/splash_screen.dart';
 import 'package:trabalho/theme/theme_manager.dart';
+import 'package:trabalho/wrapper.dart';
 import 'pages/auth/login_page.dart';
 import 'pages/auth/register_house.dart';
 import 'routes/routes.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         Routes.welcomePage: (_) => WelcomePage(),
         Routes.enterHousePage: (_) => EnterHousePage(),
         Routes.errorPage: (_) => ErrorPage(),
+        Routes.wrapper: (_) => Wrapper(),
       },
     );
   }

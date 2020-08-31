@@ -8,4 +8,5 @@ class Routes {
 
   static const homePage = '/home';
   static const loginPage = '/login';
+  static const wrapper = '/wrapper';
 }

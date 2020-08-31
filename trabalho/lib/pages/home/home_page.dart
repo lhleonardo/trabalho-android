@@ -89,8 +89,8 @@ class _HomePage extends State<HomePage> {
                     await _authService.logout();
                     await progress.hide();
 
-                    Navigator.of(context)
-                        .pushReplacementNamed(Routes.loginPage);
+                    // Navigator.of(context)
+                    //     .pushReplacementNamed(Routes.loginPage);
                   },
                 )
               ],

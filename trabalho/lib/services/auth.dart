@@ -39,7 +39,6 @@ class AuthService {
     @required String nickname,
     @required String cpf,
     @required String dateOfBirth,
-    House house,
   }) {
     return Member(
       id: id,
@@ -48,7 +47,6 @@ class AuthService {
       nickname: nickname,
       cpf: cpf,
       dateOfBirth: dateOfBirth,
-      house: house,
     );
   }
 
