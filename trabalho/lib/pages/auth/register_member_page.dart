@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 import 'package:trabalho/components/input.dart';
 import 'package:trabalho/components/button.dart';
@@ -16,6 +17,8 @@ class RegisterMember extends StatelessWidget {
 
   final AuthService _authService = AuthService();
 
+  final _maskFormatterCpf = new MaskTextInputFormatter(mask: '###.###.###-##', filter: { "#": RegExp(r'[0-9]') });
+
   void _persist(String field, String value) {
     _formData[field] = value;
   }
@@ -24,9 +27,6 @@ class RegisterMember extends StatelessWidget {
     final provider = Provider.of<MemberProvider>(context, listen: false);
     final progress = ValidatorAlerts.createProgress(context);
     if (!_formKey.currentState.validate()) {
-      ValidatorAlerts.showWarningMessage(
-          context, 'Validação', 'Há campos que precisam de sua atenção!');
-
       return;
     }
 
@@ -115,6 +115,7 @@ class RegisterMember extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 16.0),
                         child: Input(
                           placeholder: 'CPF',
+                          inputFormatter: _maskFormatterCpf,
                           validator: InputValidators.NotEmpty,
                           onSaved: (value) => _persist('cpf', value),
                         ),
@@ -147,7 +148,21 @@ class RegisterMember extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 16.0),
                         child: Input(
                           placeholder: 'Endereço de e-mail',
-                          validator: InputValidators.NotEmpty,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            bool format = false;
+                            for (var i = 0; i < value.length; i++) {
+                              if (value[i] == '@') {
+                                format = true;
+                              }
+                            }
+                            if (format == false) {
+                              return 'Insira um endereço de e-mail válido';
+                            }
+                            return null;
+                          },
                           onSaved: (value) => _persist('email', value),
                         ),
                       ),

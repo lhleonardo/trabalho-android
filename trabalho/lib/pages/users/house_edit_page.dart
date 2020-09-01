@@ -1,27 +1,17 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trabalho/models/member.dart';
+import 'package:trabalho/pages/dashboard/widget/new_bill.dart';
 import 'package:trabalho/providers/member_provider.dart';
-import 'package:trabalho/services/auth.dart';
 import 'package:trabalho/services/house.dart';
 import 'package:trabalho/services/member.dart';
 import '../dashboard/widget/account_widget.dart';
 
 class HouseEditPage extends StatelessWidget {
-  final ItemTeste item1 = ItemTeste(title: 'teste1');
-  final ItemTeste item2 = ItemTeste(title: 'teste1');
-  final ItemTeste item3 = ItemTeste(title: 'teste1');
-  final ItemTeste item4 = ItemTeste(title: 'teste1');
-  final ItemTeste item5 = ItemTeste(title: 'teste1');
-  final ItemTeste item6 = ItemTeste(title: 'teste1');
-
   final _houseService = HouseService();
   final _memberService = MemberService();
 
   Widget _managerView(BuildContext context, MemberProvider provider) {
-    final List<ItemTeste> myList = [item1, item2, item3, item4, item5, item6];
-
     return Column(
       children: [
         Container(
@@ -63,14 +53,6 @@ class HouseEditPage extends StatelessWidget {
                   ),
                 ],
               ),
-              Container(
-                alignment: Alignment.topLeft,
-                child: IconButton(
-                  icon: const Icon(Icons.edit),
-                  color: const Color.fromRGBO(240, 238, 238, 1),
-                  onPressed: () {},
-                ),
-              ),
             ],
           ),
         ),
@@ -95,7 +77,13 @@ class HouseEditPage extends StatelessWidget {
               IconButton(
                 icon: const Icon(Icons.add_circle),
                 color: Theme.of(context).accentColor,
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => NewBillPage()),
+                  );
+                },
               )
             ],
           ),
