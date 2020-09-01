@@ -14,17 +14,5 @@ class Accountlist extends StatelessWidget {
         ),
       ),
     );
-    /*
-    return Flexible(
-      child: Container(
-        color: Theme.of(context).primaryColor,
-        child: ListView.builder(
-          itemExtent: 160.0,
-          itemCount: 1,
-          itemBuilder: (_, index) => CardList(),
-        ),
-      ),
-    );
-    */
   }
 }

@@ -132,7 +132,7 @@ class _HomePage extends State<HomePage> {
     if (provider.house != null) {
       return _home();
     } else {
-      return _welcome();
+      return _home();
     }
   }
 }
