@@ -14,7 +14,12 @@ class MemberService {
     }
   }
 
-  Future<void> setHouse(String memberId, String houseId) async {
+  /// Método utilizado para definir a casa de um determinado membro
+  /// a partir de um código da república
+  Future<void> setHouse({
+    String memberId,
+    String houseId,
+  }) async {
     await _collection.doc(memberId).update({'house_id': houseId});
   }
 }

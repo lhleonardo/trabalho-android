@@ -31,5 +31,5 @@ class Member {
         email = snapshot['email'] as String ?? '',
         cpf = snapshot['cpf'] as String ?? '',
         dateOfBirth = snapshot['dateOfBirth'] as String ?? '',
-        houseId = snapshot['houseId'] as String ?? '';
+        houseId = snapshot['house_id'] as String ?? '';
 }

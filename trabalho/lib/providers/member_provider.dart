@@ -1,28 +1,55 @@
+import 'package:flutter/material.dart';
 import 'package:trabalho/models/house.dart';
 import 'package:trabalho/models/member.dart';
 import 'package:trabalho/services/house.dart';
 import 'package:trabalho/services/member.dart';
 
-class MemberProvider {
-  Member _member;
-  House _house;
+class MemberProvider extends ChangeNotifier {
+  Member _loggedMember;
+  House _loggedMemberHouse;
 
-  final _memberService = MemberService();
-  final _houseService = HouseService();
+  final MemberService _memberService = MemberService();
+  final HouseService _houseService = HouseService();
 
-  MemberProvider(String memberId) {
-    _loadMember(memberId);
+  Future<void> setLoggedMemberFor(String firebaseUserId) async {
+    setLoggedMember(await _memberService.getById(firebaseUserId));
   }
 
-  Future<void> _loadMember(String id) async {
-    _member = await _memberService.getById(id);
+  void logout() {
+    _loggedMember = null;
+    _loggedMemberHouse = null;
 
-    if (_member != null && _member.houseId != null) {
-      _house = await _houseService.getById(_member.houseId);
+    notifyListeners();
+  }
+
+  Future<void> setMemberHouse(String houseId) async {
+    _loggedMemberHouse = await _houseService.getById(houseId);
+
+    notifyListeners();
+  }
+
+  Member get loggedMember {
+    return _loggedMember;
+  }
+
+  Future<void> setLoggedMember(Member member) async {
+    _loggedMember = member;
+
+    if (_loggedMember.houseId != null && _loggedMember.houseId.isNotEmpty) {
+      _loggedMemberHouse = await _houseService.getById(_loggedMember.houseId);
     }
+
+    notifyListeners();
   }
 
-  House get house {
-    return _house;
+  void setInfo(Member member, House house) {
+    _loggedMember = member;
+    _loggedMemberHouse = house;
+
+    notifyListeners();
+  }
+
+  House get loggedMemberHouse {
+    return _loggedMemberHouse;
   }
 }

@@ -11,13 +11,13 @@ class HouseService {
     return snapshot != null ? House.fromMap(snapshot.data(), id) : null;
   }
 
-  Future<House> create(
+  Future<House> create({
     String name,
     String address,
     String state,
     String city,
     String managerId,
-  ) async {
+  }) async {
     final reference = await _collection.add(
       {
         'name': name,
@@ -30,7 +30,10 @@ class HouseService {
       },
     );
 
-    await _memberService.setHouse(managerId, reference.id);
+    await _memberService.setHouse(
+      memberId: managerId,
+      houseId: reference.id,
+    );
 
     return House(
       name: name,
@@ -38,5 +41,61 @@ class HouseService {
       state: state,
       city: city,
     );
+  }
+
+  Future<String> _getHouseIdForInviteCode(String invitationCode) async {
+    final result = await _collection
+        .where('invitation_code', isEqualTo: invitationCode)
+        .get();
+
+    if (result.docs.isEmpty) {
+      return null;
+    }
+
+    return result.docs.first.id;
+  }
+
+  Future<void> addMember({
+    String invitationCode,
+    String memberId,
+    bool isManager,
+  }) async {
+    final String houseId = await _getHouseIdForInviteCode(invitationCode);
+
+    _collection.doc(houseId).collection('members').add({
+      'member_id': memberId,
+      'is_manager': isManager,
+    });
+  }
+
+  Future<void> promoveToManager(String memberId, String houseId) async {
+    final members = await _collection
+        .doc(houseId)
+        .collection('members')
+        .where('member_id', isEqualTo: memberId)
+        .get();
+
+    // só pode ter uma associação com member_id dentro de uma república
+    if (members.docs.isNotEmpty && members.docs.length == 1) {
+      // define que o membro é um representante
+      await _collection
+          .doc(houseId)
+          .collection('members')
+          .doc(members.docs.first.id)
+          .update({'is_manager': true});
+    }
+    // SE ENTRAR AQUI É PQ ESSE MEMBRO NÃO EXISTIA NO BANCO...
+  }
+
+  Future<bool> checkIsManager(String houseId, String memberId) async {
+    final members = await _collection
+        .doc(houseId)
+        .collection('members')
+        .where('member_id', isEqualTo: memberId)
+        .get();
+
+    return members.docs.any((member) {
+      return member.get('is_manager') as bool;
+    });
   }
 }

@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:trabalho/providers/member_provider.dart';
 import 'package:trabalho/routes/routes.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -12,6 +14,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   StreamSubscription<User> _subscription;
+
   @override
   void initState() {
     super.initState();
@@ -23,14 +26,28 @@ class _SplashScreenState extends State<SplashScreen> {
       await Firebase.initializeApp();
 
       _subscription = FirebaseAuth.instance.authStateChanges().listen(
-        (event) {
+        (event) async {
           _subscription.cancel();
-          Timer(
-            const Duration(seconds: 2),
-            () {
-              Navigator.of(context).pushReplacementNamed(Routes.wrapper);
-            },
-          );
+
+          if (event != null) {
+            Provider.of<MemberProvider>(context, listen: false)
+                .setLoggedMemberFor(event.uid)
+                .then((_) {
+              Timer(
+                const Duration(seconds: 2),
+                () {
+                  Navigator.of(context).pushReplacementNamed(Routes.wrapper);
+                },
+              );
+            });
+          } else {
+            Timer(
+              const Duration(seconds: 2),
+              () {
+                Navigator.of(context).pushReplacementNamed(Routes.wrapper);
+              },
+            );
+          }
         },
       );
     } catch (error) {

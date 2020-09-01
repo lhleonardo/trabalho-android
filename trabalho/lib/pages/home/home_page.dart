@@ -39,8 +39,9 @@ class _HomePage extends State<HomePage> {
     }
   }
 
-  Widget _home() {
+  Widget _home(MemberProvider provider) {
     final progress = ValidatorAlerts.createProgress(context);
+
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: PreferredSize(
@@ -86,6 +87,7 @@ class _HomePage extends State<HomePage> {
                   onPressed: () async {
                     await progress.show();
                     await _authService.logout();
+                    provider.logout();
                     await progress.hide();
                   },
                 )
@@ -129,10 +131,10 @@ class _HomePage extends State<HomePage> {
   Widget build(BuildContext context) {
     final MemberProvider provider = Provider.of<MemberProvider>(context);
 
-    if (provider.house != null) {
-      return _home();
-    } else {
+    if (provider.loggedMemberHouse == null) {
       return _welcome();
+    } else {
+      return _home(provider);
     }
   }
 }

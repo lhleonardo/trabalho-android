@@ -3,28 +3,6 @@ import 'package:trabalho/components/button.dart';
 import 'package:trabalho/components/input.dart';
 
 class EnterHousePage extends StatelessWidget {
-  Widget _backup(BuildContext context) {
-    Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Center(
-            child: Container(
-              alignment: Alignment.center,
-              margin: const EdgeInsets.only(top: 30, left: 10, right: 10),
-              height: MediaQuery.of(context).size.height * 0.87,
-              width: MediaQuery.of(context).size.height * 1,
-              decoration: BoxDecoration(
-                color: Theme.of(context).backgroundColor,
-                borderRadius: const BorderRadius.all(Radius.circular(25)),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
