@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../routes/routes.dart';
 
 class CardList extends StatelessWidget {
   //final Planet planet;
@@ -86,7 +87,8 @@ class CardList extends StatelessWidget {
       height: 120.0,
       margin: const EdgeInsets.only(top: 16.0, bottom: 8.0),
       child: FlatButton(
-        // onPressed: () => _navigateTo(context, planet.id),
+        //onPressed: () => _navigateTo(context),
+        onPressed: () => Navigator.pushNamed(context,Routes.accountDetails),
 
         child: Stack(
           children: <Widget>[
@@ -99,12 +101,8 @@ class CardList extends StatelessWidget {
   }
 
   /*
-  _navigateTo(context, String id) {
-    Routes.navigateTo(
-      context,
-      '/detail/${planet.id}',
-      transition: TransitionType.fadeIn
-    );
+  _navigateTo(context) {
+    Navigator.pushNamed(, Routes.welcomePage);
   }
   */
 }

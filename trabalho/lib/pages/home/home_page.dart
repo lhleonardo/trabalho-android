@@ -1,6 +1,7 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trabalho/pages/dashboard/account_details_page.dart';
 import 'package:trabalho/pages/home/welcome_page.dart';
 import 'package:trabalho/providers/member_provider.dart';
 import 'package:trabalho/services/auth.dart';
