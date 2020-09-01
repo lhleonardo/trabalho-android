@@ -46,8 +46,10 @@ class _RegisterHouseState extends State<RegisterHouse> {
   final AuthService _authService = AuthService();
   final HouseService _houseService = HouseService();
 
-  final _maskFormatterCpf = new MaskTextInputFormatter(mask: '###.###.###-##', filter: { "#": RegExp(r'[0-9]') });
-  final _maskFormatterTel = new MaskTextInputFormatter(mask: '(##) # ####-####', filter: { "#": RegExp(r'[0-9]') });
+  final _maskFormatterCpf = new MaskTextInputFormatter(
+      mask: '###.###.###-##', filter: {"#": RegExp(r'[0-9]')});
+  final _maskFormatterTel = new MaskTextInputFormatter(
+      mask: '(##) # ####-####', filter: {"#": RegExp(r'[0-9]')});
 
   void _scrollToTop() {
     scrollController.animateTo(
