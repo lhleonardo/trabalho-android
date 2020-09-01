@@ -62,6 +62,8 @@ class _RegisterHouseState extends State<RegisterHouse> {
     if (_formKey2.currentState.validate()) {
       _formKey2.currentState.save();
 
+      FocusScope.of(context).unfocus();
+
       await progress.show();
 
       final Member member = await _authService.registerMember(
@@ -85,9 +87,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
 
       await progress.hide();
 
-      ValidatorAlerts.showWarningMessage(
-              context, 'Tudo certo!', 'Faça login para continuar')
-          .then((value) => Navigator.of(context).pop());
+      Navigator.of(context).pop();
     }
   }
 
@@ -106,15 +106,13 @@ class _RegisterHouseState extends State<RegisterHouse> {
     _estados.sort();
   }
 
-  void _loadCidades() async {
+  Future<void> _loadCidades() async {
     _estadoAnterior = _placeholderEst;
     _cidades = [];
-    String siglaEstado = _siglas[_placeholderEst];
-    var response = await http.get(
-        'https://servicodados.ibge.gov.br/api/v1/localidades/estados/' +
-            siglaEstado +
-            '/distritos');
-    var jsonResponse = json.decode(response.body);
+    final String siglaEstado = _siglas[_placeholderEst];
+    final response = await http.get(
+        'https://servicodados.ibge.gov.br/api/v1/localidades/estados/$siglaEstado/distritos');
+    final jsonResponse = json.decode(response.body);
     String municipio;
     jsonResponse.forEach(
       (elemento) => {
@@ -124,14 +122,14 @@ class _RegisterHouseState extends State<RegisterHouse> {
     );
   }
 
-  _choosedEstado(String estado) {
+  void _choosedEstado(String estado) {
     _estadoController.text = estado;
     setState(() {
       _placeholderEst = _estadoController.text;
     });
   }
 
-  _choosedCidade(String cidade) {
+  void _choosedCidade(String cidade) {
     _cidadeController.text = cidade;
     setState(() {
       _placeholderCid = _cidadeController.text;
@@ -208,25 +206,6 @@ class _RegisterHouseState extends State<RegisterHouse> {
                   Padding(
                     padding: const EdgeInsets.only(top: 16.0),
                     child: Input(
-                      placeholder: 'CPF',
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Campo obrigatório';
-                        }
-
-                        if (value.length < 11) {
-                          return 'Precisa ser um cpf válido';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        data['house.address'] = value;
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16.0),
-                    child: Input(
                       placeholder: 'Data de criação',
                       validator: (value) {
                         if (value.isEmpty) {
@@ -269,8 +248,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
                           data['house.state'] = value;
                         },
                         onTap: () async {
-                          await _dialogEscolha(
-                              0, _estados, 'Escolha seu estado');
+                          _dialogEscolha(0, _estados, 'Escolha seu estado');
                         }),
                   ),
                   Padding(
@@ -293,13 +271,10 @@ class _RegisterHouseState extends State<RegisterHouse> {
                           ValidatorAlerts.showWarningMessage(
                               context, 'Aviso', 'Escolha um estado primeiro');
                         } else if (_estadoAnterior == _placeholderEst) {
-                          await _dialogEscolha(
-                              1, _cidades, 'Escolha sua cidade');
-                          print('reaproveitamento');
+                          _dialogEscolha(1, _cidades, 'Escolha sua cidade');
                         } else {
                           await _loadCidades();
-                          await _dialogEscolha(
-                              1, _cidades, 'Escolha sua cidade');
+                          _dialogEscolha(1, _cidades, 'Escolha sua cidade');
                         }
                       },
                     ),
@@ -422,6 +397,25 @@ class _RegisterHouseState extends State<RegisterHouse> {
                         placeholder: 'Apelido',
                         onSaved: (value) {
                           data['manager.nickname'] = value;
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16.0),
+                      child: Input(
+                        placeholder: 'CPF',
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Campo obrigatório';
+                          }
+
+                          if (value.length < 11) {
+                            return 'Precisa ser um cpf válido';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          data['manager.cpf'] = value;
                         },
                       ),
                     ),
@@ -558,7 +552,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
     );
   }
 
-  Future<String> _dialogEscolha(int tipo, List<String> lista, String titulo) {
+  void _dialogEscolha(int tipo, List<String> lista, String titulo) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -567,8 +561,9 @@ class _RegisterHouseState extends State<RegisterHouse> {
             titulo,
             style: const TextStyle(color: Colors.white),
           ),
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20))),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+          ),
           backgroundColor: Theme.of(context).primaryColor,
           actionsPadding: const EdgeInsets.only(left: 10, right: 10),
           actions: <Widget>[
