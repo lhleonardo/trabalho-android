@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../dashboard/widget/account_widget.dart';
+import '../dashboard/widget/new_bill.dart';
 
 class HouseEditPage extends StatelessWidget {
   final ItemTeste item1 = ItemTeste(title: 'teste1');
@@ -86,7 +87,14 @@ class HouseEditPage extends StatelessWidget {
                     IconButton(
                       icon: const Icon(Icons.add_circle),
                       color: Theme.of(context).accentColor,
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => NewBillPage()
+                          )
+                        );
+                      },
                     )
                   ],
                 ),
