@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:provider/provider.dart';
 import 'package:trabalho/components/input.dart';
 import 'package:trabalho/components/dialogAlert.dart';
+import 'package:trabalho/providers/member_provider.dart';
 import 'package:trabalho/services/auth.dart';
 import 'package:trabalho/utils/validator_alerts.dart';
 
@@ -34,6 +36,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _submit(BuildContext context) async {
+    final provider = Provider.of<MemberProvider>(context, listen: false);
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
 
@@ -44,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
         await _progress.hide();
 
         if (member != null) {
-          // Navigator.of(context).pushReplacementNamed(Routes.homePage);
+          await provider.setLoggedMember(member);
         }
       } on FirebaseAuthException catch (error) {
         await _progress.hide();

@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:trabalho/components/input.dart';
 import 'package:trabalho/components/button.dart';
+import 'package:trabalho/models/house.dart';
+import 'package:trabalho/models/member.dart';
+import 'package:trabalho/providers/member_provider.dart';
+import 'package:trabalho/services/auth.dart';
+import 'package:trabalho/services/house.dart';
+import 'package:trabalho/utils/validator_alerts.dart';
 
 class RegisterHouse extends StatefulWidget {
   @override
@@ -12,14 +19,19 @@ class _RegisterHouseState extends State<RegisterHouse> {
   /// Controlador de scroll da página com intuito de fazer a tela
   /// ter o scroll para cima no momento de troca entre tela de cadastro do
   // usuário e da república
-  ScrollController scrollController = ScrollController();
   int step = 1;
+  ScrollController scrollController = ScrollController();
   final Map<String, String> data = {};
+
   final TextEditingController _dateController1 = TextEditingController();
   final TextEditingController _dateController2 = TextEditingController();
+
   final GlobalKey<FormState> _formKey1 = GlobalKey<FormState>();
-  //final GlobalKey<FormState> _formKey2 = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey2 = GlobalKey<FormState>();
   final _formatter = DateFormat('dd/MM/yyyy');
+
+  final AuthService _authService = AuthService();
+  final HouseService _houseService = HouseService();
 
   void _scrollToTop() {
     scrollController.animateTo(
@@ -31,9 +43,39 @@ class _RegisterHouseState extends State<RegisterHouse> {
     );
   }
 
-  void _submit() {
-    if (_formKey1.currentState.validate()) {
-      print('tudo certo');
+  Future<void> _submit() async {
+    final MemberProvider provider = Provider.of(context, listen: false);
+    final progress = ValidatorAlerts.createProgress(context);
+
+    if (_formKey2.currentState.validate()) {
+      _formKey2.currentState.save();
+
+      await progress.show();
+
+      final Member member = await _authService.registerMember(
+        email: data['manager.email'],
+        name: data['manager.name'],
+        nickname: data['manager.nickname'],
+        cpf: data['manager.cpf'],
+        dateOfBirth: data['manager.dateOfBirth'],
+        password: data['manager.password'],
+      );
+
+      final House house = await _houseService.create(
+        name: data['house.name'],
+        address: data['house.address'],
+        state: data['house.state'],
+        city: data['house.city'],
+        managerId: member.id,
+      );
+
+      provider.setInfo(member, house);
+
+      await progress.hide();
+
+      ValidatorAlerts.showWarningMessage(
+              context, 'Tudo certo!', 'Faça login para continuar')
+          .then((value) => Navigator.of(context).pop());
     }
   }
 
@@ -85,7 +127,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
                         return null;
                       },
                       onSaved: (value) {
-                        data['nomeRep'] = value;
+                        data['house.name'] = value;
                       },
                     ),
                   ),
@@ -93,18 +135,33 @@ class _RegisterHouseState extends State<RegisterHouse> {
                     padding: const EdgeInsets.only(top: 16.0),
                     child: Input(
                       placeholder: 'Telefone',
-                      keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value.trim().isEmpty) {
                           return 'Campo obrigatório';
                         }
-                        if (value.trim().length < 11) {
-                          return 'Insira o número incluindo o DDD';
+                        return null;
+                      },
+                      onSaved: (value) {
+                        data['house.address'] = value;
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: Input(
+                      placeholder: 'CPF',
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Campo obrigatório';
+                        }
+
+                        if (value.length < 11) {
+                          return 'Precisa ser um cpf válido';
                         }
                         return null;
                       },
                       onSaved: (value) {
-                        data['telefone'] = value;
+                        data['house.address'] = value;
                       },
                     ),
                   ),
@@ -120,7 +177,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
                       },
                       controller: _dateController1,
                       readOnly: true,
-                      onSaved: (value) => data['dataCriacao'] = value,
+                      onSaved: (value) => data['house.created_at'] = value,
                       onTap: () async {
                         final currentDate = _dateController1.text != null &&
                                 _dateController1.text.isNotEmpty
@@ -148,7 +205,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
                         return null;
                       },
                       onSaved: (value) {
-                        data['estado'] = value;
+                        data['house.state'] = value;
                       },
                     ),
                   ),
@@ -163,7 +220,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
                         return null;
                       },
                       onSaved: (value) {
-                        data['cidade'] = value;
+                        data['house.city'] = value;
                       },
                     ),
                   ),
@@ -176,6 +233,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
                       text: 'Próximo',
                       callback: () => setState(() {
                         if (_formKey1.currentState.validate()) {
+                          _formKey1.currentState.save();
                           _formKey1.currentState.reset();
                           _scrollToTop();
                           step = 2;
@@ -260,7 +318,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
             Container(
               width: MediaQuery.of(context).size.width * 0.8,
               child: Form(
-                key: _formKey1,
+                key: _formKey2,
                 child: Column(
                   children: [
                     Padding(
@@ -274,7 +332,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
                           return null;
                         },
                         onSaved: (value) {
-                          data['nomeCompleto'] = value;
+                          data['manager.name'] = value;
                         },
                       ),
                     ),
@@ -283,7 +341,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
                       child: Input(
                         placeholder: 'Apelido',
                         onSaved: (value) {
-                          data['apelido'] = value;
+                          data['manager.nickname'] = value;
                         },
                       ),
                     ),
@@ -299,7 +357,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
                         },
                         controller: _dateController2,
                         readOnly: true,
-                        onSaved: (value) => data['dataNascimento'] = value,
+                        onSaved: (value) => data['manager.dateOfBirth'] = value,
                         onTap: () async {
                           final currentDate = _dateController2.text != null &&
                                   _dateController2.text.isNotEmpty
@@ -336,7 +394,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
                           return null;
                         },
                         onSaved: (value) {
-                          data['email'] = value;
+                          data['manager.email'] = value;
                         },
                       ),
                     ),
@@ -349,11 +407,12 @@ class _RegisterHouseState extends State<RegisterHouse> {
                           if (value.trim().isEmpty) {
                             return 'Campo obrigatório';
                           }
-                          data['senha'] = value;
+
+                          data['manager.password'] = value;
                           return null;
                         },
                         onSaved: (value) {
-                          data['senha'] = value;
+                          data['manager.password'] = value;
                         },
                       ),
                     ),
@@ -366,13 +425,10 @@ class _RegisterHouseState extends State<RegisterHouse> {
                           if (value.trim().isEmpty) {
                             return 'Campo obrigatório';
                           }
-                          if (value.trim() != data['senha']) {
+                          if (value.trim() != data['manager.password']) {
                             return 'Confirmação diferente da senha';
                           }
                           return null;
-                        },
-                        onSaved: (value) {
-                          data['senhaConfirmacao'] = value;
                         },
                       ),
                     ),
@@ -396,12 +452,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          onPressed: () {
-                            // ignore: lines_longer_than_80_chars
-                            if (_formKey1.currentState.validate() == true) {
-                              print('tudo certo');
-                            }
-                          },
+                          onPressed: _submit,
                         ),
                       ),
                     ),

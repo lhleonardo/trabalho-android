@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:trabalho/components/input.dart';
 import 'package:trabalho/components/button.dart';
+import 'package:trabalho/providers/member_provider.dart';
 import 'package:trabalho/services/auth.dart';
 import 'package:trabalho/utils/input_validators.dart';
 import 'package:trabalho/utils/validator_alerts.dart';
@@ -19,6 +21,7 @@ class RegisterMember extends StatelessWidget {
   }
 
   Future<void> _submit(BuildContext context) async {
+    final provider = Provider.of<MemberProvider>(context, listen: false);
     final progress = ValidatorAlerts.createProgress(context);
     if (!_formKey.currentState.validate()) {
       ValidatorAlerts.showWarningMessage(
@@ -31,7 +34,7 @@ class RegisterMember extends StatelessWidget {
 
     await progress.show();
     try {
-      await _authService.registerMember(
+      final member = await _authService.registerMember(
         name: _formData['name'],
         email: _formData['email'],
         nickname: _formData['nickname'],
@@ -39,6 +42,8 @@ class RegisterMember extends StatelessWidget {
         password: _formData['password'],
         cpf: _formData['cpf'],
       );
+
+      provider.setLoggedMember(member);
 
       await progress.hide();
 
@@ -149,6 +154,7 @@ class RegisterMember extends StatelessWidget {
                         child: Input(
                           placeholder: 'Senha',
                           validator: InputValidators.NotEmpty,
+                          obscureText: true,
                           onSaved: (value) => _persist('password', value),
                         ),
                       ),
