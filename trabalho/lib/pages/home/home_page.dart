@@ -99,18 +99,29 @@ class _HomePage extends State<HomePage> {
           ),
         ),
       ),
-      body: Container(
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 200),
         child: _showPage,
       ),
       bottomNavigationBar: CurvedNavigationBar(
         index: _page,
         height: 56,
         items: <Widget>[
-          Icon(Icons.person,
-              size: 25, color: Theme.of(context).backgroundColor),
-          Icon(Icons.dashboard,
-              size: 25, color: Theme.of(context).backgroundColor),
-          Icon(Icons.home, size: 25, color: Theme.of(context).backgroundColor),
+          Icon(
+            Icons.person,
+            size: 25,
+            color: Theme.of(context).backgroundColor,
+          ),
+          Icon(
+            Icons.dashboard,
+            size: 25,
+            color: Theme.of(context).backgroundColor,
+          ),
+          Icon(
+            Icons.home,
+            size: 25,
+            color: Theme.of(context).backgroundColor,
+          ),
         ],
         color: Theme.of(context).accentColor,
         buttonBackgroundColor: Theme.of(context).accentColor,
@@ -118,9 +129,11 @@ class _HomePage extends State<HomePage> {
         animationCurve: Curves.easeInOut,
         animationDuration: const Duration(milliseconds: 300),
         onTap: (int tappedIndex) {
-          setState(() {
-            _showPage = _pageChosser(tappedIndex);
-          });
+          setState(
+            () {
+              _showPage = _pageChosser(tappedIndex);
+            },
+          );
         },
       ),
     );
