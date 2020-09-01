@@ -6,7 +6,9 @@ class AccountWidget extends StatelessWidget {
     return Card(
       color: Theme.of(context).primaryColor,
       child: const ListTile(
-          title: Text('Título de Despesa'), trailing: Text('R\$ Valor')),
+        title: Text('Título de Despesa'),
+        trailing: Text('R\$ Valor'),
+      ),
     );
   }
 }

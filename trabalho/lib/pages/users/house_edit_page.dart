@@ -22,36 +22,38 @@ class HouseEditPage extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  const Image(
-                    image: AssetImage('assets/icons/RepIcon.png'),
-                    height: 100,
-                    width: 100,
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Column(
-                    children: const <Widget>[
-                      Text(
-                        'Nome da república',
-                        style: TextStyle(
-                            color: Color.fromRGBO(240, 238, 238, 1),
-                            fontSize: 14),
+                  Row(
+                    children: [
+                      const Image(
+                        image: AssetImage('assets/icons/RepIcon.png'),
+                        height: 100,
+                        width: 100,
                       ),
-                      SizedBox(
-                        height: 2,
+                      const SizedBox(
+                        width: 10,
                       ),
-                      Text(
-                        'Criada 10/12/2017',
-                        style: TextStyle(
-                            color: Color.fromRGBO(240, 238, 238, 1),
-                            fontSize: 12),
+                      Column(
+                        children: const <Widget>[
+                          Text(
+                            'Nome da república',
+                            style: TextStyle(
+                                color: Color.fromRGBO(240, 238, 238, 1),
+                                fontSize: 14),
+                          ),
+                          SizedBox(
+                            height: 2,
+                          ),
+                          Text(
+                            'Criada 10/12/2017',
+                            style: TextStyle(
+                                color: Color.fromRGBO(240, 238, 238, 1),
+                                fontSize: 12),
+                          ),
+                        ],
                       ),
                     ],
-                  ),
-                  const SizedBox(
-                    width: 100,
                   ),
                   Container(
                     alignment: Alignment.topLeft,
@@ -86,15 +88,19 @@ class HouseEditPage extends StatelessWidget {
                   )
                 ],
               ),
-              Flexible(
-                flex: 3,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: 4,
-                  itemBuilder: (_, index) => AccountWidget(),
+              Column(
+                children: List.generate(
+                  5,
+                  (index) => AccountWidget(),
                 ),
               ),
+              // child: ListView.builder(
+              //   shrinkWrap: true,
+              //   physics: const NeverScrollableScrollPhysics(),
+              //   itemCount: 4,
+              //   itemBuilder: (_, index) => AccountWidget(),
+              // ),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
