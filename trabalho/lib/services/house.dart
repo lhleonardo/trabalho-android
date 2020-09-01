@@ -8,7 +8,9 @@ class HouseService {
 
   Future<House> getById(String id) async {
     final snapshot = await _collection.doc(id).get();
-    return snapshot != null ? House.fromMap(snapshot.data(), id) : null;
+    return snapshot != null && snapshot.exists
+        ? House.fromMap(snapshot.data(), id)
+        : null;
   }
 
   Future<House> create({
@@ -24,11 +26,12 @@ class HouseService {
         'address': address,
         'state': state,
         'city': city,
-        'members': [
-          {'member_id': managerId, 'is_manager': true},
-        ]
       },
     );
+
+    await reference
+        .collection('members')
+        .add({'member_id': managerId, 'is_manager': true});
 
     await _memberService.setHouse(
       memberId: managerId,
@@ -43,29 +46,24 @@ class HouseService {
     );
   }
 
-  Future<String> _getHouseIdForInviteCode(String invitationCode) async {
-    final result = await _collection
-        .where('invitation_code', isEqualTo: invitationCode)
-        .get();
-
-    if (result.docs.isEmpty) {
-      return null;
-    }
-
-    return result.docs.first.id;
+  Future<bool> checkExists({String houseId}) async {
+    final snapshot = await _collection.doc(houseId).get();
+    return snapshot.exists;
   }
 
   Future<void> addMember({
-    String invitationCode,
+    String houseId,
     String memberId,
-    bool isManager,
+    bool isManager = false,
   }) async {
-    final String houseId = await _getHouseIdForInviteCode(invitationCode);
+    await _collection.doc(houseId).collection('members').add(
+      {
+        'member_id': memberId,
+        'is_manager': isManager,
+      },
+    );
 
-    _collection.doc(houseId).collection('members').add({
-      'member_id': memberId,
-      'is_manager': isManager,
-    });
+    _memberService.setHouse(houseId: houseId, memberId: memberId);
   }
 
   Future<void> promoveToManager(String memberId, String houseId) async {

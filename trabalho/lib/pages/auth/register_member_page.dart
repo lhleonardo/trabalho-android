@@ -30,6 +30,8 @@ class RegisterMember extends StatelessWidget {
       return;
     }
 
+    FocusScope.of(context).unfocus();
+
     _formKey.currentState.save();
 
     await progress.show();

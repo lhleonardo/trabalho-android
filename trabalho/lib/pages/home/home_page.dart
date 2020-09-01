@@ -39,7 +39,7 @@ class _HomePage extends State<HomePage> {
     }
   }
 
-  Widget _home(MemberProvider provider) {
+  Widget _home() {
     final progress = ValidatorAlerts.createProgress(context);
 
     return Scaffold(
@@ -55,27 +55,29 @@ class _HomePage extends State<HomePage> {
                   padding: const EdgeInsets.only(
                     left: 12.0,
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        'Nome do membro',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.normal,
-                          color: Color.fromRGBO(240, 238, 238, 1),
+                  child: Consumer<MemberProvider>(
+                    builder: (context, provider, child) => Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          provider.loggedMember.name,
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.normal,
+                            color: Color.fromRGBO(240, 238, 238, 1),
+                          ),
                         ),
-                      ),
-                      Text(
-                        'Nome da republica',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.normal,
-                          color: Color.fromRGBO(240, 238, 238, 1),
+                        Text(
+                          provider.loggedMemberHouse.name,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.normal,
+                            color: Color.fromRGBO(240, 238, 238, 1),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 IconButton(
@@ -87,7 +89,8 @@ class _HomePage extends State<HomePage> {
                   onPressed: () async {
                     await progress.show();
                     await _authService.logout();
-                    provider.logout();
+                    Provider.of<MemberProvider>(context, listen: false)
+                        .logout();
                     await progress.hide();
                   },
                 )
@@ -134,7 +137,7 @@ class _HomePage extends State<HomePage> {
     if (provider.loggedMemberHouse == null) {
       return _welcome();
     } else {
-      return _home(provider);
+      return _home();
     }
   }
 }

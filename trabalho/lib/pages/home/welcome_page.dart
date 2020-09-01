@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:trabalho/components/button.dart';
+import 'package:trabalho/providers/member_provider.dart';
 import 'package:trabalho/routes/routes.dart';
+import 'package:trabalho/services/auth.dart';
 
 class WelcomePage extends StatelessWidget {
+  final _authService = AuthService();
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<MemberProvider>(context, listen: false);
     return Container(
       height: double.infinity,
       decoration: BoxDecoration(
@@ -73,10 +78,22 @@ class WelcomePage extends StatelessWidget {
                 height: MediaQuery.of(context).size.height * 0.03,
               ),
               Button(
-                  text: 'Avançar',
-                  callback: () {
-                    Navigator.of(context).pushNamed(Routes.enterHousePage);
-                  }),
+                text: 'Avançar',
+                callback: () {
+                  Navigator.of(context).pushNamed(Routes.enterHousePage);
+                },
+              ),
+              const SizedBox(
+                height: 4,
+              ),
+              FlatButton(
+                onPressed: () async {
+                  await _authService.logout();
+                  provider.logout();
+                },
+                child: Text('Ou clique para sair',
+                    style: Theme.of(context).textTheme.caption),
+              )
             ],
           ),
         ),

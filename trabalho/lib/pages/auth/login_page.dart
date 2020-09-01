@@ -38,6 +38,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _submit(BuildContext context) async {
     final provider = Provider.of<MemberProvider>(context, listen: false);
     if (_formKey.currentState.validate()) {
+      FocusScope.of(context).unfocus();
       _formKey.currentState.save();
 
       try {
