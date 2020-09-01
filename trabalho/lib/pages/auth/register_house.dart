@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +10,7 @@ import 'package:trabalho/models/member.dart';
 import 'package:trabalho/providers/member_provider.dart';
 import 'package:trabalho/services/auth.dart';
 import 'package:trabalho/services/house.dart';
+import 'package:http/http.dart' as http;
 import 'package:trabalho/utils/validator_alerts.dart';
 
 class RegisterHouse extends StatefulWidget {
@@ -28,7 +31,16 @@ class _RegisterHouseState extends State<RegisterHouse> {
 
   final GlobalKey<FormState> _formKey1 = GlobalKey<FormState>();
   final GlobalKey<FormState> _formKey2 = GlobalKey<FormState>();
+  final TextEditingController _estadoController = TextEditingController();
+  final TextEditingController _cidadeController = TextEditingController();
+
   final _formatter = DateFormat('dd/MM/yyyy');
+  final List<String> _estados = [];
+  final Map<String, String> _siglas = {};
+  List<String> _cidades = [];
+  String _estadoAnterior = 'Estado';
+  String _placeholderEst = 'Estado';
+  String _placeholderCid = 'Cidade';
 
   final AuthService _authService = AuthService();
   final HouseService _houseService = HouseService();
@@ -77,6 +89,53 @@ class _RegisterHouseState extends State<RegisterHouse> {
               context, 'Tudo certo!', 'Faça login para continuar')
           .then((value) => Navigator.of(context).pop());
     }
+  }
+
+  Future<void> _loadEstados() async {
+    final response = await http
+        .get('https://servicodados.ibge.gov.br/api/v1/localidades/estados/');
+    final jsonResponse = json.decode(response.body);
+    jsonResponse.forEach((elemento) => {
+          if (!_estados.contains(elemento['nome'].toString()))
+            {
+              _estados.add(elemento['nome'].toString()),
+              _siglas[elemento['nome'].toString()] =
+                  elemento['sigla'].toString()
+            }
+        });
+    _estados.sort();
+  }
+
+  void _loadCidades() async {
+    _estadoAnterior = _placeholderEst;
+    _cidades = [];
+    String siglaEstado = _siglas[_placeholderEst];
+    var response = await http.get(
+        'https://servicodados.ibge.gov.br/api/v1/localidades/estados/' +
+            siglaEstado +
+            '/distritos');
+    var jsonResponse = json.decode(response.body);
+    String municipio;
+    jsonResponse.forEach(
+      (elemento) => {
+        municipio = elemento['municipio']['nome'].toString(),
+        if (!_cidades.contains(municipio)) {_cidades.add(municipio)}
+      },
+    );
+  }
+
+  _choosedEstado(String estado) {
+    _estadoController.text = estado;
+    setState(() {
+      _placeholderEst = _estadoController.text;
+    });
+  }
+
+  _choosedCidade(String cidade) {
+    _cidadeController.text = cidade;
+    setState(() {
+      _placeholderCid = _cidadeController.text;
+    });
   }
 
   Widget _houseForm() {
@@ -197,22 +256,29 @@ class _RegisterHouseState extends State<RegisterHouse> {
                   Padding(
                     padding: const EdgeInsets.only(top: 16.0),
                     child: Input(
-                      placeholder: 'Estado',
-                      validator: (value) {
-                        if (value.trim().isEmpty) {
-                          return 'Campo obrigatório';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        data['house.state'] = value;
-                      },
-                    ),
+                        placeholder: _placeholderEst,
+                        controller: _estadoController,
+                        readOnly: true,
+                        validator: (value) {
+                          if (value.trim().isEmpty) {
+                            return 'Campo obrigatório';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          data['house.state'] = value;
+                        },
+                        onTap: () async {
+                          await _dialogEscolha(
+                              0, _estados, 'Escolha seu estado');
+                        }),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 16.0),
                     child: Input(
-                      placeholder: 'Cidade',
+                      placeholder: _placeholderCid,
+                      controller: _cidadeController,
+                      readOnly: true,
                       validator: (value) {
                         if (value.trim().isEmpty) {
                           return 'Campo obrigatório';
@@ -221,6 +287,20 @@ class _RegisterHouseState extends State<RegisterHouse> {
                       },
                       onSaved: (value) {
                         data['house.city'] = value;
+                      },
+                      onTap: () async {
+                        if (_placeholderEst == 'Estado') {
+                          ValidatorAlerts.showWarningMessage(
+                              context, 'Aviso', 'Escolha um estado primeiro');
+                        } else if (_estadoAnterior == _placeholderEst) {
+                          await _dialogEscolha(
+                              1, _cidades, 'Escolha sua cidade');
+                          print('reaproveitamento');
+                        } else {
+                          await _loadCidades();
+                          await _dialogEscolha(
+                              1, _cidades, 'Escolha sua cidade');
+                        }
                       },
                     ),
                   ),
@@ -478,8 +558,77 @@ class _RegisterHouseState extends State<RegisterHouse> {
     );
   }
 
+  Future<String> _dialogEscolha(int tipo, List<String> lista, String titulo) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            titulo,
+            style: const TextStyle(color: Colors.white),
+          ),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20))),
+          backgroundColor: Theme.of(context).primaryColor,
+          actionsPadding: const EdgeInsets.only(left: 10, right: 10),
+          actions: <Widget>[
+            FlatButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              color: Theme.of(context).backgroundColor,
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: const Text(
+                'FECHAR',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+          content: Container(
+            width: double.maxFinite,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                const Divider(),
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: MediaQuery.of(context).size.height * 0.4,
+                  ),
+                  child: ListView.builder(
+                      itemCount: lista.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return ListTile(
+                          title: Text(
+                            lista[index],
+                            style:
+                                TextStyle(color: Theme.of(context).accentColor),
+                          ),
+                          onTap: () {
+                            if (tipo == 0) {
+                              _choosedEstado(lista[index]);
+                            } else {
+                              _choosedCidade(lista[index]);
+                            }
+                            Navigator.pop(context);
+                          },
+                        );
+                      }),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    _loadEstados();
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: SingleChildScrollView(
