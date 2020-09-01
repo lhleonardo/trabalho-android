@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Input extends StatelessWidget {
   const Input(
@@ -10,7 +11,8 @@ class Input extends StatelessWidget {
       this.obscureText = false,
       this.readOnly = false,
       this.initialValue = '',
-      this.keyboardType = TextInputType.text});
+      this.keyboardType = TextInputType.text,
+      this.inputFormatter = null });
 
   final TextEditingController controller;
   final String placeholder;
@@ -21,11 +23,13 @@ class Input extends StatelessWidget {
   final bool readOnly;
   final TextInputType keyboardType;
   final String initialValue;
+  final TextInputFormatter inputFormatter;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
+      inputFormatters: [inputFormatter ?? WhitelistingTextInputFormatter(RegExp('.*'))],
       cursorColor: Theme.of(context).accentColor,
       keyboardType: keyboardType,
       validator: validator,

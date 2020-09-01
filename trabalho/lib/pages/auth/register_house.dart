@@ -12,6 +12,7 @@ import 'package:trabalho/services/auth.dart';
 import 'package:trabalho/services/house.dart';
 import 'package:http/http.dart' as http;
 import 'package:trabalho/utils/validator_alerts.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class RegisterHouse extends StatefulWidget {
   @override
@@ -44,6 +45,9 @@ class _RegisterHouseState extends State<RegisterHouse> {
 
   final AuthService _authService = AuthService();
   final HouseService _houseService = HouseService();
+
+  final _maskFormatterCpf = new MaskTextInputFormatter(mask: '###.###.###-##', filter: { "#": RegExp(r'[0-9]') });
+  final _maskFormatterTel = new MaskTextInputFormatter(mask: '(##) # ####-####', filter: { "#": RegExp(r'[0-9]') });
 
   void _scrollToTop() {
     scrollController.animateTo(
@@ -192,6 +196,8 @@ class _RegisterHouseState extends State<RegisterHouse> {
                     padding: const EdgeInsets.only(top: 16.0),
                     child: Input(
                       placeholder: 'Telefone',
+                      inputFormatter: _maskFormatterTel,
+                      keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value.trim().isEmpty) {
                           return 'Campo obrigatório';
@@ -395,6 +401,11 @@ class _RegisterHouseState extends State<RegisterHouse> {
                       padding: const EdgeInsets.only(top: 16.0),
                       child: Input(
                         placeholder: 'Apelido',
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Campo obrigatório';
+                          }
+                        },
                         onSaved: (value) {
                           data['manager.nickname'] = value;
                         },
@@ -404,12 +415,13 @@ class _RegisterHouseState extends State<RegisterHouse> {
                       padding: const EdgeInsets.only(top: 16.0),
                       child: Input(
                         placeholder: 'CPF',
+                        inputFormatter: _maskFormatterCpf,
+                        keyboardType: TextInputType.number,
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
                             return 'Campo obrigatório';
                           }
-
-                          if (value.length < 11) {
+                          if (value.length < 14) {
                             return 'Precisa ser um cpf válido';
                           }
                           return null;
