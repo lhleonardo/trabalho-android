@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trabalho/pages/dashboard/account_details_page.dart';
 import 'package:trabalho/pages/home/enter_house_page.dart';
 import 'package:trabalho/pages/home/home_page.dart';
 import 'package:trabalho/pages/home/welcome_page.dart';
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
           Routes.enterHousePage: (_) => EnterHousePage(),
           Routes.errorPage: (_) => ErrorPage(),
           Routes.wrapper: (_) => Wrapper(),
+          Routes.accountDetails: (_) => AccountDetails(),
         },
       ),
     );

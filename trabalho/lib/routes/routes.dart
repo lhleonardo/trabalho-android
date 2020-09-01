@@ -5,6 +5,7 @@ class Routes {
   static const welcomePage = '/welcome-page';
   static const enterHousePage = '/enter-house-page';
   static const errorPage = '/error';
+  static const accountDetails = '/account-details';
 
   static const homePage = '/home';
   static const loginPage = '/login';
