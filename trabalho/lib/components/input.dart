@@ -9,6 +9,7 @@ class Input extends StatelessWidget {
       this.onTap,
       this.obscureText = false,
       this.readOnly = false,
+      this.initialValue = '',
       this.keyboardType = TextInputType.text});
 
   final TextEditingController controller;
@@ -19,6 +20,7 @@ class Input extends StatelessWidget {
   final bool obscureText;
   final bool readOnly;
   final TextInputType keyboardType;
+  final String initialValue;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +32,7 @@ class Input extends StatelessWidget {
       obscureText: obscureText,
       onTap: onTap,
       onSaved: onSaved,
+      initialValue: controller == null ? initialValue : null,
       readOnly: readOnly,
       decoration: InputDecoration(
         hintText: placeholder,
