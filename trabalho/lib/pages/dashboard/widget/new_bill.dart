@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:trabalho/components/input.dart';
 import 'bill_widget.dart';
+import 'dart:math';
 
-class NewBillPage extends StatelessWidget {
-  final ItemTeste item1 = ItemTeste(title: 'teste1');
-  final ItemTeste item2 = ItemTeste(title: 'teste1');
-  final ItemTeste item3 = ItemTeste(title: 'teste1');
-  final ItemTeste item4 = ItemTeste(title: 'teste1');
-  final ItemTeste item5 = ItemTeste(title: 'teste1');
-  final ItemTeste item6 = ItemTeste(title: 'teste1');
+class NewBillPage extends StatefulWidget {
+  @override
+  _NewBillPage createState() => _NewBillPage();
+}
+
+class _NewBillPage extends State<NewBillPage> {
+  var _validCheck = false;
+  var count;
 
   Widget _managerView(BuildContext context) {
-    final List<ItemTeste> myList = [item1, item2, item3, item4, item5, item6];
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: SafeArea(
@@ -68,48 +69,46 @@ class NewBillPage extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.only(top: 16.0, left: 20, right: 15),
-                  child: Row(
-                    children: <Widget>[
-                      Text('Nova despesa', style: Theme.of(context).textTheme.headline3)
-                    ]
-                  ),
+                  padding:
+                      const EdgeInsets.only(top: 16.0, left: 20, right: 15),
+                  child: Row(children: <Widget>[
+                    Text('Nova despesa',
+                        style: Theme.of(context).textTheme.headline3)
+                  ]),
                 ),
                 Container(
                   margin: const EdgeInsets.only(top: 10, left: 5, right: 5),
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(top: 16.0, left: 15, right: 15),
-                        child: Input(
-                          placeholder: 'Descrição da despesa',
-                          validator: (value) {
-                            if (value.trim().isEmpty) {
-                              return 'Campo obrigatório';
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                          },
-                        ),
+                  child: Column(children: <Widget>[
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(top: 16.0, left: 15, right: 15),
+                      child: Input(
+                        placeholder: 'Descrição da despesa',
+                        validator: (value) {
+                          if (value.trim().isEmpty) {
+                            return 'Campo obrigatório';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {},
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 16.0, left: 15, right: 15),
-                        child: Input(
-                          placeholder: 'Valor total',
-                          keyboardType: TextInputType.number,
-                          validator: (value) {
-                            if (value.trim().isEmpty) {
-                              return 'Campo obrigatório';
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                          },
-                        ),
+                    ),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(top: 16.0, left: 15, right: 15),
+                      child: Input(
+                        placeholder: 'Valor total',
+                        keyboardType: TextInputType.number,
+                        validator: (value) {
+                          if (value.trim().isEmpty) {
+                            return 'Campo obrigatório';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {},
                       ),
-                    ]
-                  ),
+                    ),
+                  ]),
                 ),
                 Container(
                   margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
@@ -133,7 +132,21 @@ class NewBillPage extends StatelessWidget {
                   child: Column(
                     children: List.generate(
                       5,
-                      (index) => BillWidget(),
+                      (index) => Card(
+                        color: Theme.of(context).primaryColor,
+                        child: CheckboxListTile(
+                          //key: Key(),
+                          title: Text('Nome do Membro (Apelido)'),
+                          value: _validCheck,
+                          onChanged: (value) {
+                            setState(() {
+                              _validCheck = value;
+                            });
+                          },
+                          activeColor: Colors.green,
+                          checkColor: Theme.of(context).backgroundColor,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -193,7 +206,7 @@ class NewBillPage extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            onPressed: (){},
+                            onPressed: () {},
                           ),
                         ),
                       ),
@@ -212,10 +225,20 @@ class NewBillPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return _managerView(context);
   }
-}
 
-class ItemTeste {
-  String title;
+  /*
+  void adcAccount() async {
+    final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+    FirebaseUser user = await _firebaseAuth.currentUser();
 
-  ItemTeste({this.title});
+    print(user.uid);
+    await Firestore.instance.collection('Carrinho').add({
+      "ID": user.uid,
+      "nome": _nome,
+      "descricao": _descricao,
+      "quantidade": _quantidade,
+      "valor": _valor
+    });
+  }
+    */
 }
