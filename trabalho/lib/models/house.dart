@@ -13,13 +13,24 @@ class House {
   final String address;
   final String state;
   final String city;
+  final String createdAt;
 
-  House({this.id, this.name, this.address, this.state, this.city});
+  House({
+    this.id,
+    this.name,
+    this.address,
+    this.state,
+    this.city,
+    this.createdAt,
+  });
 
-  House.fromMap(Map<String, dynamic> snapshot, String id)
-      : id = id ?? '',
+  House.fromMap(
+    Map<String, dynamic> snapshot,
+    String id,
+  )   : id = id ?? '',
         name = snapshot['name'] as String ?? '',
         address = snapshot['address'] as String ?? '',
         state = snapshot['state'] as String ?? '',
-        city = snapshot['city'] as String ?? '';
+        city = snapshot['city'] as String ?? '',
+        createdAt = snapshot['created_at'] as String ?? '';
 }
