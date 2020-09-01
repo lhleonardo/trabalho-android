@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:trabalho/models/house.dart';
+import 'package:trabalho/models/member.dart';
 import 'package:trabalho/services/member.dart';
 
 class HouseService {
@@ -19,6 +20,7 @@ class HouseService {
     String state,
     String city,
     String managerId,
+    String createdAt,
   }) async {
     final reference = await _collection.add(
       {
@@ -26,6 +28,7 @@ class HouseService {
         'address': address,
         'state': state,
         'city': city,
+        'created_at': createdAt,
       },
     );
 
@@ -44,6 +47,38 @@ class HouseService {
       state: state,
       city: city,
     );
+  }
+
+  Stream<List<Member>> getManagers(String houseId) {
+    return _collection
+        .doc(houseId)
+        .collection('members')
+        .where('is_manager', isEqualTo: true)
+        .snapshots()
+        .map(_convertToListOfManagers);
+  }
+
+  Stream<List<Member>> getMembers(
+      {String houseId, bool excludeManagers = false}) {
+    final membersCollection = _collection.doc(houseId).collection('members');
+
+    if (excludeManagers) {
+      return membersCollection.snapshots().map(_convertToListOfManagers);
+    } else {
+      return membersCollection
+          .where('is_manager', isEqualTo: false)
+          .snapshots()
+          .map(_convertToListOfManagers);
+    }
+  }
+
+  List<Member> _convertToListOfManagers(QuerySnapshot snapshot) {
+    return snapshot.docs
+        .map(
+          (member) =>
+              Member.fromMap(member.data(), member.get('member_id') as String),
+        )
+        .toList();
   }
 
   Future<bool> checkExists({String houseId}) async {

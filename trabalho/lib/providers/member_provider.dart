@@ -8,6 +8,8 @@ class MemberProvider extends ChangeNotifier {
   Member _loggedMember;
   House _loggedMemberHouse;
 
+  bool _isManager;
+
   final MemberService _memberService = MemberService();
   final HouseService _houseService = HouseService();
 
@@ -18,14 +20,21 @@ class MemberProvider extends ChangeNotifier {
   void logout() {
     _loggedMember = null;
     _loggedMemberHouse = null;
+    _isManager = false;
 
     notifyListeners();
   }
 
   Future<void> setMemberHouse(String houseId) async {
     _loggedMemberHouse = await _houseService.getById(houseId);
+    await _checkIsManager();
 
     notifyListeners();
+  }
+
+  Future<void> _checkIsManager() async {
+    _isManager = await _houseService.checkIsManager(
+        _loggedMemberHouse.id, _loggedMember.id);
   }
 
   Member get loggedMember {
@@ -38,18 +47,24 @@ class MemberProvider extends ChangeNotifier {
     if (_loggedMember.houseId != null && _loggedMember.houseId.isNotEmpty) {
       _loggedMemberHouse = await _houseService.getById(_loggedMember.houseId);
     }
+    await _checkIsManager();
 
     notifyListeners();
   }
 
-  void setInfo(Member member, House house) {
+  Future<void> setInfo(Member member, House house) async {
     _loggedMember = member;
     _loggedMemberHouse = house;
 
+    await _checkIsManager();
     notifyListeners();
   }
 
   House get loggedMemberHouse {
     return _loggedMemberHouse;
+  }
+
+  bool get isManager {
+    return _isManager;
   }
 }
