@@ -42,6 +42,7 @@ class HouseService {
     );
 
     return House(
+      id: reference.id,
       name: name,
       address: address,
       state: state,

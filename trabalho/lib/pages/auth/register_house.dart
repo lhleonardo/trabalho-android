@@ -89,7 +89,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
         managerId: member.id,
       );
 
-      provider.setInfo(member, house);
+      await provider.setInfo(member, house);
 
       await progress.hide();
 
