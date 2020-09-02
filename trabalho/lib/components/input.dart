@@ -2,20 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class Input extends StatelessWidget {
-  const Input(
-      {this.placeholder,
-      this.validator,
-      this.controller,
-      this.onSaved,
-      this.onTap,
-      this.obscureText = false,
-      this.readOnly = false,
-      this.initialValue = '',
-      this.keyboardType = TextInputType.text,
-      this.inputFormatter = null});
+  const Input({
+    @required this.labelText,
+    this.placeholder,
+    this.validator,
+    this.controller,
+    this.onSaved,
+    this.onTap,
+    this.obscureText = false,
+    this.readOnly = false,
+    this.initialValue = '',
+    this.keyboardType = TextInputType.text,
+    this.inputFormatter,
+  });
 
-  final TextEditingController controller;
+  final String labelText;
   final String placeholder;
+  final TextEditingController controller;
   final FormFieldValidator<String> validator;
   final FormFieldSetter<String> onSaved;
   final GestureTapCallback onTap;
@@ -30,7 +33,7 @@ class Input extends StatelessWidget {
     return TextFormField(
       controller: controller,
       inputFormatters: [
-        inputFormatter ?? WhitelistingTextInputFormatter(RegExp('.*'))
+        inputFormatter ?? FilteringTextInputFormatter.allow(RegExp('.*'))
       ],
       cursorColor: Theme.of(context).accentColor,
       keyboardType: keyboardType,
@@ -41,8 +44,13 @@ class Input extends StatelessWidget {
       initialValue: controller == null ? initialValue : null,
       readOnly: readOnly,
       decoration: InputDecoration(
-        hintText: placeholder,
+        labelText: labelText,
+        hintText: placeholder ?? '',
         hintStyle: TextStyle(
+          color: Theme.of(context).primaryColor,
+          fontSize: 20,
+        ),
+        labelStyle: TextStyle(
           color: Theme.of(context).accentColor,
           fontSize: 20,
         ),

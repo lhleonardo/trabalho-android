@@ -17,7 +17,8 @@ class RegisterMember extends StatelessWidget {
 
   final AuthService _authService = AuthService();
 
-  final _maskFormatterCpf = new MaskTextInputFormatter(mask: '###.###.###-##', filter: { "#": RegExp(r'[0-9]') });
+  final _maskFormatterCpf = MaskTextInputFormatter(
+      mask: '###.###.###-##', filter: {'#': RegExp('[0-9]')});
 
   void _persist(String field, String value) {
     _formData[field] = value;
@@ -98,7 +99,8 @@ class RegisterMember extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: 16.0),
                         child: Input(
-                          placeholder: 'Nome completo',
+                          labelText: 'Nome completo',
+                          placeholder: 'Ex: João da Silva',
                           validator: InputValidators.NotEmpty,
                           onSaved: (value) => _persist('name', value),
                         ),
@@ -106,7 +108,8 @@ class RegisterMember extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: 16.0),
                         child: Input(
-                          placeholder: 'Apelido',
+                          labelText: 'Apelido',
+                          placeholder: 'Ex: Joãozinho',
                           validator: InputValidators.NotEmpty,
                           onSaved: (value) => _persist('nickname', value),
                         ),
@@ -114,7 +117,8 @@ class RegisterMember extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: 16.0),
                         child: Input(
-                          placeholder: 'CPF',
+                          labelText: 'CPF',
+                          placeholder: 'Ex: 123.123.123-44',
                           keyboardType: TextInputType.number,
                           inputFormatter: _maskFormatterCpf,
                           validator: InputValidators.NotEmpty,
@@ -124,7 +128,8 @@ class RegisterMember extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: 16.0),
                         child: Input(
-                          placeholder: 'Data de Nascimento',
+                          labelText: 'Data de Nascimento',
+                          placeholder: 'Ex: 25/05/1999',
                           validator: InputValidators.NotEmpty,
                           controller: _dateController,
                           readOnly: true,
@@ -148,7 +153,8 @@ class RegisterMember extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: 16.0),
                         child: Input(
-                          placeholder: 'Endereço de e-mail',
+                          labelText: 'Endereço de e-mail',
+                          placeholder: 'Ex: nome@mail.com',
                           validator: (value) {
                             if (value.isEmpty) {
                               return 'Campo obrigatório';
@@ -170,11 +176,11 @@ class RegisterMember extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: 16.0),
                         child: Input(
-                          placeholder: 'Senha',
-                          validator: (value){
+                          labelText: 'Senha',
+                          validator: (value) {
                             if (value.trim().isEmpty) {
-                            return 'Campo obrigatório';
-                          }
+                              return 'Campo obrigatório';
+                            }
 
                             _persist('password', value);
                             return null;
@@ -184,21 +190,21 @@ class RegisterMember extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                      padding: const EdgeInsets.only(top: 16.0),
-                      child: Input(
-                        obscureText: true,
-                        placeholder: 'Confirme a senha',
-                        validator: (value) {
-                          if (value.trim().isEmpty) {
-                            return 'Campo obrigatório';
-                          }
-                          if (value.trim() != _formData['password']) {
-                            return 'Confirmação diferente da senha';
-                          }
-                          return null;
-                        },
+                        padding: const EdgeInsets.only(top: 16.0),
+                        child: Input(
+                          obscureText: true,
+                          labelText: 'Confirme a senha',
+                          validator: (value) {
+                            if (value.trim().isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            if (value.trim() != _formData['password']) {
+                              return 'Confirmação diferente da senha';
+                            }
+                            return null;
+                          },
+                        ),
                       ),
-                    ),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.04,
                       ),
@@ -216,7 +222,9 @@ class RegisterMember extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 24),
                 child: FlatButton(
-                  onPressed: () {Navigator.pop(context);},
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                   child: Text(
                     'Já tem uma conta? Entrar',
                     style: Theme.of(context).textTheme.subtitle1,

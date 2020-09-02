@@ -212,7 +212,7 @@ class _MemberEditState extends State<MemberEditPage> {
                   child: const Padding(
                     padding: EdgeInsets.only(top: 16.0),
                     child: Input(
-                      placeholder: 'Gabrielle Almeida Cuba',
+                      labelText: 'Gabrielle Almeida Cuba',
                     ),
                   ),
                 ),
@@ -235,7 +235,7 @@ class _MemberEditState extends State<MemberEditPage> {
                   child: const Padding(
                     padding: EdgeInsets.only(top: 16.0),
                     child: Input(
-                      placeholder: 'Apelido',
+                      labelText: 'Apelido',
                     ),
                   ),
                 ),
@@ -258,7 +258,7 @@ class _MemberEditState extends State<MemberEditPage> {
                   child: const Padding(
                     padding: EdgeInsets.only(top: 16.0),
                     child: Input(
-                      placeholder: 'Endereço de e-mail',
+                      labelText: 'Endereço de e-mail',
                     ),
                   ),
                 ),
@@ -281,7 +281,7 @@ class _MemberEditState extends State<MemberEditPage> {
                   child: const Padding(
                     padding: EdgeInsets.only(top: 16.0),
                     child: Input(
-                      placeholder: '11/11/111',
+                      labelText: '11/11/111',
                     ),
                   ),
                 ),

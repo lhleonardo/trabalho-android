@@ -115,7 +115,8 @@ class _LoginPageState extends State<LoginPage> {
                       Padding(
                         padding: const EdgeInsets.only(top: 16.0),
                         child: Input(
-                          placeholder: 'Endereço de e-mail',
+                          labelText: 'Endereço de e-mail',
+                          placeholder: 'ex: joao@mail.com',
                           keyboardType: TextInputType.emailAddress,
                           validator: _inputValidator,
                           onSaved: (value) => data['email'] = value,
@@ -125,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
                         padding: const EdgeInsets.only(top: 16.0),
                         child: Input(
                           obscureText: true,
-                          placeholder: 'Senha',
+                          labelText: 'Senha',
                           validator: (value) {
                             if (value.isEmpty) {
                               return 'Insira uma senha';

@@ -121,7 +121,7 @@ class EnterHousePage extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.only(top: 16.0),
                         child: Input(
-                          placeholder: 'Código da república',
+                          labelText: 'Código da república',
                           validator: (String value) {
                             if (value == null ||
                                 value.isEmpty ||

@@ -24,11 +24,11 @@ class AccountDetails extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Container(
-                margin: EdgeInsets.only(left: 25, right: 25),
+                margin: const EdgeInsets.only(left: 25, right: 25),
                 child: Column(
                   children: <Widget>[
                     Row(
@@ -36,13 +36,13 @@ class AccountDetails extends StatelessWidget {
                       children: <Widget>[
                         Row(
                           children: <Widget>[
-                            Image(
+                            const Image(
                               image:
                                   AssetImage('assets/icons/icon_mercado.png'),
                               height: 80,
                               width: 80,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 10,
                             ),
                             Text(
@@ -56,7 +56,7 @@ class AccountDetails extends StatelessWidget {
                           width: 100,
                           decoration: BoxDecoration(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(15)),
+                                  const BorderRadius.all(Radius.circular(15)),
                               color: Theme.of(context).accentColor),
                           child: FlatButton(
                             child: Text('Pagar',
@@ -88,15 +88,13 @@ class AccountDetails extends StatelessWidget {
                             style: Theme.of(context).textTheme.subtitle1),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
-                    Container(
-                      child: Text(
-                        'Aqui vai a descrição do produto uhasuhuhsuhaushuahsuaush asdjansodsanodasoidnasoind asidjasoijdoiasjdoasjdjoisa diajsdoijas',
-                        style: Theme.of(context).textTheme.caption,
-                        textAlign: TextAlign.start,
-                      ),
+                    Text(
+                      'Aqui vai a descrição do produto uhasuhuhsuhaushuahsuaush asdjansodsanodasoidnasoind asidjasoijdoiasjdoasjdjoisa diajsdoijas',
+                      style: Theme.of(context).textTheme.caption,
+                      textAlign: TextAlign.start,
                     ),
                     Divider(
                       height: 30,
@@ -111,12 +109,12 @@ class AccountDetails extends StatelessWidget {
                             style: Theme.of(context).textTheme.subtitle1),
                         Row(
                           children: <Widget>[
-                            Text("Pago:",
+                            Text('Pago:',
                                 style: Theme.of(context).textTheme.subtitle1),
-                            SizedBox(
+                            const SizedBox(
                               width: 2,
                             ),
-                            Icon(
+                            const Icon(
                               Icons.cancel,
                               color: Colors.red,
                               size: 20,
@@ -131,7 +129,6 @@ class AccountDetails extends StatelessWidget {
                       indent: 5,
                       endIndent: 5,
                     ),
-                   
                     Row(
                       children: <Widget>[
                         const Icon(

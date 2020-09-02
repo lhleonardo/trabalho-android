@@ -46,10 +46,10 @@ class _RegisterHouseState extends State<RegisterHouse> {
   final AuthService _authService = AuthService();
   final HouseService _houseService = HouseService();
 
-  final _maskFormatterCpf = new MaskTextInputFormatter(
-      mask: '###.###.###-##', filter: {"#": RegExp(r'[0-9]')});
-  final _maskFormatterTel = new MaskTextInputFormatter(
-      mask: '(##) # ####-####', filter: {"#": RegExp(r'[0-9]')});
+  final _maskFormatterCpf = MaskTextInputFormatter(
+      mask: '###.###.###-##', filter: {'#': RegExp('[0-9]')});
+  final _maskFormatterTel = MaskTextInputFormatter(
+      mask: '(##) # ####-####', filter: {'#': RegExp('[0-9]')});
 
   void _scrollToTop() {
     scrollController.animateTo(
@@ -182,7 +182,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
                   Padding(
                     padding: const EdgeInsets.only(top: 16.0),
                     child: Input(
-                      placeholder: 'Nome da república',
+                      labelText: 'Nome da república',
                       validator: (value) {
                         if (value.trim().isEmpty) {
                           return 'Campo obrigatório';
@@ -197,7 +197,8 @@ class _RegisterHouseState extends State<RegisterHouse> {
                   Padding(
                     padding: const EdgeInsets.only(top: 16.0),
                     child: Input(
-                      placeholder: 'Telefone',
+                      labelText: 'Telefone',
+                      placeholder: 'Ex: (DD) 9 9999-9999',
                       inputFormatter: _maskFormatterTel,
                       keyboardType: TextInputType.number,
                       validator: (value) {
@@ -214,7 +215,8 @@ class _RegisterHouseState extends State<RegisterHouse> {
                   Padding(
                     padding: const EdgeInsets.only(top: 16.0),
                     child: Input(
-                      placeholder: 'Data de criação',
+                      labelText: 'Data de criação',
+                      placeholder: 'Ex: 25/05/2020',
                       validator: (value) {
                         if (value.isEmpty) {
                           return 'Campo obrigatório';
@@ -243,7 +245,8 @@ class _RegisterHouseState extends State<RegisterHouse> {
                   Padding(
                     padding: const EdgeInsets.only(top: 16.0),
                     child: Input(
-                        placeholder: _placeholderEst,
+                        placeholder: 'Clique para selecionar',
+                        labelText: _placeholderEst,
                         controller: _estadoController,
                         readOnly: true,
                         validator: (value) {
@@ -262,7 +265,8 @@ class _RegisterHouseState extends State<RegisterHouse> {
                   Padding(
                     padding: const EdgeInsets.only(top: 16.0),
                     child: Input(
-                      placeholder: _placeholderCid,
+                      placeholder: 'Clique para selecionar',
+                      labelText: _placeholderCid,
                       controller: _cidadeController,
                       readOnly: true,
                       validator: (value) {
@@ -387,7 +391,8 @@ class _RegisterHouseState extends State<RegisterHouse> {
                     Padding(
                       padding: const EdgeInsets.only(top: 16.0),
                       child: Input(
-                        placeholder: 'Nome completo',
+                        labelText: 'Nome completo',
+                        placeholder: 'Ex: João da Silva',
                         validator: (value) {
                           if (value.trim().isEmpty) {
                             return 'Campo obrigatório';
@@ -402,11 +407,14 @@ class _RegisterHouseState extends State<RegisterHouse> {
                     Padding(
                       padding: const EdgeInsets.only(top: 16.0),
                       child: Input(
-                        placeholder: 'Apelido',
+                        labelText: 'Apelido',
+                        placeholder: 'Ex: Joãozinho',
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
                             return 'Campo obrigatório';
                           }
+
+                          return null;
                         },
                         onSaved: (value) {
                           data['manager.nickname'] = value;
@@ -416,7 +424,8 @@ class _RegisterHouseState extends State<RegisterHouse> {
                     Padding(
                       padding: const EdgeInsets.only(top: 16.0),
                       child: Input(
-                        placeholder: 'CPF',
+                        labelText: 'CPF',
+                        placeholder: 'Ex: 123.123.123-44',
                         inputFormatter: _maskFormatterCpf,
                         keyboardType: TextInputType.number,
                         validator: (value) {
@@ -436,7 +445,8 @@ class _RegisterHouseState extends State<RegisterHouse> {
                     Padding(
                       padding: const EdgeInsets.only(top: 16.0),
                       child: Input(
-                        placeholder: 'Data de Nascimento',
+                        labelText: 'Data de Nascimento',
+                        placeholder: 'Ex: 25/05/1999',
                         validator: (value) {
                           if (value.isEmpty) {
                             return 'Campo obrigatório';
@@ -465,7 +475,8 @@ class _RegisterHouseState extends State<RegisterHouse> {
                     Padding(
                       padding: const EdgeInsets.only(top: 16.0),
                       child: Input(
-                        placeholder: 'E-mail',
+                        labelText: 'E-mail',
+                        placeholder: 'Ex: nome@mail.com',
                         validator: (value) {
                           if (value.isEmpty) {
                             return 'Campo obrigatório';
@@ -490,7 +501,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
                       padding: const EdgeInsets.only(top: 16.0),
                       child: Input(
                         obscureText: true,
-                        placeholder: 'Senha',
+                        labelText: 'Senha',
                         validator: (value) {
                           if (value.trim().isEmpty) {
                             return 'Campo obrigatório';
@@ -508,7 +519,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
                       padding: const EdgeInsets.only(top: 16.0),
                       child: Input(
                         obscureText: true,
-                        placeholder: 'Confirme a senha',
+                        labelText: 'Confirme a senha',
                         validator: (value) {
                           if (value.trim().isEmpty) {
                             return 'Campo obrigatório';

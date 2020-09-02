@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trabalho/components/category_widget.dart';
 import 'package:trabalho/components/input.dart';
 import 'package:trabalho/models/member.dart';
 import 'package:trabalho/services/house.dart';
@@ -27,9 +28,9 @@ class _NewBillPage extends State<NewBillPage> {
     _membersList =
         await _houseService.getCommomMembers(provider.loggedMemberHouse.id);
 
-    _membersList.forEach((member) {
+    for (final member in _membersList) {
       _members[member.id] = false;
-    });
+    }
 
     setState(() => _isLoading = false);
   }
@@ -42,34 +43,11 @@ class _NewBillPage extends State<NewBillPage> {
   }
 
   Widget _categoryWidget(String category, String description) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor,
-        borderRadius: const BorderRadius.all(Radius.circular(20)),
-        border: (category == _selectedCategory)
-            ? Border.all(
-                width: 3.0,
-                color: Theme.of(context).accentColor,
-              )
-            : null,
-        boxShadow: const [
-          BoxShadow(
-            offset: Offset(2, 2),
-            blurRadius: 2,
-          ),
-        ],
-      ),
-      child: FlatButton(
-        onPressed: () => setState(() => _selectedCategory = category),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset('assets/icons/$category.png', width: 44),
-            const SizedBox(height: 10),
-            Text(description, style: Theme.of(context).textTheme.subtitle1)
-          ],
-        ),
-      ),
+    return CategoryWidget(
+      isSelected: _selectedCategory == category,
+      onPressed: () => setState(() => _selectedCategory = category),
+      icon: Image.asset('assets/icons/$category.png', width: 44),
+      label: description,
     );
   }
 
@@ -124,7 +102,8 @@ class _NewBillPage extends State<NewBillPage> {
                   padding:
                       const EdgeInsets.only(top: 16.0, left: 15, right: 15),
                   child: Input(
-                    placeholder: 'Descrição da despesa',
+                    labelText: 'Descrição da despesa',
+                    placeholder: 'Ex: Compra do Supermercado',
                     validator: (value) {
                       if (value.trim().isEmpty) {
                         return 'Campo obrigatório';
@@ -140,7 +119,8 @@ class _NewBillPage extends State<NewBillPage> {
                   padding:
                       const EdgeInsets.only(top: 16.0, left: 15, right: 15),
                   child: Input(
-                    placeholder: 'Valor total',
+                    labelText: 'Valor total',
+                    initialValue: '0.0',
                     keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value.trim().isEmpty) {
@@ -291,8 +271,11 @@ class _NewBillPage extends State<NewBillPage> {
           child: Padding(
             padding: const EdgeInsets.only(bottom: 20),
             child: _isLoading
-                ? const Center(
-                    child: CircularProgressIndicator(),
+                ? Container(
+                    height: MediaQuery.of(context).size.height,
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
                   )
                 : _managerView(context, Provider.of<MemberProvider>(context)),
           ),
