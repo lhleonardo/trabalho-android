@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:trabalho/components/member_bill.dart';
 import 'package:trabalho/models/bill.dart';
 import 'package:trabalho/models/member.dart';
+import 'package:trabalho/providers/member_provider.dart';
+import 'package:trabalho/services/bill.dart';
 import 'package:trabalho/services/member.dart';
+import 'package:trabalho/utils/validator_alerts.dart';
 
 class BillDetailsPage extends StatelessWidget {
   final _memberService = MemberService();
+  final _billService = BillService();
+
   final NumberFormat _formatter =
       NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
 
@@ -37,14 +43,34 @@ class BillDetailsPage extends StatelessWidget {
     return text;
   }
 
+  Future<void> _submit(
+      BuildContext context, MemberProvider provider, Bill bill) async {
+    final progress = ValidatorAlerts.createProgress(context);
+
+    await progress.show();
+    await _billService.markAsPaid(
+        houseId: provider.loggedMemberHouse.id,
+        memberId: provider.loggedMember.id,
+        billId: bill.id);
+
+    await progress.hide();
+
+    await ValidatorAlerts.showWarningMessage(
+        context, 'Sucesso!', 'Você marcou que pagou sua parte na despesa.');
+
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     final Bill bill = ModalRoute.of(context).settings.arguments as Bill;
     final double perMember = bill.price / bill.recipients.length;
 
+    final provider = Provider.of<MemberProvider>(context, listen: false);
     final List<String> membersId =
         bill.recipients.entries.map((e) => e.key).toList();
 
+    final isPaid = bill.recipients[provider.loggedMember.id];
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: SafeArea(
@@ -172,7 +198,8 @@ class BillDetailsPage extends StatelessWidget {
                                   ),
                                   textAlign: TextAlign.center,
                                 ),
-                                onPressed: () {},
+                                onPressed: () =>
+                                    _submit(context, provider, bill),
                               ),
                             ),
                           )
@@ -216,9 +243,6 @@ class BillDetailsPage extends StatelessWidget {
                       indent: 5,
                       endIndent: 5,
                     ),
-                    // TODO: Falta terminar de listar:
-                    // 1 - Membros de forma assíncrona
-                    // preço a pagar
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -290,10 +314,6 @@ class BillDetailsPage extends StatelessWidget {
                     Container(
                       margin: const EdgeInsets.only(top: 10, bottom: 40),
                       child: Column(
-                        // children: List.generate(
-                        //   6,
-                        //   (index) => MemberBillWidget(),
-                        // ),
                         children: membersId
                             .map(
                               (memberId) => FutureBuilder<Member>(
@@ -315,8 +335,9 @@ class BillDetailsPage extends StatelessWidget {
                                     margin: const EdgeInsets.only(
                                         top: 5, bottom: 5),
                                     child: MemberBillWidget(
-                                        member: snapshot.data,
-                                        payed: bill.recipients[memberId]),
+                                      member: snapshot.data,
+                                      payed: bill.recipients[memberId],
+                                    ),
                                   );
                                 },
                               ),

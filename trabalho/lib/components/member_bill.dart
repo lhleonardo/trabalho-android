@@ -25,11 +25,17 @@ class MemberBillWidget extends StatelessWidget {
             fontSize: 14,
           ),
         ),
-        trailing: Icon(
-          Icons.check_circle,
-          color: Colors.green,
-          size: 22,
-        ),
+        trailing: payed
+            ? const Icon(
+                Icons.check_circle,
+                color: Colors.green,
+                size: 22,
+              )
+            : const Icon(
+                Icons.hourglass_empty,
+                color: Colors.grey,
+                size: 22,
+              ),
       ),
     );
   }

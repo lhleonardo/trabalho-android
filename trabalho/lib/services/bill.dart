@@ -37,7 +37,7 @@ class BillService {
     final billsCollection = _collection.doc(houseId).collection('bills');
 
     return billsCollection
-        .where('recipients.$memberId', isEqualTo: false)
+        .where('recipients.$memberId', whereIn: [false, true])
         .snapshots()
         .map(_convertToBill);
   }
@@ -46,5 +46,16 @@ class BillService {
     return snapshot.docs
         .map((document) => Bill.fromMap(document.data(), document.id))
         .toList();
+  }
+
+  Future<void> markAsPaid(
+      {String houseId, String billId, String memberId}) async {
+    final doc = _collection.doc(houseId).collection('bills').doc(billId);
+    final billItem = await doc.get();
+
+    final receipts = billItem.get('recipients');
+    receipts[memberId] = true;
+
+    await doc.update({'recipients': receipts});
   }
 }
