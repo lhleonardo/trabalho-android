@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:trabalho/components/input.dart';
-import 'bill_widget.dart';
-import 'dart:math';
+import 'package:trabalho/models/member.dart';
+import 'package:trabalho/services/house.dart';
+import '../../../providers/member_provider.dart';
+import '../../../services/house.dart';
+import '../../../services/member.dart';
 
 class NewBillPage extends StatefulWidget {
   @override
@@ -9,10 +13,12 @@ class NewBillPage extends StatefulWidget {
 }
 
 class _NewBillPage extends State<NewBillPage> {
-  var _validCheck = false;
-  var count;
+  final Map<String, bool> _members = {};
+  final MemberService _memberService = MemberService();
+  final HouseService _houseService = HouseService();
 
   Widget _managerView(BuildContext context) {
+    final provider = Provider.of<MemberProvider>(context);
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: SafeArea(
@@ -129,26 +135,70 @@ class _NewBillPage extends State<NewBillPage> {
                 ),
                 Container(
                   margin: const EdgeInsets.only(top: 10, left: 15, right: 15),
-                  child: Column(
-                    children: List.generate(
-                      5,
-                      (index) => Card(
-                        color: Theme.of(context).primaryColor,
-                        child: CheckboxListTile(
-                          //key: Key(),
-                          title: Text('Nome do Membro (Apelido)'),
-                          value: _validCheck,
-                          onChanged: (value) {
-                            setState(() {
-                              _validCheck = value;
-                            });
-                          },
-                          activeColor: Colors.green,
-                          checkColor: Theme.of(context).backgroundColor,
-                        ),
-                      ),
-                    ),
+                  child: StreamBuilder<List<Member>>(
+                    stream: _houseService.getMembers(
+                        houseId: provider.loggedMemberHouse.id),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: LinearProgressIndicator(),
+                        );
+                      }
+
+                      final membersHouse = snapshot.data;
+
+                      return Column(
+                        children: membersHouse.map((memberItem) {
+                          _members[memberItem.id] = false;
+
+                          return Card(
+                            color: Theme.of(context).primaryColor,
+                            child: FutureBuilder<Member>(
+                              future: _memberService.getById(memberItem.id),
+                              builder: (context, member) {
+                                if (member.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+                                return CheckboxListTile(
+                                  key: Key(memberItem.id),
+                                  title: Text(
+                                      '${member.data.name} (${member.data.nickname})'),
+                                  value: _members[memberItem.id],
+                                  onChanged: (value) =>
+                                      (() => _members[memberItem.id] = value),
+                                  activeColor: Colors.green,
+                                  checkColor: Theme.of(context).backgroundColor,
+                                );
+                              },
+                            ),
+                          );
+                        }).toList(),
+                      );
+                    },
                   ),
+                  // child: Column(
+                  //   children: List.generate(
+                  //     5,
+                  // (index) =>
+                  // Card(
+                  //   color: Theme.of(context).primaryColor,
+                  //   child: CheckboxListTile(
+                  //     //key: Key(),
+                  //     title: Text('Nome do Membro (Apelido)'),
+                  //     value: _validCheck,
+                  //     onChanged: (value) {
+                  //       setState(() {
+                  //         _validCheck = value;
+                  //       });
+                  //     },
+                  //     activeColor: Colors.green,
+                  //     checkColor: Theme.of(context).backgroundColor,
+                  //   ),
+                  // ),
+                  //   ),
                 ),
                 Container(
                   margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
@@ -225,20 +275,4 @@ class _NewBillPage extends State<NewBillPage> {
   Widget build(BuildContext context) {
     return _managerView(context);
   }
-
-  /*
-  void adcAccount() async {
-    final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-    FirebaseUser user = await _firebaseAuth.currentUser();
-
-    print(user.uid);
-    await Firestore.instance.collection('Carrinho').add({
-      "ID": user.uid,
-      "nome": _nome,
-      "descricao": _descricao,
-      "quantidade": _quantidade,
-      "valor": _valor
-    });
-  }
-    */
 }

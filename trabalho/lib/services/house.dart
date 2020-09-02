@@ -63,7 +63,6 @@ class HouseService {
     final membersCollection = _collection.doc(houseId).collection('members');
 
     if (excludeManagers) {
-      print("oi");
 
       return membersCollection
           .where('is_manager', isEqualTo: false)
