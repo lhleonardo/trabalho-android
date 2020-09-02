@@ -63,7 +63,6 @@ class HouseService {
     final membersCollection = _collection.doc(houseId).collection('members');
 
     if (excludeManagers) {
-
       return membersCollection
           .where('is_manager', isEqualTo: false)
           .snapshots()
@@ -71,6 +70,22 @@ class HouseService {
     } else {
       return membersCollection.snapshots().map(_convertToListOfManagers);
     }
+  }
+
+  Future<List<Member>> getCommomMembers(String houseId) async {
+    final snapshot = await _collection.doc(houseId).collection('members').get();
+
+    final List<Member> membersRelation = snapshot.docs
+        .map((e) => Member.fromMap(e.data(), e.get('member_id') as String))
+        .toList();
+
+    final List<Member> result = [];
+
+    for (int i = 0; i < membersRelation.length; i++) {
+      result.add(await _memberService.getById(membersRelation[i].id));
+    }
+
+    return result;
   }
 
   List<Member> _convertToListOfManagers(QuerySnapshot snapshot) {

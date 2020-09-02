@@ -18,6 +18,11 @@ class ThemeManager {
           fontWeight: FontWeight.normal,
           color: Color.fromRGBO(240, 238, 238, 1),
         ),
+        headline2: TextStyle(
+          fontSize: 28,
+          fontWeight: FontWeight.normal,
+          color: Color.fromRGBO(240, 238, 238, 1),
+        ),
         headline3: TextStyle(
           fontSize: 22,
           fontWeight: FontWeight.normal,

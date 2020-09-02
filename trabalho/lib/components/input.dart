@@ -12,7 +12,7 @@ class Input extends StatelessWidget {
       this.readOnly = false,
       this.initialValue = '',
       this.keyboardType = TextInputType.text,
-      this.inputFormatter = null });
+      this.inputFormatter = null});
 
   final TextEditingController controller;
   final String placeholder;
@@ -29,7 +29,9 @@ class Input extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      inputFormatters: [inputFormatter ?? WhitelistingTextInputFormatter(RegExp('.*'))],
+      inputFormatters: [
+        inputFormatter ?? WhitelistingTextInputFormatter(RegExp('.*'))
+      ],
       cursorColor: Theme.of(context).accentColor,
       keyboardType: keyboardType,
       validator: validator,
@@ -44,7 +46,6 @@ class Input extends StatelessWidget {
           color: Theme.of(context).accentColor,
           fontSize: 20,
         ),
-        floatingLabelBehavior: FloatingLabelBehavior.always,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5),
           borderSide: BorderSide(
