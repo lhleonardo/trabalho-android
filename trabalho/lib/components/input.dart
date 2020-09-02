@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class Input extends StatelessWidget {
-  const Input({
-    @required this.labelText,
-    this.placeholder,
-    this.validator,
-    this.controller,
-    this.onSaved,
-    this.onTap,
-    this.obscureText = false,
-    this.readOnly = false,
-    this.initialValue = '',
-    this.keyboardType = TextInputType.text,
-    this.inputFormatter,
-  });
+  const Input(
+      {@required this.labelText,
+      this.placeholder,
+      this.validator,
+      this.controller,
+      this.onSaved,
+      this.onTap,
+      this.obscureText = false,
+      this.readOnly = false,
+      this.initialValue = '',
+      this.keyboardType = TextInputType.text,
+      this.inputFormatter,
+      this.onChanged});
 
   final String labelText;
   final String placeholder;
@@ -27,6 +27,7 @@ class Input extends StatelessWidget {
   final TextInputType keyboardType;
   final String initialValue;
   final TextInputFormatter inputFormatter;
+  final ValueChanged<String> onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +42,7 @@ class Input extends StatelessWidget {
       obscureText: obscureText,
       onTap: onTap,
       onSaved: onSaved,
+      onChanged: onChanged,
       initialValue: controller == null ? initialValue : null,
       readOnly: readOnly,
       decoration: InputDecoration(

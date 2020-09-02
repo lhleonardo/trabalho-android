@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 import 'package:trabalho/components/category_widget.dart';
 import 'package:trabalho/components/input.dart';
@@ -17,11 +19,17 @@ class _NewBillPage extends State<NewBillPage> {
   final HouseService _houseService = HouseService();
   final Map<String, String> _data = {};
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _controller = TextEditingController();
+
+  final NumberFormat _format =
+      NumberFormat.simpleCurrency(locale: 'pt_BR', decimalDigits: 2);
 
   List<Member> _membersList = [];
   bool _isLoading = true;
-
   String _selectedCategory;
+
+  int _payersCount = 0;
+  double _payersPart = 0;
 
   Future<void> _loadMembers() async {
     final provider = Provider.of<MemberProvider>(context, listen: false);
@@ -120,8 +128,8 @@ class _NewBillPage extends State<NewBillPage> {
                       const EdgeInsets.only(top: 16.0, left: 15, right: 15),
                   child: Input(
                     labelText: 'Valor total',
-                    initialValue: '0.0',
                     keyboardType: TextInputType.number,
+                    controller: _controller,
                     validator: (value) {
                       if (value.trim().isEmpty) {
                         return 'Campo obrigatório';
@@ -185,6 +193,23 @@ class _NewBillPage extends State<NewBillPage> {
                       onChanged: (value) {
                         setState(() {
                           _members[member.id] = value;
+
+                          if (value) {
+                            _payersCount += 1;
+                          } else {
+                            _payersCount -= 1;
+                          }
+
+                          if (_payersCount == 0) {
+                            _payersPart = 0.0;
+                          } else {
+                            if (_controller.text.isEmpty) {
+                              _payersPart = 0;
+                            } else {
+                              _payersPart = _format.parse(_controller.text) /
+                                  _payersCount;
+                            }
+                          }
                         });
                       },
                       activeColor: Colors.green,
@@ -205,7 +230,7 @@ class _NewBillPage extends State<NewBillPage> {
                   const SizedBox(
                     width: 10,
                   ),
-                  Text('Total Selecionado: ',
+                  Text('Total Selecionado: $_payersCount',
                       style: Theme.of(context).textTheme.subtitle1),
                 ],
               ),
@@ -222,7 +247,7 @@ class _NewBillPage extends State<NewBillPage> {
                   const SizedBox(
                     width: 10,
                   ),
-                  Text('Valor para cada (R\$): ',
+                  Text('Valor para cada: ${_format.format(_payersPart)}',
                       style: Theme.of(context).textTheme.subtitle1),
                 ],
               ),
