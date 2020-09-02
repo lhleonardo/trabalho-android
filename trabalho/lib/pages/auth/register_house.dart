@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:trabalho/components/input.dart';
 import 'package:trabalho/components/button.dart';
@@ -42,6 +43,8 @@ class _RegisterHouseState extends State<RegisterHouse> {
   String _estadoAnterior = 'Estado';
   String _placeholderEst = 'Estado';
   String _placeholderCid = 'Cidade';
+
+  ProgressDialog _progressDialog;
 
   final AuthService _authService = AuthService();
   final HouseService _houseService = HouseService();
@@ -286,7 +289,9 @@ class _RegisterHouseState extends State<RegisterHouse> {
                         } else if (_estadoAnterior == _placeholderEst) {
                           _dialogEscolha(1, _cidades, 'Escolha sua cidade');
                         } else {
+                          await _progressDialog.show();
                           await _loadCidades();
+                          await _progressDialog.hide();
                           _dialogEscolha(1, _cidades, 'Escolha sua cidade');
                         }
                       },
@@ -650,6 +655,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
   @override
   Widget build(BuildContext context) {
     _loadEstados();
+    _progressDialog = ValidatorAlerts.createProgress(context);
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: SingleChildScrollView(
