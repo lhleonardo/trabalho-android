@@ -276,7 +276,7 @@ class BillDetailsPage extends StatelessWidget {
                               ),
                               const SizedBox(height: 4),
                               Icon(
-                                Icons.hourglass_empty_outlined,
+                                Icons.hourglass_empty,
                                 color: Colors.grey[300],
                                 size: 20,
                               ),
@@ -299,7 +299,7 @@ class BillDetailsPage extends StatelessWidget {
                     Row(
                       children: <Widget>[
                         const Icon(
-                          Icons.supervised_user_circle_rounded,
+                          Icons.supervised_user_circle,
                           color: Color.fromRGBO(240, 238, 238, 1),
                         ),
                         const SizedBox(

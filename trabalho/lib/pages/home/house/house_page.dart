@@ -7,6 +7,7 @@ import 'package:trabalho/services/member.dart';
 
 import '../../../models/member.dart';
 import '../bill/bill_form.dart';
+import 'house_controll.dart';
 
 class HouseViewPage extends StatelessWidget {
   final _houseService = HouseService();
@@ -120,7 +121,14 @@ class HouseViewPage extends StatelessWidget {
               IconButton(
                 icon: const Icon(Icons.add_circle),
                 color: Theme.of(context).accentColor,
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => HouseControllPage(),
+                    ),
+                  );
+                },
               )
             ],
           ),
