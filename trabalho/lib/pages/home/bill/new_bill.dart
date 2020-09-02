@@ -53,7 +53,7 @@ class _NewBillPage extends State<NewBillPage> {
     _loadMembers();
   }
 
-  Future<void> _submit(String houseId) async {
+  Future<void> _submit({String houseId, String memberId}) async {
     final progress = ValidatorAlerts.createProgress(context);
     // descrição e preço preenchidos
     await progress.show();
@@ -76,6 +76,7 @@ class _NewBillPage extends State<NewBillPage> {
 
         await _service.create(
           houseId,
+          ownerId: memberId,
           category: _selectedCategory,
           description: _data['description'],
           price: _format.parse(_data['price']).toDouble(),
@@ -321,7 +322,9 @@ class _NewBillPage extends State<NewBillPage> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    onPressed: () => _submit(provider.loggedMemberHouse.id),
+                    onPressed: () => _submit(
+                        houseId: provider.loggedMemberHouse.id,
+                        memberId: provider.loggedMember.id),
                   ),
                 ),
               ),

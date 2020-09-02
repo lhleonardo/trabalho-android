@@ -30,7 +30,7 @@ class BillListPage extends StatelessWidget {
           }
 
           return ListView.builder(
-            itemExtent: 140.0,
+            itemExtent: 160.0,
             itemCount: snapshot.data.length,
             itemBuilder: (_, index) => BillCard(value: snapshot.data[index]),
           );

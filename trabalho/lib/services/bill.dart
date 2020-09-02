@@ -12,6 +12,7 @@ class BillService {
     double price,
     String category,
     List<Member> recipients,
+    String ownerId,
   }) async {
     final billsCollection = _collection.doc(houseId).collection('bills');
 
@@ -25,6 +26,7 @@ class BillService {
       'description': description,
       'category': category,
       'recipients': relations,
+      'owner_id': ownerId,
     });
   }
 
