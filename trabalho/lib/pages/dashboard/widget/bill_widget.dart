@@ -5,11 +5,8 @@ class BillWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: Theme.of(context).primaryColor,
-      child: const ListTile(
+      child: CheckboxListTile(
         title: Text('Nome do Membro (Apelido)'),
-        leading: Icon(
-          Icons.check_box
-        )
       ),
     );
   }

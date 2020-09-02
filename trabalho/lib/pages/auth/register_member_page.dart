@@ -115,6 +115,7 @@ class RegisterMember extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 16.0),
                         child: Input(
                           placeholder: 'CPF',
+                          keyboardType: TextInputType.number,
                           inputFormatter: _maskFormatterCpf,
                           validator: InputValidators.NotEmpty,
                           onSaved: (value) => _persist('cpf', value),
@@ -170,11 +171,34 @@ class RegisterMember extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 16.0),
                         child: Input(
                           placeholder: 'Senha',
-                          validator: InputValidators.NotEmpty,
+                          validator: (value){
+                            if (value.trim().isEmpty) {
+                            return 'Campo obrigatório';
+                          }
+
+                            _persist('password', value);
+                            return null;
+                          },
                           obscureText: true,
                           onSaved: (value) => _persist('password', value),
                         ),
                       ),
+                      Padding(
+                      padding: const EdgeInsets.only(top: 16.0),
+                      child: Input(
+                        obscureText: true,
+                        placeholder: 'Confirme a senha',
+                        validator: (value) {
+                          if (value.trim().isEmpty) {
+                            return 'Campo obrigatório';
+                          }
+                          if (value.trim() != _formData['password']) {
+                            return 'Confirmação diferente da senha';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.04,
                       ),
@@ -192,7 +216,7 @@ class RegisterMember extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 24),
                 child: FlatButton(
-                  onPressed: () {},
+                  onPressed: () {Navigator.pop(context);},
                   child: Text(
                     'Já tem uma conta? Entrar',
                     style: Theme.of(context).textTheme.subtitle1,
