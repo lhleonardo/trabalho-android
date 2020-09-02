@@ -39,10 +39,6 @@ class _HouseControllPage extends State<HouseControllPage> {
     _membersList =
         await _houseService.getCommomMembers(provider.loggedMemberHouse.id);
 
-    for (final member in _membersList) {
-      print(member.isManager);
-    }
-
     setState(() => _isLoading = false);
   }
 
