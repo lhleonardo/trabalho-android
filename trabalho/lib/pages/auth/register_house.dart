@@ -87,6 +87,7 @@ class _RegisterHouseState extends State<RegisterHouse> {
         state: data['house.state'],
         city: data['house.city'],
         managerId: member.id,
+        createdAt: data['house.created_at'],
       );
 
       await provider.setInfo(member, house);

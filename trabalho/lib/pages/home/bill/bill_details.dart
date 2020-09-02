@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:trabalho/components/member_bill.dart';
 import 'package:trabalho/models/bill.dart';
+import 'package:trabalho/models/member.dart';
+import 'package:trabalho/services/member.dart';
 
 class BillDetailsPage extends StatelessWidget {
+  final _memberService = MemberService();
+  final NumberFormat _formatter =
+      NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
+
   String _choiceLabel(String key) {
     String text = '';
 
@@ -33,6 +40,10 @@ class BillDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Bill bill = ModalRoute.of(context).settings.arguments as Bill;
+    final double perMember = bill.price / bill.recipients.length;
+
+    final List<String> membersId =
+        bill.recipients.entries.map((e) => e.key).toList();
 
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
@@ -76,7 +87,41 @@ class BillDetailsPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 16),
+                    Container(
+                      width: double.infinity,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.label_outline,
+                                color: Color.fromRGBO(240, 238, 238, 1),
+                              ),
+                              const SizedBox(
+                                width: 4,
+                              ),
+                              Text(
+                                'Título da despesa',
+                                style: Theme.of(context).textTheme.headline3,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            bill.title,
+                            style: Theme.of(context).textTheme.caption,
+                          )
+                        ],
+                      ),
+                    ),
+                    Divider(
+                      height: 60,
+                      color: Theme.of(context).primaryColor,
+                      indent: 5,
+                      endIndent: 5,
+                    ),
                     Container(
                       width: double.infinity,
                       child: Stack(
@@ -135,7 +180,7 @@ class BillDetailsPage extends StatelessWidget {
                       ),
                     ),
                     Divider(
-                      height: 30,
+                      height: 50,
                       color: Theme.of(context).primaryColor,
                       indent: 5,
                       endIndent: 5,
@@ -152,7 +197,7 @@ class BillDetailsPage extends StatelessWidget {
                         Text(
                           'Descrição',
                           textAlign: TextAlign.left,
-                          style: Theme.of(context).textTheme.subtitle1,
+                          style: Theme.of(context).textTheme.headline3,
                         ),
                       ],
                     ),
@@ -166,7 +211,7 @@ class BillDetailsPage extends StatelessWidget {
                       softWrap: true,
                     ),
                     Divider(
-                      height: 30,
+                      height: 50,
                       color: Theme.of(context).primaryColor,
                       indent: 5,
                       endIndent: 5,
@@ -177,26 +222,52 @@ class BillDetailsPage extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text('Valor:',
-                            style: Theme.of(context).textTheme.subtitle1),
-                        Row(
-                          children: <Widget>[
-                            Text('Pago:',
-                                style: Theme.of(context).textTheme.subtitle1),
-                            const SizedBox(
-                              width: 2,
-                            ),
-                            const Icon(
-                              Icons.cancel,
-                              color: Colors.red,
-                              size: 20,
-                            )
-                          ],
+                        Container(
+                          margin: const EdgeInsets.only(right: 4),
+                          child: Column(
+                            children: [
+                              Text(
+                                'Valor',
+                                style: Theme.of(context).textTheme.subtitle1,
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                'Total: ${_formatter.format(bill.price)}',
+                                style: Theme.of(context).textTheme.caption,
+                              ),
+                              Text(
+                                'Individual: ${_formatter.format(perMember)}',
+                                style: Theme.of(context).textTheme.caption,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(right: 4),
+                          child: Column(
+                            children: [
+                              Text(
+                                'Status',
+                                style: Theme.of(context).textTheme.subtitle1,
+                              ),
+                              const SizedBox(height: 4),
+                              Icon(
+                                Icons.hourglass_empty_outlined,
+                                color: Colors.grey[300],
+                                size: 20,
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                'Aguardando',
+                                style: Theme.of(context).textTheme.caption,
+                              ),
+                            ],
+                          ),
                         )
                       ],
                     ),
                     Divider(
-                      height: 30,
+                      height: 50,
                       color: Theme.of(context).primaryColor,
                       indent: 5,
                       endIndent: 5,
@@ -204,23 +275,53 @@ class BillDetailsPage extends StatelessWidget {
                     Row(
                       children: <Widget>[
                         const Icon(
-                          Icons.supervised_user_circle,
+                          Icons.supervised_user_circle_rounded,
                           color: Color.fromRGBO(240, 238, 238, 1),
                         ),
                         const SizedBox(
                           width: 10,
                         ),
-                        Text('Membros',
-                            style: Theme.of(context).textTheme.subtitle1),
+                        Text(
+                          'Membros',
+                          style: Theme.of(context).textTheme.headline3,
+                        ),
                       ],
                     ),
                     Container(
-                      margin: const EdgeInsets.only(top: 10, left: 5, right: 5),
+                      margin: const EdgeInsets.only(top: 10, bottom: 40),
                       child: Column(
-                        children: List.generate(
-                          6,
-                          (index) => MemberBillWidget(),
-                        ),
+                        // children: List.generate(
+                        //   6,
+                        //   (index) => MemberBillWidget(),
+                        // ),
+                        children: membersId
+                            .map(
+                              (memberId) => FutureBuilder<Member>(
+                                future: _memberService.getById(memberId),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return Center(
+                                      child: Container(
+                                        margin: const EdgeInsets.only(
+                                            top: 4, bottom: 4),
+                                        child:
+                                            const CircularProgressIndicator(),
+                                      ),
+                                    );
+                                  }
+
+                                  return Container(
+                                    margin: const EdgeInsets.only(
+                                        top: 5, bottom: 5),
+                                    child: MemberBillWidget(
+                                        member: snapshot.data,
+                                        payed: bill.recipients[memberId]),
+                                  );
+                                },
+                              ),
+                            )
+                            .toList(),
                       ),
                     ),
                   ],

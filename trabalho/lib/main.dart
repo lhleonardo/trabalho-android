@@ -5,7 +5,7 @@ import 'package:trabalho/pages/home/welcome/enter_house_page.dart';
 import 'package:trabalho/pages/home/home_page.dart';
 import 'package:trabalho/pages/home/welcome/welcome_page.dart';
 import 'package:trabalho/pages/auth/register_member_page.dart';
-import 'package:trabalho/services/error_page.dart';
+import 'package:trabalho/pages/error_page.dart';
 import 'package:trabalho/pages/splash_screen.dart';
 import 'package:trabalho/providers/member_provider.dart';
 import 'package:trabalho/theme/theme_manager.dart';
