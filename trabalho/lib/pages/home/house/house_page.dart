@@ -6,7 +6,7 @@ import 'package:trabalho/services/house.dart';
 import 'package:trabalho/services/member.dart';
 
 import '../../../models/member.dart';
-import '../bill/new_bill.dart';
+import '../bill/bill_form.dart';
 import 'house_controll.dart';
 
 class HouseViewPage extends StatelessWidget {

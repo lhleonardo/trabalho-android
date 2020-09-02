@@ -1,5 +1,6 @@
 class Bill {
   final String id;
+  final String title;
   final String description;
   final String category;
   final double price;
@@ -10,6 +11,7 @@ class Bill {
   Bill({
     this.id,
     this.description,
+    this.title,
     this.category,
     this.price,
     this.ownerId,
@@ -18,6 +20,7 @@ class Bill {
 
   Bill.fromMap(Map<String, dynamic> map, String id)
       : id = id ?? '',
+        title = map['title'] as String ?? '',
         description = map['description'] as String ?? '',
         category = map['category'] as String ?? '',
         price = map['price'] as double ?? 0,
