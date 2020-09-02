@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trabalho/models/member.dart';
-import 'package:trabalho/pages/dashboard/widget/new_bill.dart';
-import 'package:trabalho/providers/member_provider.dart';
-import 'package:trabalho/services/house.dart';
-import 'package:trabalho/services/member.dart';
+
+import '../../models/member.dart';
+import '../../pages/dashboard/widget/new_bill.dart';
+import '../../providers/member_provider.dart';
+import '../../services/house.dart';
+import '../../services/member.dart';
 import '../dashboard/widget/account_widget.dart';
 
 class HouseEditPage extends StatelessWidget {
@@ -173,6 +174,71 @@ class HouseEditPage extends StatelessWidget {
     );
   }
 
+  Widget _memberWidget({BuildContext context, Member member, bool isManager}) {
+    final split = member.name.split(' ');
+
+    final sigla = split.length > 1
+        ? ('${split[0][0].toUpperCase()}${split[1][0].toUpperCase()}')
+        : split[0][0].toUpperCase();
+    return Stack(
+      alignment: Alignment.centerLeft,
+      children: [
+        Container(
+          height: 45,
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+            borderRadius: const BorderRadius.horizontal(
+              left: Radius.circular(25),
+              right: Radius.circular(15),
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 70.0),
+                child: Text(
+                  member.name,
+                  style: Theme.of(context).textTheme.subtitle1,
+                ),
+              ),
+              Opacity(
+                opacity: isManager ? 1 : 0,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 15.0),
+                  child: Icon(
+                    Icons.verified_user,
+                    color: Theme.of(context).accentColor,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          width: 50,
+          height: 50,
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+            borderRadius: BorderRadius.circular(25),
+            boxShadow: const [
+              BoxShadow(
+                blurRadius: 1,
+                offset: Offset(3, 3),
+              )
+            ],
+          ),
+          child: Center(
+            child: Text(
+              sigla,
+              style: Theme.of(context).textTheme.subtitle1,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _memberView(BuildContext context, MemberProvider provider) {
     return Column(
       children: [
@@ -237,112 +303,39 @@ class HouseEditPage extends StatelessWidget {
         ),
         Container(
           margin: const EdgeInsets.only(top: 15, left: 10, right: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Stack(
-                alignment: Alignment.centerLeft,
-                children: [
-                  Container(
-                    height: 45,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: const BorderRadius.horizontal(
-                        left: Radius.circular(25),
-                        right: Radius.circular(15),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 70.0),
-                          child: Text(
-                            'Leonardo Braz',
-                            style: Theme.of(context).textTheme.subtitle1,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 15.0),
-                          child: Icon(
-                            Icons.verified_user,
-                            color: Theme.of(context).accentColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.circular(25),
-                      boxShadow: const [
-                        BoxShadow(
-                          blurRadius: 1,
-                          offset: Offset(3, 3),
-                        )
-                      ],
-                    ),
-                    child: Center(
-                      child: Text(
-                        'LB',
-                        style: Theme.of(context).textTheme.subtitle1,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 4),
-              Stack(
-                alignment: Alignment.centerLeft,
-                children: [
-                  Container(
-                    height: 45,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: const BorderRadius.horizontal(
-                        left: Radius.circular(25),
-                        right: Radius.circular(15),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 70.0),
-                          child: Text(
-                            'Leonardo Braz',
-                            style: Theme.of(context).textTheme.subtitle1,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.circular(25),
-                      boxShadow: const [
-                        BoxShadow(
-                          blurRadius: 1,
-                          offset: Offset(3, 3),
-                        )
-                      ],
-                    ),
-                    child: Center(
-                      child: Text(
-                        'LB',
-                        style: Theme.of(context).textTheme.subtitle1,
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            ],
+          child: StreamBuilder<List<Member>>(
+            stream: _houseService.getMembers(
+                houseId: provider.loggedMemberHouse.id),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: LinearProgressIndicator(),
+                );
+              }
+
+              return Column(
+                children: snapshot.data
+                    .map((memberItem) => Container(
+                          margin: const EdgeInsets.only(bottom: 4),
+                          child: FutureBuilder<Member>(
+                              future: _memberService.getById(memberItem.id),
+                              builder: (context, member) {
+                                if (member.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+                                return _memberWidget(
+                                  context: context,
+                                  member: member.data,
+                                  isManager: memberItem.isManager,
+                                );
+                              }),
+                        ))
+                    .toList(),
+              );
+            },
           ),
         ),
       ],

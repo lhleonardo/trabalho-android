@@ -12,8 +12,9 @@ class Member {
   final String email;
   final String cpf;
   final String dateOfBirth;
-
   final String houseId;
+
+  final bool isManager;
 
   const Member(
       {this.id,
@@ -22,7 +23,8 @@ class Member {
       this.email,
       this.cpf,
       this.dateOfBirth,
-      this.houseId});
+      this.houseId,
+      this.isManager = false});
 
   Member.fromMap(Map<String, dynamic> snapshot, String id)
       : id = id ?? '',
@@ -31,5 +33,6 @@ class Member {
         email = snapshot['email'] as String ?? '',
         cpf = snapshot['cpf'] as String ?? '',
         dateOfBirth = snapshot['dateOfBirth'] as String ?? '',
-        houseId = snapshot['house_id'] as String ?? '';
+        houseId = snapshot['house_id'] as String ?? '',
+        isManager = snapshot['is_manager'] as bool ?? false;
 }

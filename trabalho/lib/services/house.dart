@@ -63,12 +63,14 @@ class HouseService {
     final membersCollection = _collection.doc(houseId).collection('members');
 
     if (excludeManagers) {
-      return membersCollection.snapshots().map(_convertToListOfManagers);
-    } else {
+      print("oi");
+
       return membersCollection
           .where('is_manager', isEqualTo: false)
           .snapshots()
           .map(_convertToListOfManagers);
+    } else {
+      return membersCollection.snapshots().map(_convertToListOfManagers);
     }
   }
 
