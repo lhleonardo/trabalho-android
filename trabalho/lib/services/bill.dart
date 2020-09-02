@@ -42,7 +42,7 @@ class BillService {
 
   List<Bill> _convertToBill(QuerySnapshot snapshot) {
     return snapshot.docs
-        .map((document) => Bill.fromMap(document.data()))
+        .map((document) => Bill.fromMap(document.data(), document.id))
         .toList();
   }
 }

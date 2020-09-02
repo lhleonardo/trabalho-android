@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:trabalho/models/bill.dart';
 import 'package:trabalho/routes/routes.dart';
 
@@ -36,11 +37,21 @@ class BillCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final total = value.recipients.length;
+
+    int checked = 0;
+
+    for (final entry in value.recipients.entries) {
+      if (value.recipients[entry.key] == true) {
+        checked++;
+      }
+    }
+
     final accountThumbnail = Container(
       alignment: const FractionalOffset(0.0, 0.5),
       margin: const EdgeInsets.only(left: 8.0),
       child: Hero(
-        tag: 'idBanco',
+        tag: value.id,
         child: Image(
           image: AssetImage('assets/icons/${value.category}.png'),
           height: 85,
@@ -97,11 +108,14 @@ class BillCard extends StatelessWidget {
                   children: [
                     const Icon(Icons.attach_money,
                         size: 14.0, color: Colors.green),
-                    const Text(
-                      '15.00',
-                      style: TextStyle(
+                    Text(
+                      NumberFormat.currency(
+                        locale: 'pt_BR',
+                        symbol: 'R\$',
+                      ).format(value.price / total),
+                      style: const TextStyle(
                           color: Color.fromRGBO(240, 238, 238, 1),
-                          fontSize: 12.0),
+                          fontSize: 13.0),
                     ),
                   ],
                 ),
@@ -114,9 +128,9 @@ class BillCard extends StatelessWidget {
                       const SizedBox(
                         width: 8,
                       ),
-                      const Text(
-                        '4/8',
-                        style: TextStyle(
+                      Text(
+                        '$checked/$total',
+                        style: const TextStyle(
                             color: Color.fromRGBO(240, 238, 238, 1),
                             fontSize: 12.0),
                       ),
@@ -134,8 +148,8 @@ class BillCard extends StatelessWidget {
       margin: const EdgeInsets.only(top: 16.0, bottom: 8.0),
       child: FlatButton(
         //onPressed: () => _navigateTo(context),
-        onPressed: () => Navigator.pushNamed(context, Routes.accountDetails),
-
+        onPressed: () =>
+            Navigator.pushNamed(context, Routes.billDetais, arguments: value),
         child: Stack(
           children: <Widget>[
             accountCard,

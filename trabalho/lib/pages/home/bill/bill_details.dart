@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:trabalho/components/member_bill.dart';
+import 'package:trabalho/models/bill.dart';
 
-class AccountDetails extends StatelessWidget {
+class BillDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final Bill bill = ModalRoute.of(context).settings.arguments as Bill;
+
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: SafeArea(
@@ -30,14 +33,16 @@ class AccountDetails extends StatelessWidget {
               Container(
                 margin: const EdgeInsets.only(left: 25, right: 25),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Row(
                           children: <Widget>[
-                            const Image(
-                              image: AssetImage('assets/icons/mercado.png'),
+                            Image(
+                              image: AssetImage(
+                                  'assets/icons/${bill.category}.png'),
                               height: 80,
                               width: 80,
                             ),
@@ -83,17 +88,21 @@ class AccountDetails extends StatelessWidget {
                         const SizedBox(
                           width: 10,
                         ),
-                        Text('Descrição',
-                            style: Theme.of(context).textTheme.subtitle1),
+                        Text(
+                          'Descrição',
+                          textAlign: TextAlign.left,
+                          style: Theme.of(context).textTheme.subtitle1,
+                        ),
                       ],
                     ),
                     const SizedBox(
                       height: 10,
                     ),
                     Text(
-                      'Aqui vai a descrição do produto uhasuhuhsuhaushuahsuaush asdjansodsanodasoidnasoind asidjasoijdoiasjdoasjdjoisa diajsdoijas',
+                      bill.description,
                       style: Theme.of(context).textTheme.caption,
                       textAlign: TextAlign.start,
+                      softWrap: true,
                     ),
                     Divider(
                       height: 30,
@@ -101,10 +110,13 @@ class AccountDetails extends StatelessWidget {
                       indent: 5,
                       endIndent: 5,
                     ),
+                    // TODO: Falta terminar de listar:
+                    // 1 - Membros de forma assíncrona
+                    // preço a pagar
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text('Valor: R\$ 50,00',
+                        Text('Valor:',
                             style: Theme.of(context).textTheme.subtitle1),
                         Row(
                           children: <Widget>[
