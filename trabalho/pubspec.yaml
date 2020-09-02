@@ -29,20 +29,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/icons/aluguel.png
-    - assets/icons/compras.png
-    - assets/icons/limpeza.png
-    - assets/icons/luz.png
-    - assets/icons/outros.png
-    - assets/icons/water.png
-    - assets/icons/logo.png
-    - assets/icons/member.png
-    - assets/icons/house.png
-    - assets/icons/group.png
-    - assets/icons/thumbs.png
-    - assets/icons/icon_mercado.png
-    - assets/icons/Vector.png
-    - assets/icons/RepIcon.png
+    - assets/icons/
   fonts:
     - family: Raleway
       fonts:

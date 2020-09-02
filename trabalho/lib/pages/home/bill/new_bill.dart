@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 import 'package:trabalho/components/category_widget.dart';
 import 'package:trabalho/components/input.dart';
 import 'package:trabalho/models/member.dart';
+import 'package:trabalho/services/bill.dart';
 import 'package:trabalho/services/house.dart';
+import 'package:trabalho/utils/validator_alerts.dart';
 import '../../../providers/member_provider.dart';
 import '../../../services/house.dart';
 
@@ -20,6 +21,8 @@ class _NewBillPage extends State<NewBillPage> {
   final Map<String, String> _data = {};
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _controller = TextEditingController();
+
+  final BillService _service = BillService();
 
   final NumberFormat _format =
       NumberFormat.simpleCurrency(locale: 'pt_BR', decimalDigits: 2);
@@ -48,6 +51,48 @@ class _NewBillPage extends State<NewBillPage> {
     super.initState();
 
     _loadMembers();
+  }
+
+  Future<void> _submit(String houseId) async {
+    final progress = ValidatorAlerts.createProgress(context);
+    // descrição e preço preenchidos
+    await progress.show();
+    if (_formKey.currentState.validate()) {
+      FocusScope.of(context).unfocus();
+      if (_selectedCategory == null || _selectedCategory.isEmpty) {
+        await progress.hide();
+        ValidatorAlerts.showWarningMessage(
+            context, 'Validação', 'Selecione a categoria da despesa');
+      } else if (_payersCount == 0) {
+        await progress.hide();
+        ValidatorAlerts.showWarningMessage(context, 'Validação',
+            'Marque pelo menos um membro que deverá pagar a despesa');
+      } else {
+        final recipients = _membersList
+            .where((element) => _members[element.id] == true)
+            .toList();
+
+        _formKey.currentState.save();
+
+        await _service.create(
+          houseId,
+          category: _selectedCategory,
+          description: _data['description'],
+          price: _format.parse(_data['price']).toDouble(),
+          recipients: recipients,
+        );
+        await progress.hide();
+
+        ValidatorAlerts.showWarningMessage(
+            context, 'Concluído', 'Despesa cadastrada com sucesso');
+      }
+    }
+
+    _service.getBillsForMember(
+        houseId: houseId,
+        memberId: Provider.of<MemberProvider>(context, listen: false)
+            .loggedMember
+            .id);
   }
 
   Widget _categoryWidget(String category, String description) {
@@ -119,7 +164,7 @@ class _NewBillPage extends State<NewBillPage> {
                       return null;
                     },
                     onSaved: (value) {
-                      _data['descricao'] = value;
+                      _data['description'] = value;
                     },
                   ),
                 ),
@@ -137,7 +182,7 @@ class _NewBillPage extends State<NewBillPage> {
                       return null;
                     },
                     onSaved: (value) {
-                      _data['valor'] = value;
+                      _data['price'] = value;
                     },
                   ),
                 ),
@@ -276,7 +321,7 @@ class _NewBillPage extends State<NewBillPage> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () => _submit(provider.loggedMemberHouse.id),
                   ),
                 ),
               ),

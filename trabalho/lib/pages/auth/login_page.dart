@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:trabalho/components/input.dart';
-import 'package:trabalho/components/dialogAlert.dart';
+import 'package:trabalho/components/dialog_alert.dart';
 import 'package:trabalho/providers/member_provider.dart';
 import 'package:trabalho/services/auth.dart';
 import 'package:trabalho/utils/validator_alerts.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './widget/membersAccount_widget.dart';
+import 'package:trabalho/components/member_bill.dart';
 
 class AccountDetails extends StatelessWidget {
   @override
@@ -37,8 +37,7 @@ class AccountDetails extends StatelessWidget {
                         Row(
                           children: <Widget>[
                             const Image(
-                              image:
-                                  AssetImage('assets/icons/icon_mercado.png'),
+                              image: AssetImage('assets/icons/mercado.png'),
                               height: 80,
                               width: 80,
                             ),
@@ -147,7 +146,7 @@ class AccountDetails extends StatelessWidget {
                       child: Column(
                         children: List.generate(
                           5,
-                          (index) => MemberAccountWidget(),
+                          (index) => MemberBillWidget(),
                         ),
                       ),
                     ),

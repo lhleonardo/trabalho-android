@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trabalho/components/bill_list_tile.dart';
+import 'package:trabalho/providers/member_provider.dart';
+import 'package:trabalho/services/house.dart';
+import 'package:trabalho/services/member.dart';
 
-import '../../models/member.dart';
-import '../../pages/dashboard/widget/new_bill.dart';
-import '../../providers/member_provider.dart';
-import '../../services/house.dart';
-import '../../services/member.dart';
-import '../dashboard/widget/account_widget.dart';
+import '../../../models/member.dart';
+import '../bill/new_bill.dart';
 
-class HouseEditPage extends StatelessWidget {
+class HouseViewPage extends StatelessWidget {
   final _houseService = HouseService();
   final _memberService = MemberService();
 
@@ -82,7 +82,8 @@ class HouseEditPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (BuildContext context) => NewBillPage()),
+                      builder: (BuildContext context) => NewBillPage(),
+                    ),
                   );
                 },
               )
@@ -94,7 +95,7 @@ class HouseEditPage extends StatelessWidget {
           child: Column(
             children: List.generate(
               5,
-              (index) => AccountWidget(),
+              (index) => BillListTile(),
             ),
           ),
         ),

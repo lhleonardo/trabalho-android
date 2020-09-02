@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:trabalho/components/input.dart';
 import 'package:trabalho/components/button.dart';
 
-class MemberEditPage extends StatefulWidget {
+class AccountEditPage extends StatefulWidget {
   @override
-  _MemberEditState createState() => _MemberEditState();
+  _AccountEditState createState() => _AccountEditState();
 }
 
-class _MemberEditState extends State<MemberEditPage> {
+class _AccountEditState extends State<AccountEditPage> {
   /// Controlador de scroll da página com intuito de fazer a tela
   /// ter o scroll para cima no momento de troca entre tela de cadastro do
   // usuário e da república

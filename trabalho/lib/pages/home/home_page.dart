@@ -1,14 +1,13 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trabalho/pages/home/welcome_page.dart';
+import 'package:trabalho/pages/home/account/account_edit_page.dart';
+import 'package:trabalho/pages/home/bill/bill_list_page.dart';
+import 'package:trabalho/pages/home/house/house_page.dart';
+import 'package:trabalho/pages/home/welcome/welcome_page.dart';
 import 'package:trabalho/providers/member_provider.dart';
 import 'package:trabalho/services/auth.dart';
 import 'package:trabalho/utils/validator_alerts.dart';
-
-import '../dashboard/account_list_page.dart';
-import '../users/house_edit_page.dart';
-import '../users/member_edit_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -19,22 +18,22 @@ class _HomePage extends State<HomePage> {
   final int _page = 1;
   final _authService = AuthService();
 
-  final Accountlist _accountlist = Accountlist();
-  final HouseEditPage _houseEditPage = HouseEditPage();
-  final MemberEditPage _memberEditPage = MemberEditPage();
+  final BillListPage _billListPage = BillListPage();
+  final HouseViewPage _houseViewPage = HouseViewPage();
+  final AccountEditPage _accountEditPage = AccountEditPage();
 
-  Widget _showPage = Accountlist();
+  Widget _showPage = BillListPage();
 
   Widget _pageChosser(int page) {
     switch (page) {
       case 0:
-        return _memberEditPage;
+        return _accountEditPage;
         break;
       case 1:
-        return _accountlist;
+        return _billListPage;
         break;
       default:
-        return _houseEditPage;
+        return _houseViewPage;
         break;
     }
   }

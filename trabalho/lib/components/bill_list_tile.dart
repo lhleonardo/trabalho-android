@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class AccountWidget extends StatelessWidget {
+class BillListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
