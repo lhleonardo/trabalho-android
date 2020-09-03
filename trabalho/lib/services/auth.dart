@@ -57,6 +57,22 @@ class AuthService {
     );
   }
 
+  Future<Member> editMember({
+    @required String email,
+    @required String name,
+    @required String nickname,
+    @required String dateOfBirth,
+    @required String userId,
+  }) async {
+    // atualiza um usuário
+    await _collection.doc(userId).update({
+      'name': name,
+      'email': email,
+      'nickname': nickname,
+      'dateOfBirth': dateOfBirth,
+    });
+  }
+
   Future<void> logout() {
     return _auth.signOut();
   }
