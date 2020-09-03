@@ -107,8 +107,11 @@ class HouseViewPage extends StatelessWidget {
               }
 
               if (!snapshot.hasData || snapshot.data.isEmpty) {
-                return const Center(
-                  child: Text('Nenhuma despesa cadastrada.'),
+                return Center(
+                  child: Text(
+                    'Nenhuma despesa cadastrada.',
+                    style: Theme.of(context).textTheme.caption,
+                  ),
                 );
               }
 

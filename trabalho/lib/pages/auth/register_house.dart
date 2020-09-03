@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -68,36 +69,49 @@ class _RegisterHouseState extends State<RegisterHouse> {
     final MemberProvider provider = Provider.of(context, listen: false);
     final progress = ValidatorAlerts.createProgress(context);
 
-    if (_formKey2.currentState.validate()) {
-      _formKey2.currentState.save();
+    try {
+      if (_formKey2.currentState.validate()) {
+        _formKey2.currentState.save();
 
-      FocusScope.of(context).unfocus();
+        FocusScope.of(context).unfocus();
 
-      await progress.show();
+        await progress.show();
 
-      final Member member = await _authService.registerMember(
-        email: data['manager.email'],
-        name: data['manager.name'],
-        nickname: data['manager.nickname'],
-        cpf: data['manager.cpf'],
-        dateOfBirth: data['manager.dateOfBirth'],
-        password: data['manager.password'],
-      );
+        final Member member = await _authService.registerMember(
+          email: data['manager.email'],
+          name: data['manager.name'],
+          nickname: data['manager.nickname'],
+          cpf: data['manager.cpf'],
+          dateOfBirth: data['manager.dateOfBirth'],
+          password: data['manager.password'],
+        );
 
-      final House house = await _houseService.create(
-        name: data['house.name'],
-        address: data['house.address'],
-        state: data['house.state'],
-        city: data['house.city'],
-        managerId: member.id,
-        createdAt: data['house.created_at'],
-      );
+        final House house = await _houseService.create(
+          name: data['house.name'],
+          address: data['house.address'],
+          state: data['house.state'],
+          city: data['house.city'],
+          managerId: member.id,
+          createdAt: data['house.created_at'],
+        );
 
-      await provider.setInfo(member, house);
+        await provider.setInfo(member, house);
 
+        await progress.hide();
+
+        Navigator.of(context).pop();
+      }
+    } on FirebaseAuthException catch (error) {
       await progress.hide();
+      String message = '';
 
-      Navigator.of(context).pop();
+      if (error.code == 'email-already-in-use') {
+        message = 'The account already exists for that email.';
+      } else {
+        message = 'Algo de errado aconteceu. Tente mais tarde';
+      }
+
+      ValidatorAlerts.showWarningMessage(context, 'Erro ao cadastrar', message);
     }
   }
 
