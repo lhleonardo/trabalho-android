@@ -8,6 +8,7 @@ class BillService {
 
   Future<void> create(
     String houseId, {
+    String title,
     String description,
     double price,
     String category,
@@ -22,6 +23,7 @@ class BillService {
     }
 
     await billsCollection.add({
+      'title': title,
       'price': price,
       'description': description,
       'category': category,
@@ -46,5 +48,22 @@ class BillService {
     return snapshot.docs
         .map((document) => Bill.fromMap(document.data(), document.id))
         .toList();
+  }
+
+  Stream<List<Bill>> getBillsForHouse(String houseId) {
+    final billsCollection = _collection.doc(houseId).collection('bills');
+
+    return billsCollection.snapshots().map(_convertToBill);
+  }
+
+  Future<void> markAsPaid(
+      {String houseId, String billId, String memberId}) async {
+    final doc = _collection.doc(houseId).collection('bills').doc(billId);
+    final billItem = await doc.get();
+
+    final receipts = billItem.get('recipients');
+    receipts[memberId] = true;
+
+    await doc.update({'recipients': receipts});
   }
 }

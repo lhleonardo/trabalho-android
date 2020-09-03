@@ -11,10 +11,10 @@ import 'package:trabalho/pages/splash_screen.dart';
 import 'package:trabalho/providers/member_provider.dart';
 import 'package:trabalho/theme/theme_manager.dart';
 import 'package:trabalho/wrapper.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'pages/auth/login_page.dart';
 import 'pages/auth/register_house.dart';
 import 'routes/routes.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(MyApp());
@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate
         ],
-        supportedLocales: [const Locale('pt', 'BR')],
+        supportedLocales: const [Locale('pt', 'BR')],
       ),
     );
   }

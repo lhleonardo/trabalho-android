@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trabalho/components/bill_list_tile.dart';
+import 'package:trabalho/models/bill.dart';
 import 'package:trabalho/providers/member_provider.dart';
+import 'package:trabalho/services/bill.dart';
 import 'package:trabalho/services/house.dart';
 import 'package:trabalho/services/member.dart';
 
@@ -12,6 +14,7 @@ import 'house_controll.dart';
 class HouseViewPage extends StatelessWidget {
   final _houseService = HouseService();
   final _memberService = MemberService();
+  final _billService = BillService();
 
   Widget _managerView(BuildContext context, MemberProvider provider) {
     return Column(
@@ -93,11 +96,33 @@ class HouseViewPage extends StatelessWidget {
         ),
         Container(
           margin: const EdgeInsets.only(top: 10, left: 5, right: 5),
-          child: Column(
-            children: List.generate(
-              5,
-              (index) => BillListTile(),
-            ),
+          child: StreamBuilder<List<Bill>>(
+            stream:
+                _billService.getBillsForHouse(provider.loggedMemberHouse.id),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+
+              if (!snapshot.hasData || snapshot.data.isEmpty) {
+                return Center(
+                  child: Text(
+                    'Nenhuma despesa cadastrada.',
+                    style: Theme.of(context).textTheme.caption,
+                  ),
+                );
+              }
+
+              return Column(
+                children: snapshot.data
+                    .map((bill) => BillListTile(
+                          bill: bill,
+                        ))
+                    .toList(),
+              );
+            },
           ),
         ),
         Container(
@@ -145,7 +170,7 @@ class HouseViewPage extends StatelessWidget {
               return GridView.count(
                 padding: const EdgeInsets.only(left: 16, right: 16),
                 crossAxisCount: 4,
-                crossAxisSpacing: 16,
+                crossAxisSpacing: 20,
                 mainAxisSpacing: 16,
                 children: snapshot.data.map((member) {
                   return Column(
@@ -165,10 +190,11 @@ class HouseViewPage extends StatelessWidget {
                             );
                           }
                           return Text(
-                            snapshot.data.name,
+                            snapshot.data.nickname,
                             textAlign: TextAlign.center,
                             style: const TextStyle(
-                                color: Color.fromRGBO(240, 238, 238, 1)),
+                              color: Color.fromRGBO(240, 238, 238, 1),
+                            ),
                           );
                         },
                       ),

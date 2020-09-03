@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:trabalho/components/member_bill.dart';
 import 'package:trabalho/models/bill.dart';
 import 'package:trabalho/models/member.dart';
+import 'package:trabalho/providers/member_provider.dart';
+import 'package:trabalho/services/bill.dart';
 import 'package:trabalho/services/member.dart';
+import 'package:trabalho/utils/validator_alerts.dart';
 
 class BillDetailsPage extends StatelessWidget {
   final _memberService = MemberService();
+  final _billService = BillService();
+
   final NumberFormat _formatter =
       NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
 
@@ -37,13 +43,42 @@ class BillDetailsPage extends StatelessWidget {
     return text;
   }
 
+  Future<void> _submit(
+      BuildContext context, MemberProvider provider, Bill bill) async {
+    if (bill.recipients[provider.loggedMember.id]) {
+      ValidatorAlerts.showWarningMessage(
+          context, 'Validação', 'Você já confirmou o pagamento desta despesa.');
+
+      return;
+    }
+    final progress = ValidatorAlerts.createProgress(context);
+
+    await progress.show();
+    await _billService.markAsPaid(
+        houseId: provider.loggedMemberHouse.id,
+        memberId: provider.loggedMember.id,
+        billId: bill.id);
+
+    await progress.hide();
+
+    await ValidatorAlerts.showWarningMessage(
+        context, 'Sucesso!', 'Você marcou que pagou sua parte na despesa.');
+
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     final Bill bill = ModalRoute.of(context).settings.arguments as Bill;
     final double perMember = bill.price / bill.recipients.length;
 
+    final provider = Provider.of<MemberProvider>(context, listen: false);
     final List<String> membersId =
         bill.recipients.entries.map((e) => e.key).toList();
+
+    final isPaid = bill.recipients[provider.loggedMember.id] ?? false;
+
+    final canPaid = bill.recipients.containsKey(provider.loggedMember.id);
 
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
@@ -154,25 +189,31 @@ class BillDetailsPage extends StatelessWidget {
                           Positioned(
                             right: 0,
                             top: 40,
-                            child: Container(
-                              height: 35,
-                              width: 100,
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(15),
-                                ),
-                                color: Theme.of(context).accentColor,
-                              ),
-                              child: FlatButton(
-                                child: Text(
-                                  'Pagar',
-                                  style: TextStyle(
-                                    color: Theme.of(context).backgroundColor,
-                                    fontSize: 14,
+                            child: Opacity(
+                              opacity: canPaid ? 1 : 0,
+                              child: Container(
+                                height: 35,
+                                width: 100,
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(15),
                                   ),
-                                  textAlign: TextAlign.center,
+                                  color: isPaid
+                                      ? Theme.of(context).primaryColor
+                                      : Theme.of(context).accentColor,
                                 ),
-                                onPressed: () {},
+                                child: FlatButton(
+                                  child: Text(
+                                    isPaid ? 'Pago!' : 'Pagar',
+                                    style: TextStyle(
+                                      color: Theme.of(context).backgroundColor,
+                                      fontSize: 14,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  onPressed: () =>
+                                      _submit(context, provider, bill),
+                                ),
                               ),
                             ),
                           )
@@ -216,9 +257,6 @@ class BillDetailsPage extends StatelessWidget {
                       indent: 5,
                       endIndent: 5,
                     ),
-                    // TODO: Falta terminar de listar:
-                    // 1 - Membros de forma assíncrona
-                    // preço a pagar
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -252,13 +290,15 @@ class BillDetailsPage extends StatelessWidget {
                               ),
                               const SizedBox(height: 4),
                               Icon(
-                                Icons.hourglass_empty,
-                                color: Colors.grey[300],
+                                isPaid
+                                    ? Icons.check_circle_outline
+                                    : Icons.hourglass_empty,
+                                color: isPaid ? Colors.green : Colors.grey[300],
                                 size: 20,
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                'Aguardando',
+                                isPaid ? 'Confirmado' : 'Aguardando',
                                 style: Theme.of(context).textTheme.caption,
                               ),
                             ],
@@ -290,10 +330,6 @@ class BillDetailsPage extends StatelessWidget {
                     Container(
                       margin: const EdgeInsets.only(top: 10, bottom: 40),
                       child: Column(
-                        // children: List.generate(
-                        //   6,
-                        //   (index) => MemberBillWidget(),
-                        // ),
                         children: membersId
                             .map(
                               (memberId) => FutureBuilder<Member>(
@@ -315,8 +351,9 @@ class BillDetailsPage extends StatelessWidget {
                                     margin: const EdgeInsets.only(
                                         top: 5, bottom: 5),
                                     child: MemberBillWidget(
-                                        member: snapshot.data,
-                                        payed: bill.recipients[memberId]),
+                                      member: snapshot.data,
+                                      payed: bill.recipients[memberId],
+                                    ),
                                   );
                                 },
                               ),
