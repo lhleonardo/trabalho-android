@@ -76,6 +76,7 @@ class _NewBillPage extends State<NewBillPage> {
 
         await _service.create(
           houseId,
+          title: _data['title'],
           ownerId: memberId,
           category: _selectedCategory,
           description: _data['description'],
@@ -84,16 +85,15 @@ class _NewBillPage extends State<NewBillPage> {
         );
         await progress.hide();
 
-        ValidatorAlerts.showWarningMessage(
+        await ValidatorAlerts.showWarningMessage(
             context, 'Concluído', 'Despesa cadastrada com sucesso');
+
+        Navigator.of(context).pop();
       }
     }
-
-    _service.getBillsForMember(
-        houseId: houseId,
-        memberId: Provider.of<MemberProvider>(context, listen: false)
-            .loggedMember
-            .id);
+    if (progress.isShowing()) {
+      await progress.hide();
+    }
   }
 
   Widget _categoryWidget(String category, String description) {
@@ -256,6 +256,12 @@ class _NewBillPage extends State<NewBillPage> {
                       title: Text(member.nickname),
                       value: _members[member.id],
                       onChanged: (value) {
+                        if (_controller.text.isEmpty) {
+                          ValidatorAlerts.showWarningMessage(context,
+                              'Calma lá!', 'Digite primeiramente o valor');
+
+                          return;
+                        }
                         setState(() {
                           _members[member.id] = value;
 
