@@ -45,6 +45,12 @@ class BillDetailsPage extends StatelessWidget {
 
   Future<void> _submit(
       BuildContext context, MemberProvider provider, Bill bill) async {
+    if (bill.recipients[provider.loggedMember.id]) {
+      ValidatorAlerts.showWarningMessage(
+          context, 'Validação', 'Você já confirmou o pagamento desta despesa.');
+
+      return;
+    }
     final progress = ValidatorAlerts.createProgress(context);
 
     await progress.show();
@@ -70,7 +76,10 @@ class BillDetailsPage extends StatelessWidget {
     final List<String> membersId =
         bill.recipients.entries.map((e) => e.key).toList();
 
-    final isPaid = bill.recipients[provider.loggedMember.id];
+    final isPaid = bill.recipients[provider.loggedMember.id] ?? false;
+
+    final canPaid = bill.recipients.containsKey(provider.loggedMember.id);
+
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: SafeArea(
@@ -180,26 +189,31 @@ class BillDetailsPage extends StatelessWidget {
                           Positioned(
                             right: 0,
                             top: 40,
-                            child: Container(
-                              height: 35,
-                              width: 100,
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(15),
-                                ),
-                                color: Theme.of(context).accentColor,
-                              ),
-                              child: FlatButton(
-                                child: Text(
-                                  'Pagar',
-                                  style: TextStyle(
-                                    color: Theme.of(context).backgroundColor,
-                                    fontSize: 14,
+                            child: Opacity(
+                              opacity: canPaid ? 1 : 0,
+                              child: Container(
+                                height: 35,
+                                width: 100,
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(15),
                                   ),
-                                  textAlign: TextAlign.center,
+                                  color: isPaid
+                                      ? Theme.of(context).primaryColor
+                                      : Theme.of(context).accentColor,
                                 ),
-                                onPressed: () =>
-                                    _submit(context, provider, bill),
+                                child: FlatButton(
+                                  child: Text(
+                                    isPaid ? 'Pago!' : 'Pagar',
+                                    style: TextStyle(
+                                      color: Theme.of(context).backgroundColor,
+                                      fontSize: 14,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  onPressed: () =>
+                                      _submit(context, provider, bill),
+                                ),
                               ),
                             ),
                           )
@@ -276,13 +290,15 @@ class BillDetailsPage extends StatelessWidget {
                               ),
                               const SizedBox(height: 4),
                               Icon(
-                                Icons.hourglass_empty,
-                                color: Colors.grey[300],
+                                isPaid
+                                    ? Icons.check_circle_outline
+                                    : Icons.hourglass_empty,
+                                color: isPaid ? Colors.green : Colors.grey[300],
                                 size: 20,
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                'Aguardando',
+                                isPaid ? 'Confirmado' : 'Aguardando',
                                 style: Theme.of(context).textTheme.caption,
                               ),
                             ],

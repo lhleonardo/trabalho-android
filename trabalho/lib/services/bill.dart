@@ -8,6 +8,7 @@ class BillService {
 
   Future<void> create(
     String houseId, {
+    String title,
     String description,
     double price,
     String category,
@@ -22,6 +23,7 @@ class BillService {
     }
 
     await billsCollection.add({
+      'title': title,
       'price': price,
       'description': description,
       'category': category,
@@ -37,7 +39,7 @@ class BillService {
     final billsCollection = _collection.doc(houseId).collection('bills');
 
     return billsCollection
-        .where('recipients.$memberId', whereIn: [false, true])
+        .where('recipients.$memberId', isEqualTo: false)
         .snapshots()
         .map(_convertToBill);
   }
@@ -46,6 +48,12 @@ class BillService {
     return snapshot.docs
         .map((document) => Bill.fromMap(document.data(), document.id))
         .toList();
+  }
+
+  Stream<List<Bill>> getBillsForHouse(String houseId) {
+    final billsCollection = _collection.doc(houseId).collection('bills');
+
+    return billsCollection.snapshots().map(_convertToBill);
   }
 
   Future<void> markAsPaid(
