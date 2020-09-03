@@ -210,12 +210,12 @@ class _NewBillPage extends State<NewBillPage> {
             )),
         const SizedBox(height: 22),
         Container(
-          height: 250,
+          height: 320,
           child: GridView.count(
             padding: const EdgeInsets.only(left: 16, right: 16),
             crossAxisCount: 3,
             crossAxisSpacing: 8,
-            mainAxisSpacing: 14,
+            mainAxisSpacing: 8,
             physics: const NeverScrollableScrollPhysics(),
             children: [
               _categoryWidget('water', 'Água'),
