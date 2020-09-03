@@ -156,8 +156,27 @@ class _NewBillPage extends State<NewBillPage> {
                   padding:
                       const EdgeInsets.only(top: 16.0, left: 15, right: 15),
                   child: Input(
+                    labelText: 'Titulo para despesa',
+                    maxLength: 30,
+                    placeholder: 'Ex: Compra do Supermercado',
+                    validator: (value) {
+                      if (value.trim().isEmpty) {
+                        return 'Campo obrigatório';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _data['title'] = value;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(top: 16.0, left: 15, right: 15),
+                  child: Input(
                     labelText: 'Descrição da despesa',
                     placeholder: 'Ex: Compra do Supermercado',
+                    maxLines: 4,
                     validator: (value) {
                       if (value.trim().isEmpty) {
                         return 'Campo obrigatório';

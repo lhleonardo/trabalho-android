@@ -79,7 +79,7 @@ class BillCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              value.description,
+              value.title,
               style: const TextStyle(
                   color: Color.fromRGBO(240, 238, 238, 1), fontSize: 20.0),
             ),

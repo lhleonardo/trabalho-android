@@ -2,20 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class Input extends StatelessWidget {
-  const Input(
-      {@required this.labelText,
-      this.placeholder,
-      this.validator,
-      this.controller,
-      this.onSaved,
-      this.onTap,
-      this.obscureText = false,
-      this.readOnly = false,
-      this.initialValue = '',
-      this.keyboardType = TextInputType.text,
-      this.inputFormatter,
-      this.onChanged});
+  const Input({
+    @required this.labelText,
+    this.placeholder,
+    this.validator,
+    this.controller,
+    this.onSaved,
+    this.onTap,
+    this.obscureText = false,
+    this.readOnly = false,
+    this.initialValue = '',
+    this.keyboardType = TextInputType.text,
+    this.maxLines = 1,
+    this.maxLength = 255,
+    this.inputFormatter,
+    this.onChanged,
+  });
 
+  final int maxLines;
+  final int maxLength;
   final String labelText;
   final String placeholder;
   final TextEditingController controller;
@@ -43,11 +48,18 @@ class Input extends StatelessWidget {
       onTap: onTap,
       onSaved: onSaved,
       onChanged: onChanged,
+      maxLines: maxLines,
+      maxLength: maxLength,
       initialValue: controller == null ? initialValue : null,
       readOnly: readOnly,
       decoration: InputDecoration(
+        counterStyle: const TextStyle(
+          height: double.minPositive,
+        ),
+        counterText: '',
         labelText: labelText,
         hintText: placeholder ?? '',
+        alignLabelWithHint: true,
         hintStyle: TextStyle(
           color: Theme.of(context).primaryColor,
           fontSize: 20,

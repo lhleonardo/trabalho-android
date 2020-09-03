@@ -47,6 +47,7 @@ class HouseService {
       address: address,
       state: state,
       city: city,
+      createdAt: createdAt,
     );
   }
 
@@ -83,7 +84,17 @@ class HouseService {
     final List<Member> result = [];
 
     for (int i = 0; i < membersRelation.length; i++) {
-      result.add(await _memberService.getById(membersRelation[i].id));
+      final loaded = await _memberService.getById(membersRelation[i].id);
+      result.add(Member(
+        id: loaded.id,
+        name: loaded.name,
+        nickname: loaded.nickname,
+        email: loaded.email,
+        cpf: loaded.cpf,
+        dateOfBirth: loaded.dateOfBirth,
+        houseId: loaded.houseId,
+        isManager: membersRelation[i].isManager,
+      ));
     }
 
     return result;
