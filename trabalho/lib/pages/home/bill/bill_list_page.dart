@@ -7,7 +7,7 @@ import 'package:trabalho/services/bill.dart';
 
 class BillListPage extends StatelessWidget {
   final _billService = BillService();
-
+  
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<MemberProvider>(context);
