@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trabalho/pages/home/bill/bill_details.dart';
+import 'package:trabalho/pages/home/house/house_page.dart';
 import 'package:trabalho/pages/home/welcome/enter_house_page.dart';
 import 'package:trabalho/pages/home/home_page.dart';
 import 'package:trabalho/pages/home/welcome/welcome_page.dart';
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
           Routes.errorPage: (_) => ErrorPage(),
           Routes.wrapper: (_) => Wrapper(),
           Routes.billDetais: (_) => BillDetailsPage(),
+          Routes.housePage: (_) => HouseViewPage()
         },
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,

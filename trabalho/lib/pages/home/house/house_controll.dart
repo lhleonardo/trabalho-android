@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:trabalho/components/category_widget.dart';
-import 'package:trabalho/components/input.dart';
+import 'package:trabalho/models/house.dart';
 import 'package:trabalho/models/member.dart';
+import 'package:trabalho/pages/home/house/house_page.dart';
+import 'package:trabalho/routes/routes.dart';
 import 'package:trabalho/services/bill.dart';
 import 'package:trabalho/services/house.dart';
 import 'package:trabalho/utils/validator_alerts.dart';
@@ -28,6 +30,7 @@ class _HouseControllPage extends State<HouseControllPage> {
       NumberFormat.simpleCurrency(locale: 'pt_BR', decimalDigits: 2);
 
   List<Member> _membersList = [];
+  Map<Member, bool> _managersMembers = {};
   bool _isLoading = true;
   String _selectedCategory;
 
@@ -38,7 +41,9 @@ class _HouseControllPage extends State<HouseControllPage> {
     final provider = Provider.of<MemberProvider>(context, listen: false);
     _membersList =
         await _houseService.getCommomMembers(provider.loggedMemberHouse.id);
-
+    _membersList.forEach((element) {
+      _managersMembers[element] = element.isManager;
+    });
     setState(() => _isLoading = false);
   }
 
@@ -49,47 +54,43 @@ class _HouseControllPage extends State<HouseControllPage> {
     _loadMembers();
   }
 
-  Future<void> _submit({String houseId, String memberId}) async {
-    final progress = ValidatorAlerts.createProgress(context);
-    // descrição e preço preenchidos
-    await progress.show();
-    if (_formKey.currentState.validate()) {
-      FocusScope.of(context).unfocus();
-      if (_selectedCategory == null || _selectedCategory.isEmpty) {
-        await progress.hide();
-        ValidatorAlerts.showWarningMessage(
-            context, 'Validação', 'Selecione a categoria da despesa');
-      } else if (_payersCount == 0) {
-        await progress.hide();
-        ValidatorAlerts.showWarningMessage(context, 'Validação',
-            'Marque pelo menos um membro que deverá pagar a despesa');
-      } else {
-        final recipients = _membersList
-            .where((element) => _members[element.id] == true)
-            .toList();
+  bool _verificaAlteracao() {
+    bool change = false;
+    _managersMembers.forEach((key, value) {
+      print(value);
+      if(value == true){
+        change = true;
+      }
+    });
+    return change;
+  }
 
-        _formKey.currentState.save();
-
-        await _service.create(
-          houseId,
-          ownerId: memberId,
-          category: _selectedCategory,
-          description: _data['description'],
-          price: _format.parse(_data['price']).toDouble(),
-          recipients: recipients,
-        );
-        await progress.hide();
-
-        ValidatorAlerts.showWarningMessage(
-            context, 'Concluído', 'Despesa cadastrada com sucesso');
+  void _submit({String houseId, String memberId}) async {
+    final provider = Provider.of<MemberProvider>(context, listen:false);
+    if(_verificaAlteracao() == true){
+      final progress = ValidatorAlerts.createProgress(context);
+      // descrição e preço preenchidos
+      var reset = false;
+      await progress.show();
+      _managersMembers.forEach((key, value) async {
+          await _houseService.promoveToManager(key.id, key.houseId, value);
+          if(key.id == provider.loggedMember.id && value == false){
+            reset = true;
+          }
+      });
+      await progress.hide();
+      await ValidatorAlerts.showWarningMessage(context, 'Concluído', 'Representantes alterados com sucesso');
+      if(reset == true){
+        await provider.setLoggedMemberFor(provider.loggedMember.id);
+        Navigator.pushNamed(context, Routes.housePage);
+      }
+      else{
+        Navigator.pop(context);
       }
     }
-
-    _service.getBillsForMember(
-        houseId: houseId,
-        memberId: Provider.of<MemberProvider>(context, listen: false)
-            .loggedMember
-            .id);
+    else{
+      ValidatorAlerts.showWarningMessage(context, 'Erro', 'Pelo menos um membro deve ser representante');
+    }
   }
 
   Widget _categoryWidget(String category, String description) {
@@ -179,10 +180,10 @@ class _HouseControllPage extends State<HouseControllPage> {
                     child: CheckboxListTile(
                       key: Key(member.id),
                       title: Text(member.nickname),
-                      value: member.isManager,
+                      value: _managersMembers[member],
                       onChanged: (value) {
                         setState(() {
-                          
+                          _managersMembers[member] = value;
                         });
                       },
                       activeColor: Colors.green,
@@ -215,9 +216,7 @@ class _HouseControllPage extends State<HouseControllPage> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    onPressed: () => _submit(
-                        houseId: provider.loggedMemberHouse.id,
-                        memberId: provider.loggedMember.id),
+                    onPressed: () => _submit()
                   ),
                 ),
               ),

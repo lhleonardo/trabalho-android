@@ -129,7 +129,7 @@ class HouseService {
     _memberService.setHouse(houseId: houseId, memberId: memberId);
   }
 
-  Future<void> promoveToManager(String memberId, String houseId) async {
+  Future<void> promoveToManager(String memberId, String houseId, bool manager) async {
     final members = await _collection
         .doc(houseId)
         .collection('members')
@@ -143,7 +143,7 @@ class HouseService {
           .doc(houseId)
           .collection('members')
           .doc(members.docs.first.id)
-          .update({'is_manager': true});
+          .update({'is_manager': manager});
     }
     // SE ENTRAR AQUI É PQ ESSE MEMBRO NÃO EXISTIA NO BANCO...
   }
