@@ -121,12 +121,6 @@ class HouseViewPage extends StatelessWidget {
               );
             },
           ),
-          // child: Column(
-          //   // children: List.generate(
-          //   //   5,
-          //   //   (index) => BillListTile(),
-          //   // ),
-          // ),
         ),
         Container(
           margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
@@ -173,7 +167,7 @@ class HouseViewPage extends StatelessWidget {
               return GridView.count(
                 padding: const EdgeInsets.only(left: 16, right: 16),
                 crossAxisCount: 4,
-                crossAxisSpacing: 16,
+                crossAxisSpacing: 20,
                 mainAxisSpacing: 16,
                 children: snapshot.data.map((member) {
                   return Column(
@@ -193,10 +187,11 @@ class HouseViewPage extends StatelessWidget {
                             );
                           }
                           return Text(
-                            snapshot.data.name,
+                            snapshot.data.nickname,
                             textAlign: TextAlign.center,
                             style: const TextStyle(
-                                color: Color.fromRGBO(240, 238, 238, 1)),
+                              color: Color.fromRGBO(240, 238, 238, 1),
+                            ),
                           );
                         },
                       ),
