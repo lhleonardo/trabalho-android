@@ -46,13 +46,14 @@ class RegisterMember extends StatelessWidget {
         cpf: _formData['cpf'],
       );
 
-      provider.setLoggedMember(member);
+      await provider.setLoggedMember(member);
 
       await progress.hide();
 
       // Fecha a tela após o cadastro
       Navigator.pop(context);
     } catch (error) {
+      print(error);
       await progress.hide();
       ValidatorAlerts.showWarningMessage(context, 'Erro!',
           'Não foi possível cadastrar. Tente novamente mais tarde!');

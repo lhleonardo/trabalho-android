@@ -57,49 +57,37 @@ class _HouseControllPage extends State<HouseControllPage> {
   bool _verificaAlteracao() {
     bool change = false;
     _managersMembers.forEach((key, value) {
-      print(value);
-      if(value == true){
+      if (value == true) {
         change = true;
       }
     });
     return change;
   }
 
-  void _submit({String houseId, String memberId}) async {
-    final provider = Provider.of<MemberProvider>(context, listen:false);
-    if(_verificaAlteracao() == true){
+  Future<void> _submit() async {
+    final provider = Provider.of<MemberProvider>(context, listen: false);
+    if (_verificaAlteracao() == true) {
       final progress = ValidatorAlerts.createProgress(context);
       // descrição e preço preenchidos
-      var reset = false;
       await progress.show();
       _managersMembers.forEach((key, value) async {
-          await _houseService.promoveToManager(key.id, key.houseId, value);
-          if(key.id == provider.loggedMember.id && value == false){
-            reset = true;
-          }
+        await _houseService.promoveToManager(key.id, key.houseId, value);
       });
-      await progress.hide();
-      await ValidatorAlerts.showWarningMessage(context, 'Concluído', 'Representantes alterados com sucesso');
-      if(reset == true){
-        await provider.setLoggedMemberFor(provider.loggedMember.id);
-        Navigator.pushNamed(context, Routes.housePage);
-      }
-      else{
-        Navigator.pop(context);
-      }
-    }
-    else{
-      ValidatorAlerts.showWarningMessage(context, 'Erro', 'Pelo menos um membro deve ser representante');
-    }
-  }
 
-  Widget _categoryWidget(String category, String description) {
-    return CategoryWidget(
-      isSelected: _selectedCategory == category,
-      onPressed: () => setState(() => _selectedCategory = category),
-      icon: Image.asset('assets/icons/$category.png', width: 44),
-      label: description,
-    );
+      await provider.setLoggedMemberFor(provider.loggedMember.id);
+      await progress.hide();
+
+      await ValidatorAlerts.showWarningMessage(
+        context,
+        'Concluído',
+        'Representantes alterados com sucesso',
+      );
+
+      Navigator.of(context).pop();
+    } else {
+      ValidatorAlerts.showWarningMessage(
+          context, 'Erro', 'Pelo menos um membro deve ser representante');
+    }
   }
 
   Widget _managerView(BuildContext context, MemberProvider provider) {
@@ -141,19 +129,23 @@ class _HouseControllPage extends State<HouseControllPage> {
         Container(
           padding: const EdgeInsets.only(top: 16.0, left: 20, right: 15),
           child: Row(children: <Widget>[
-            Text('Controle de acesso', style: Theme.of(context).textTheme.headline2)
+            Text('Controle de acesso',
+                style: Theme.of(context).textTheme.headline2)
           ]),
         ),
         Container(
-          margin: const EdgeInsets.only(top: 3, left: 10, right: 10, bottom: 15),
+          margin:
+              const EdgeInsets.only(top: 3, left: 10, right: 10, bottom: 15),
           child: Row(
             children: <Widget>[
               const SizedBox(
                 width: 10,
               ),
-              Text('Escolha quem poderá controlar a república',
+              Text(
+                'Escolha quem poderá controlar a república',
                 style: TextStyle(
-                  color: Color.fromRGBO(240, 238, 238, 1), fontSize: 12),)
+                    color: Color.fromRGBO(240, 238, 238, 1), fontSize: 12),
+              )
             ],
           ),
         ),
@@ -164,9 +156,11 @@ class _HouseControllPage extends State<HouseControllPage> {
               const SizedBox(
                 width: 10,
               ),
-              Text('Marque os representantes', 
-              style: TextStyle(
-                  color: Color.fromRGBO(240, 238, 238, 1), fontSize: 18),)
+              Text(
+                'Marque os representantes',
+                style: TextStyle(
+                    color: Color.fromRGBO(240, 238, 238, 1), fontSize: 18),
+              )
             ],
           ),
         ),
@@ -216,7 +210,7 @@ class _HouseControllPage extends State<HouseControllPage> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    onPressed: () => _submit()
+                    onPressed: () => _submit(),
                   ),
                 ),
               ),
@@ -242,7 +236,10 @@ class _HouseControllPage extends State<HouseControllPage> {
                       child: CircularProgressIndicator(),
                     ),
                   )
-                : _managerView(context, Provider.of<MemberProvider>(context)),
+                : _managerView(
+                    context,
+                    Provider.of<MemberProvider>(context),
+                  ),
           ),
         ),
       ),

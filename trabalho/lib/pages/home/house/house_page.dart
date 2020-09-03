@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:trabalho/components/bill_list_tile.dart';
 import 'package:trabalho/models/bill.dart';
@@ -6,6 +7,7 @@ import 'package:trabalho/providers/member_provider.dart';
 import 'package:trabalho/services/bill.dart';
 import 'package:trabalho/services/house.dart';
 import 'package:trabalho/services/member.dart';
+import 'package:trabalho/utils/validator_alerts.dart';
 
 import '../../../models/member.dart';
 import '../bill/bill_form.dart';
@@ -57,6 +59,19 @@ class HouseViewPage extends StatelessWidget {
                     ],
                   ),
                 ],
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.share,
+                  color: Theme.of(context).accentColor,
+                ),
+                onPressed: () {
+                  Clipboard.setData(
+                      ClipboardData(text: provider.loggedMemberHouse.id));
+
+                  ValidatorAlerts.showWarningMessage(context, 'Só chamar',
+                      'Código de convite copiado para área de transferência.');
+                },
               ),
             ],
           ),

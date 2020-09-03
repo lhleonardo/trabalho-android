@@ -57,7 +57,7 @@ class AuthService {
     );
   }
 
-  Future<Member> editMember({
+  Future<void> editMember({
     @required String email,
     @required String name,
     @required String nickname,

@@ -33,8 +33,12 @@ class MemberProvider extends ChangeNotifier {
   }
 
   Future<void> _checkIsManager() async {
-    _isManager = await _houseService.checkIsManager(
-        _loggedMemberHouse.id, _loggedMember.id);
+    if (_loggedMemberHouse != null) {
+      _isManager = await _houseService.checkIsManager(
+          _loggedMemberHouse.id, _loggedMember.id);
+    } else {
+      _isManager = false;
+    }
   }
 
   Member get loggedMember {
